@@ -26,7 +26,7 @@ def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
 
     return return_dict
 
-def get_VJ102_ref(ref_file):
+def get_VJ102_ref(ref_file, which_bands=None):
     '''
     input: VIIRS VJ102 (or VNP102) .nc file
     return: lat, lon, SZA, VZA, SAA, VAA
@@ -37,8 +37,13 @@ def get_VJ102_ref(ref_file):
 
         M_bands                  = np.zeros((3248,3200,16))
         M_band_solar_irradiances = np.ones(16)
+        if which_bands == None:
+            which_bands == range(16)
+        else:
+            which_bands -= 1
 
-        for i in range(16):
+
+        for i in which_bands:
             #band names 1 indexed
             band_num = i+1
             M_bands_temp = observation_data_ncObj['M{:02d}'.format(band_idx)][:]
