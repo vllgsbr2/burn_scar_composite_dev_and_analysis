@@ -35,32 +35,33 @@ def get_VJ102_ref(ref_file, which_bands=None):
     with Dataset(ref_file, 'r') as nc_ref_file_obj:
         observation_data_ncObj = nc_ref_file_obj['observation_data']
 
-        M_bands                  = np.zeros((3248,3200,16))
-        M_band_solar_irradiances = np.ones(16)
-        if which_bands == None:
-            which_bands == range(16)
-        else:
-            which_bands -= 1
+        n = len(which_bands)
 
+        # M_bands                  = np.zeros((3248,3200,n))
+        M_bands = []
 
-        for i in which_bands:
+        for i, band_num in enumerate(which_bands):
             #band names 1 indexed
-            band_num = i+1
-            M_bands_temp = observation_data_ncObj['M{:02d}'.format(band_idx)][:]
+            # print(band_num)
+            M_bands_temp = observation_data_ncObj['M{:02d}'.format(band_num)][:]
             M_band_shape = np.shape(M_bands_temp)
             #fill empty data with nans
-            M_bands[:M_band_shape[0],:M_band_shape[1],i] = M_bands_temp
-            M_bands[M_band_shape[0]:,M_band_shape[1]:,i] = np.nan
 
-            #get rid of dat with Digital Number of bad quality
-            M_bands[M_bands >=65532 ] = np.nan
+
+            # M_bands[:M_band_shape[0],:M_band_shape[1], i] = M_bands_temp
+            # M_bands[M_band_shape[0]:,M_band_shape[1]:, i] = np.nan
+
+            M_bands.append(M_bands_temp)
+
+        #get rid of dat with Digital Number of bad quality
+        M_bands = np.moveaxis(M_bands, 0,2)
+        M_bands[M_bands >=65532 ] = np.nan
 
         return M_bands
 
 
 def get_CLDMSK(cldmsk_file):
 
-##########################################
     def get_bits(data_SD, N, cMask_or_QualityAssur=True):
         '''
         INPUT:
@@ -94,84 +95,83 @@ def get_CLDMSK(cldmsk_file):
         return data_bits
 
     def decode_byte_1(decoded_mod35_hdf):
-    '''
-    INPUT:
-          decoded_mod35_hdf: - numpy array (2030, 1354, 8) - bit representation
-                               of MOD_35
-    RETURN:
-          Cloud_Mask_Flag,
-          new_Unobstructed_FOV_Quality_Flag,
-          Day_Night_Flag,
-          Sun_glint_Flag,
-          Snow_Ice_Background_Flag,
-          new_Land_Water_Flag
-                           : - numpy array (6, 2030, 1354) - first 6 MOD_35
-                                                             products from byte1
-    '''
-    data = decoded_mod35_hdf
-    shape = np.shape(data)
+        '''
+        INPUT:
+              decoded_mod35_hdf: - numpy array (2030, 1354, 8) - bit representation
+                                   of MOD_35
+        RETURN:
+              Cloud_Mask_Flag,
+              new_Unobstructed_FOV_Quality_Flag,
+              Day_Night_Flag,
+              Sun_glint_Flag,
+              Snow_Ice_Background_Flag,
+              new_Land_Water_Flag
+                               : - numpy array (6, 2030, 1354) - first 6 MOD_35
+                                                                 products from byte1
+        '''
+        data = decoded_mod35_hdf
+        shape = np.shape(data)
 
-    #create empty arrays to fill later
-    #binary 1 or 0 fill
-    Cloud_Mask_Flag           = data[:,:, 7]
-    Day_Night_Flag            = data[:,:, 4]
-    Sun_glint_Flag            = data[:,:, 3]
-    Snow_Ice_Background_Flag  = data[:,:, 2]
+        #create empty arrays to fill later
+        #binary 1 or 0 fill
+        Cloud_Mask_Flag           = data[:,:, 7]
+        Day_Night_Flag            = data[:,:, 4]
+        Sun_glint_Flag            = data[:,:, 3]
+        Snow_Ice_Background_Flag  = data[:,:, 2]
 
-    #0,1,2,or 3 fill
-    #cloudy, uncertain clear, probably clear, confident clear
-    Unobstructed_FOV_Quality_Flag = data[:,:, 5:7]
-    #find index of each cloud possibility
-    #new list to stuff new laues into and still perform a good search
-    new_Unobstructed_FOV_Quality_Flag = np.empty((shape[0], shape[1]))
+        #0,1,2,or 3 fill
+        #cloudy, uncertain clear, probably clear, confident clear
+        Unobstructed_FOV_Quality_Flag = data[:,:, 5:7]
+        #find index of each cloud possibility
+        #new list to stuff new laues into and still perform a good search
+        new_Unobstructed_FOV_Quality_Flag = np.empty((shape[0], shape[1]))
 
-    cloudy_index          = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==0)\
-                                   & (Unobstructed_FOV_Quality_Flag[:,:, 1]==0))
-    uncertain_clear_index = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==0)\
-                                   & (Unobstructed_FOV_Quality_Flag[:,:, 1]==1))
-    probably_clear_index  = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==1)\
-                                   & (Unobstructed_FOV_Quality_Flag[:,:, 1]==0))
-    confident_clear_index = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==1)\
-                                   & (Unobstructed_FOV_Quality_Flag[:,:, 1]==1))
+        cloudy_index          = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==0)\
+                                       & (Unobstructed_FOV_Quality_Flag[:,:, 1]==0))
+        uncertain_clear_index = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==0)\
+                                       & (Unobstructed_FOV_Quality_Flag[:,:, 1]==1))
+        probably_clear_index  = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==1)\
+                                       & (Unobstructed_FOV_Quality_Flag[:,:, 1]==0))
+        confident_clear_index = np.where((Unobstructed_FOV_Quality_Flag[:,:, 0]==1)\
+                                       & (Unobstructed_FOV_Quality_Flag[:,:, 1]==1))
 
-    new_Unobstructed_FOV_Quality_Flag[cloudy_index]          = 0
-    new_Unobstructed_FOV_Quality_Flag[uncertain_clear_index] = 1
-    new_Unobstructed_FOV_Quality_Flag[probably_clear_index]  = 2
-    new_Unobstructed_FOV_Quality_Flag[confident_clear_index] = 3
+        new_Unobstructed_FOV_Quality_Flag[cloudy_index]          = 0
+        new_Unobstructed_FOV_Quality_Flag[uncertain_clear_index] = 1
+        new_Unobstructed_FOV_Quality_Flag[probably_clear_index]  = 2
+        new_Unobstructed_FOV_Quality_Flag[confident_clear_index] = 3
 
-    #water, coastal, desert, land
-    Land_Water_Flag = data[:,:, 0:2]
-    #find index of each land type possibility
-    new_Land_Water_Flag = np.empty((shape[0], shape[1]))
+        #water, coastal, desert, land
+        Land_Water_Flag = data[:,:, 0:2]
+        #find index of each land type possibility
+        new_Land_Water_Flag = np.empty((shape[0], shape[1]))
 
-    water_index   = np.where((Land_Water_Flag[:,:, 0]==0) & \
-                             (Land_Water_Flag[:,:, 1]==0))
-    coastal_index = np.where((Land_Water_Flag[:,:, 0]==0) & \
-                             (Land_Water_Flag[:,:, 1]==1))
-    desert_index  = np.where((Land_Water_Flag[:,:, 0]==1) & \
-                             (Land_Water_Flag[:,:, 1]==0))
-    land_index    = np.where((Land_Water_Flag[:,:, 0]==1) & \
-                             (Land_Water_Flag[:,:, 1]==1))
+        water_index   = np.where((Land_Water_Flag[:,:, 0]==0) & \
+                                 (Land_Water_Flag[:,:, 1]==0))
+        coastal_index = np.where((Land_Water_Flag[:,:, 0]==0) & \
+                                 (Land_Water_Flag[:,:, 1]==1))
+        desert_index  = np.where((Land_Water_Flag[:,:, 0]==1) & \
+                                 (Land_Water_Flag[:,:, 1]==0))
+        land_index    = np.where((Land_Water_Flag[:,:, 0]==1) & \
+                                 (Land_Water_Flag[:,:, 1]==1))
 
-    new_Land_Water_Flag[water_index]   = 0
-    new_Land_Water_Flag[coastal_index] = 1
-    new_Land_Water_Flag[desert_index]  = 2
-    new_Land_Water_Flag[land_index]    = 3
+        new_Land_Water_Flag[water_index]   = 0
+        new_Land_Water_Flag[coastal_index] = 1
+        new_Land_Water_Flag[desert_index]  = 2
+        new_Land_Water_Flag[land_index]    = 3
 
-    return Cloud_Mask_Flag,\
-           new_Unobstructed_FOV_Quality_Flag,\
-           Day_Night_Flag,\
-           Sun_glint_Flag,\
-           Snow_Ice_Background_Flag,\
-           new_Land_Water_Flag
+        return Cloud_Mask_Flag,\
+               new_Unobstructed_FOV_Quality_Flag,\
+               Day_Night_Flag,\
+               Sun_glint_Flag,\
+               Snow_Ice_Background_Flag,\
+               new_Land_Water_Flag
 
-    with Dataset(ref_file, 'r') as nc_ref_file_obj:
-        observation_data_ncObj = nc_ref_file_obj['']
-    data_SD   = get_data(filename_MOD_35, 'Cloud_Mask', 2)
+    with Dataset(cldmsk_file, 'r') as nc_cldmsk_file_obj:
+        cldmsk_ints    = nc_cldmsk_file_obj['geophysical_data']['Cloud_Mask'][:]
+        # integer_cldmsk = nc_cldmsk_file_obj['geophysical_data']['Integer_Cloud_Mask'][:]
+        clsmsk_bits            = get_bits(cldmsk_ints, 0)
+        cldmsk_and_misc_fields = decode_byte_1(clsmsk_bits)
+        integer_cldmsk         = cldmsk_and_misc_fields[1]
+        land_water_mask        = cldmsk_and_misc_fields[-1]
 
-    fast_bits = get_bits(data_SD, 0)
-    fast_bits = decode_byte_1(fast_bits)
-
-#######################
-
-    return cldmsk
+        return integer_cldmsk, land_water_mask

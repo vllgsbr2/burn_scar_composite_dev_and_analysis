@@ -10,6 +10,7 @@ if __name__=='__main__':
     from datetime import datetime
     import os
     import time
+    import sys
     from netCDF4 import Dataset
     import h5py
     import numpy as np
@@ -19,8 +20,10 @@ if __name__=='__main__':
     #python modules I made
     from burn_scar_composites import get_burn_scar_RGB,\
                                      get_normalized_burn_ratio,\
-                                     get_BRF_lat_lon
-    from read_VIIRS_raw_nc_file import get_VJ103_geo,\
+                                     get_BRF_lat_lon,\
+                                     get_BRF_RGB,\
+                                     flip_arr
+    from read_VIIRS_raw_nc_files import get_VJ103_geo,\
                                        get_VJ102_ref,\
                                        get_CLDMSK
 
@@ -55,70 +58,90 @@ if __name__=='__main__':
     M16	11.54 - 12.49	Day/Night
     '''
 
-    home              = 'R:/satellite_data/viirs_data/noaa20/'
-    ref_filepath_home = home + 'reflectance/'
-    geo_filepath_home = home + 'geolocation/'
+    home                 = 'R:/satellite_data/viirs_data/noaa20/'
+    ref_filepath_home    = home + 'reflectance/'
+    geo_filepath_home    = home + 'geolocation/'
+    cldmsk_filepath_home = home + 'cldmsk/'
 
-    ref_filepaths = np.array([ref_filepath_home + x for x in os.listdir(ref_filepath_home)])
-    geo_filepaths = np.array([geo_filepath_home + x for x in os.listdir(geo_filepath_home)])
+    ref_filepaths    = np.sort([ref_filepath_home    + x for x in os.listdir(ref_filepath_home)])
+    geo_filepaths    = np.sort([geo_filepath_home    + x for x in os.listdir(geo_filepath_home)])
+    cldmsk_filepaths = np.sort([cldmsk_filepath_home + x for x in os.listdir(cldmsk_filepath_home)])
 
-    # sort files by time stamp; after sort check time stamps match up between files
-    # this will will allow looping between two file lists to access coincident geo and ref
-    # data wihtout the overhead of check the timestamp match
-    time_stamps_sorted_idx = np.argsort([x[-33:-21] for x in ref_filepaths])
-    time_stamps = np.sort([x[-33:-21] for x in ref_filepaths])
-    ref_filepaths = ref_filepaths[time_stamps_sorted_idx]
-    geo_filepaths = geo_filepaths[time_stamps_sorted_idx]
-    # print([x[-33:-21] for x in ref_filepaths] == [x[-33:-21] for x in geo_filepaths])
+    ref_file_timestamps    = [x[-33:-21] for x in ref_filepaths]
+    geo_file_timestamps    = [x[-33:-21] for x in geo_filepaths]
+    cldmsk_file_timestamps = [x[-33:-21] for x in cldmsk_filepaths]
 
+    boolean_intersection_ref_cldmsk = np.in1d(ref_file_timestamps, cldmsk_file_timestamps)
+    idx_last_not_match = np.where(boolean_intersection_ref_cldmsk==False)[0][-1]
 
-    # file_num = 100
+    ref_filepaths    = ref_filepaths[idx_last_not_match+1:]
+    geo_filepaths    = geo_filepaths[idx_last_not_match+1:]
+    # cldmsk_filepaths =
+
     warnings.filterwarnings("ignore")
+    start, end = 604, -1
 
-    with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','w') as hf_database:
-        for i, (geo_file, ref_file) in enumerate(zip(geo_filepaths, ref_filepaths)):
-            start_time = time.time()
-            which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
-            #             [0,1,2,3,4]
-            M_bands_norm, lat, lon = get_BRF_lat_lon(geo_file, ref_file, which_bands)
+    if True:
+        with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r+') as hf_database:
+            for i, (geo_file, ref_file, cldmsk_file) in enumerate(zip(geo_filepaths[start:end],\
+                        ref_filepaths[start:end], cldmsk_filepaths[start:end])):
 
-            R_M3, R_M4, R_M5, R_M7, R_M11 = \
-                                      M_bands_norm[:,:,0], M_bands_norm[:,:,1],\
-                                      M_bands_norm[:,:,2], M_bands_norm[:,:,3],\
-                                      M_bands_norm[:,:,4]
+                start_time = time.time()
+                which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
+                #             [0,1,2,3,4]
+                M_bands_BRF, lat, lon = get_BRF_lat_lon(geo_file, ref_file, which_bands)
 
-            BRF_RGB       = get_BRF_RGB(R_M5,R_M4,R_M3)
-            NBR           = get_normalized_burn_ratio(R_M7, R_M11)
-            burn_scar_RGB = get_burn_scar_RGB(R_M11, R_M7, R_M5)
+                R_M3, R_M4, R_M5, R_M7, R_M11 = \
+                                          M_bands_BRF[:,:,0], M_bands_BRF[:,:,1],\
+                                          M_bands_BRF[:,:,2], M_bands_BRF[:,:,3],\
+                                          M_bands_BRF[:,:,4]
 
-            BRF_RGB[np.isnan(BRF_RGB)]             = -999
-            NBR[np.isnan(NBR)]                     = -999
-            burn_scar_RGB[np.isnan(burn_scar_RGB)] = -999
+                BRF_RGB                 = get_BRF_RGB(R_M5,R_M4,R_M3)
+                NBR                     = get_normalized_burn_ratio(R_M7, R_M11)
+                burn_scar_RGB           = get_burn_scar_RGB(R_M11, R_M7, R_M5)
+                cldmsk, land_water_mask = get_CLDMSK(cldmsk_file)
 
-            # group.create_dataset(observables[i], data=data[:,:,i], compression='gzip')
-            # group = hf_observables.create_group(time_stamp)
 
-            #write data to file
-            time_stamp_current = geo_file[-33:-21]
-            year     = time_stamp_current[:4]
-            DOY      = '{}'.format(time_stamp_current[4:7])
-            UTC_hr   = time_stamp_current[8:][:2]
-            UTC_min  = time_stamp_current[8:][2:]
-            date     = datetime.strptime(year + "-" + DOY, "%Y-%j").strftime("_%m.%d.%Y")
+                BRF_RGB[np.isnan(BRF_RGB)]                 = -999
+                NBR[np.isnan(NBR)]                         = -999
+                burn_scar_RGB[np.isnan(burn_scar_RGB)]     = -999
+                cldmsk[np.isnan(cldmsk)]                   = -999
+                land_water_mask[np.isnan(land_water_mask)] = -999
 
-            group_timestamp = hf_database.create_group(time_stamp_current+date)
-            group_timestamp.create_dataset('BRF_RGB'        , data=BRF_RGB        , compression='gzip')
-            group_timestamp.create_dataset('NBR'            , data=NBR            , compression='gzip')
-            group_timestamp.create_dataset('burn_scar_RGB'  , data=burn_scar_RGB  , compression='gzip')
-            group_timestamp.create_dataset('cldmsk'         , data=cldmsk         , compression='gzip')
-            group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
-            group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
-            group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
+                BRF_RGB         = flip_arr(BRF_RGB)
+                NBR             = flip_arr(NBR)
+                burn_scar_RGB   = flip_arr(burn_scar_RGB)
+                cldmsk          = flip_arr(cldmsk)
+                land_water_mask = flip_arr(land_water_mask)
 
-            #print some diagnostics
+                # group.create_dataset(observables[i], data=data[:,:,i], compression='gzip')
+                # group = hf_observables.create_group(time_stamp)
 
-            run_time = time.time() - start_time
-            print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'.format(i, date, time_stamp_current, run_time))
+                #write data to file
+                time_stamp_current = geo_file[-33:-21]
+                year     = time_stamp_current[:4]
+                DOY      = '{}'.format(time_stamp_current[4:7])
+                UTC_hr   = time_stamp_current[8:][:2]
+                UTC_min  = time_stamp_current[8:][2:]
+                date     = datetime.strptime(year + "-" + DOY, "%Y-%j").strftime("_%m.%d.%Y")
 
-            if i==4:
-                break
+                group_timestamp = hf_database.create_group(time_stamp_current+date)
+                group_timestamp.create_dataset('BRF_RGB'        , data=BRF_RGB        , compression='gzip')
+                group_timestamp.create_dataset('NBR'            , data=NBR            , compression='gzip')
+                group_timestamp.create_dataset('burn_scar_RGB'  , data=burn_scar_RGB  , compression='gzip')
+                group_timestamp.create_dataset('cldmsk'         , data=cldmsk         , compression='gzip')
+                group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
+                group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
+                group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
+
+                #print some diagnostics
+
+                run_time = time.time() - start_time
+                print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'.format(i, date, time_stamp_current, run_time))
+
+
+    # with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r') as hf_database:
+    #     k = list(hf_database.keys())
+    #     k1 = '{}/{}'.format(k[0], 'BRF_RGB')
+    #     plt.imshow(flip_arr(hf_database[k1][:]))
+    #     plt.show()
