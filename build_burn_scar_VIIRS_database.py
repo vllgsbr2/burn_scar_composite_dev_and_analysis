@@ -76,6 +76,8 @@ if __name__=='__main__':
 
     ref_filepaths    = ref_filepaths[idx_last_not_match+1:]
     geo_filepaths    = geo_filepaths[idx_last_not_match+1:]
+    ref_file_timestamps    = ref_file_timestamps[idx_last_not_match+1:]
+    geo_file_timestamps    = geo_file_timestamps[idx_last_not_match+1:]
     # cldmsk_filepaths =
 
     warnings.filterwarnings("ignore")

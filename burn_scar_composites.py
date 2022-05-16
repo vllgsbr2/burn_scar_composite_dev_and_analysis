@@ -49,7 +49,7 @@ def get_burn_scar_composite(R_M7, R_M11, geotiff=False):
     from scipy import ndimage
 
     if not geotiff:
-        R_M11[R_M7  > 0.1346] = np.nan
+        # R_M11[R_M7  > 0.1346] = np.nan #for clear no smoke only
         R_M11[R_M11 < 0.0281] = np.nan
         return ndimage.gaussian_filter(R_M11, sigma=1)
     else:
