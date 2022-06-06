@@ -8,7 +8,7 @@ import h5py
 import sys
 import os
 import time
-
+import numpy as np
 
 
 def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, source_data):
@@ -46,14 +46,23 @@ def make_custom_lat_lon_grid():
         p_mt  = pyproj.Proj("".join(projname))
         xl,yl = p_mt(lon_lc,lat_lc)
         xr,yr = p_mt(lon_rc,lat_rc)
-        xl = -150000.000
-        yl = -200000.0
-        xr = 150000.000
-        yr = 200000.0
+        # xl = -150000.000
+        # yl = -200000.0
+        # xr = 150000.000
+        # yr = 200000.0
         #print(xl,yl)
+
+        x, y = (xl-xr)/2, (yl-yr)/2
+        xl = -1*np.abs(x)
+        yl = -1*np.abs(y)
+        xr = np.abs(x)
+        yr = np.abs(y)
+
         proj_dict = {'proj': 'aea', 'lat_1': lat_p1, 'lat_2': lat_p2, 'lat_0': lat_c, 'lon_0': lon_c,'x_0': 0,'y_0':0, 'units': 'm'}
 
         area_extent = (xl, yl, xr, yr)
+        # print((area_extent[2]-area_extent[0])/2, (area_extent[3]-area_extent[1])/2)
+        print(area_extent)
         area_def = create_area_def('pta_la', proj_dict, area_extent=area_extent,resolution=resolution)
         lons, lats = area_def.get_lonlats()
         #save_quicklook('check_grid.png', area_def, lats, label='Quick Check')
@@ -75,6 +84,7 @@ def make_custom_lat_lon_grid():
         if index==41:
             print(1.5)
             ptaname = las['Target_Short_Name']
+            print(ptaname)
             ptaname = ptaname.replace('-','_')
 
             #central coordinate of bounding box
@@ -100,7 +110,7 @@ def make_custom_lat_lon_grid():
             lon_se = las['L2_L4_BB_coord_SE_lon']
 
             #meters resolution of pixel
-            resolution = (75,75)
+            resolution = (750,750)
 
             lat_lc = lat_sw
             lon_lc = lon_sw
@@ -156,9 +166,60 @@ def get_lat_lon_grid_from_geotiff(tif_sar_f_name):
     return lat, lon
 
 if __name__ == "__main__":
-    print(0)
-    make_custom_lat_lon_grid()
-    print(1)
+    # make_custom_lat_lon_grid()
+
+    with h5py.File('', 'r') as hf_west_conus_grid:
+        common_grid_lat = hf_west_conus_grid['Geolocation/Latitude']
+        common_grid_lon = hf_west_conus_grid['Geolocation/Longitude']
+    #put viirs and SAR data on same grid made by make_custom_lat_lon_grid()
+    #grab sar lat/lon grid
+    tif_sar_f_name = ''
+    sar_lat, sar_lon = get_lat_lon_grid_from_geotiff(tif_sar_f_name)
+
+    def get_roger_SAR_data(tif_sar_f_name):
+        import rasterio
+        with rasterio.open(tif_sar_f_name) as src:
+            image = src.read(1)
+        return image
+    sar_data = get_roger_SAR_data(tif_sar_f_name)
+
+    #grab VIIRS data from h5 database
+    def get_VIIRS_database_composites(h5_viirs_name, timestamp):
+        import h5py
+
+        with h5py.File(h5_viirs_name, 'r') as h5_viirs_f:
+            timestamps = list(h5_viirs_f.keys())
+            timestamps_modifed = [x[:12] for x in timestamps]
+            if timestamp in timestamps_modifed:
+                data_dict = {}
+                data_names = list(h5_viirs_f[timestamp].keys())
+                for data_name in data_names:
+                    data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
+
+                return data_dict
+            else:
+                print('timestamp not found, choose from')
+                print(timestamps)
+
+    h5_viirs_name, timestamp = '', 'YYYDOY.HHMM'
+    viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
+
+    viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+    viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
+
+    #put both on common grid using the pytaf resample_n wrapper function
+    #just VIIRS for now, since the SAR is such a higher res, it won't snap
+    #to the grid properly. Will need to upscale the VIIRS data and common grid
+    #to match SAR, or downscale the SAR to the VIIRS data (might be better)
+
+    source_lat, source_lon = np.copy(common_grid_lat), np.copy(common_grid_lon)
+    target_lat, target_lon = np.copy(viirs_lat), np.copy(viirs_lon)
+    source_data            = viirs_DLCF_RGB
+    regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
+                                            target_lat, target_lon, source_data)
+
+
+
     #
     # import matplotlib.pyplot as plt
     # import h5py
