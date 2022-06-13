@@ -9,10 +9,21 @@ import sys
 import os
 import time
 import numpy as np
+import matplotlib.pyplot as plt
+
+def flip_arr(arr):
+    '''
+    return: array flipped over each of the 1st 2 axes for proper display using
+    ax.imshow(arr)
+    '''
+    arr=np.flip(arr, axis=0)
+    # arr=np.flip(arr, axis=1)
+    return arr
 
 
 def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, source_data):
     '''
+    https://github.com/TerraFusion/pytaf
     Objective:
         take source geolocation and source data, and regrid it to a target
         geolocation using nearest nieghbor.
@@ -24,6 +35,7 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
         target_data {2D narray} -- returns regridded source data, such that it
                                    matches up with the target lat/lon
     '''
+    import pytaf
     #radius in meters to search around pixel for a neighbor
     max_radius = 5556.
     target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
@@ -167,31 +179,32 @@ def get_lat_lon_grid_from_geotiff(tif_sar_f_name):
 
 if __name__ == "__main__":
     # make_custom_lat_lon_grid()
-
-    with h5py.File('', 'r') as hf_west_conus_grid:
-        common_grid_lat = hf_west_conus_grid['Geolocation/Latitude']
-        common_grid_lon = hf_west_conus_grid['Geolocation/Longitude']
-    #put viirs and SAR data on same grid made by make_custom_lat_lon_grid()
-    #grab sar lat/lon grid
-    tif_sar_f_name = ''
-    sar_lat, sar_lon = get_lat_lon_grid_from_geotiff(tif_sar_f_name)
-
-    def get_roger_SAR_data(tif_sar_f_name):
-        import rasterio
-        with rasterio.open(tif_sar_f_name) as src:
-            image = src.read(1)
-        return image
-    sar_data = get_roger_SAR_data(tif_sar_f_name)
-
-    #grab VIIRS data from h5 database
+    commongrid_file = 'C:/Users/Javi/Documents/NOAA/Grids_West_CONUS.h5'
+    with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
+        common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
+        common_grid_lon = hf_west_conus_grid['Geolocation/Longitude'][:]
+    # #put viirs and SAR data on same grid made by make_custom_lat_lon_grid()
+    # #grab sar lat/lon grid
+    # tif_sar_f_name   = 'C:/Users/Javi/Documents/NOAA/Roger_SAR_data/for_javier(2)/for_javier/view_descending_1th interferogram_07_21_2020-08_14_2020.tif'
+    # sar_lat, sar_lon = get_lat_lon_grid_from_geotiff(tif_sar_f_name)
+    #
+    # def get_roger_SAR_data(tif_sar_f_name):
+    #     import rasterio
+    #     with rasterio.open(tif_sar_f_name) as src:
+    #         image = src.read(1)
+    #     return image
+    # sar_data = get_roger_SAR_data(tif_sar_f_name)
+    #
+    # #grab VIIRS data from h5 database
     def get_VIIRS_database_composites(h5_viirs_name, timestamp):
         import h5py
 
         with h5py.File(h5_viirs_name, 'r') as h5_viirs_f:
             timestamps = list(h5_viirs_f.keys())
-            timestamps_modifed = [x[:12] for x in timestamps]
-            if timestamp in timestamps_modifed:
-                data_dict = {}
+            timestamp  = [x for x in timestamps if x[:12]==timestamp]
+            if len(timestamp) == 1:
+                timestamp = timestamp[0]
+                data_dict  = {}
                 data_names = list(h5_viirs_f[timestamp].keys())
                 for data_name in data_names:
                     data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
@@ -199,28 +212,85 @@ if __name__ == "__main__":
                 return data_dict
             else:
                 print('timestamp not found, choose from')
-                print(timestamps)
+                # print(timestamps)
 
-    h5_viirs_name, timestamp = '', 'YYYDOY.HHMM'
+    h5_viirs_name   = 'R:/satellite_data/viirs_data/noaa20/databases/VIIRS_burn_Scar_database.h5'
+    timestamp       = '2021226.2000'
     viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
-
-    viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+    # print(viirs_data_dict)
+    viirs_lat      = viirs_data_dict['lat'].astype(np.float64)
+    viirs_lon      = viirs_data_dict['lon'].astype(np.float64)*-1
     viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
+    print(viirs_lon)
 
     #put both on common grid using the pytaf resample_n wrapper function
     #just VIIRS for now, since the SAR is such a higher res, it won't snap
     #to the grid properly. Will need to upscale the VIIRS data and common grid
     #to match SAR, or downscale the SAR to the VIIRS data (might be better)
 
-    source_lat, source_lon = np.copy(common_grid_lat), np.copy(common_grid_lon)
-    target_lat, target_lon = np.copy(viirs_lat), np.copy(viirs_lon)
-    source_data            = viirs_DLCF_RGB
-    regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
-                                            target_lat, target_lon, source_data)
+    viirs_nx, viirs_ny             = np.shape(viirs_DLCF_RGB[:,:,0])
+    viirs_rows                     = np.arange(viirs_nx).astype(np.float64)
+    viirs_cols                     = np.arange(viirs_ny).astype(np.float64)
+    viirs_col_mesh, viirs_row_mesh = np.meshgrid(viirs_cols, viirs_rows)
+    # print(common_grid_lon)
 
+    target_lat = common_grid_lat.astype(np.float64)
+    target_lon = common_grid_lon.astype(np.float64)
+    source_lat, source_lon = np.copy(viirs_lat), np.copy(viirs_lon)
 
+    import time
+    start=time.time()
 
+    print('regridding rows')
+    regrid_row_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                 np.copy(source_lon),\
+                                                 np.copy(target_lat),\
+                                                 np.copy(target_lon),\
+                                                 viirs_row_mesh.astype(np.float64)).astype(int)
+    print(-start+time.time())
+    print('rigridding cols')
+    regrid_col_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                 np.copy(source_lon),\
+                                                 np.copy(target_lat),\
+                                                 np.copy(target_lon),\
+                                                 viirs_col_mesh.astype(np.float64)).astype(int)
+    print(-start+time.time())
+
+    # print(np.where(regrid_row_idx != -999))
+    # #grab -999 fill values in regrid col/row idx
+    # #use these positions to write fill values when regridding the rest of the data
+    # fill_val = -999
+    # fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+    #                         (regrid_col_idx == fill_val)   )
     #
+    # regrid_row_idx[fill_val_idx] = regrid_row_idx[0,0]
+    # regrid_col_idx[fill_val_idx] = regrid_col_idx[0,0]
+    #
+    # for i in range(3):
+    #     viirs_DLCF_RGB[fill_val_idx,i] = np.nan
+
+    f, ax = plt.subplots(nrows=2, ncols=3, sharex=True, sharey=True, figsize=(12,12))
+
+    ax[0,0].imshow(viirs_DLCF_RGB)
+    ax[0,1].imshow(flip_arr(source_lat), cmap='jet')
+    ax[0,2].imshow(flip_arr(source_lon), cmap='jet')
+
+    ax[1,0].imshow(flip_arr(viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]), cmap='Greys_r')
+    ax[1,1].imshow(source_lat[regrid_row_idx, regrid_col_idx], cmap='jet')
+    ax[1,2].imshow(source_lon[regrid_row_idx, regrid_col_idx], cmap='jet')
+
+    ax[0,0].set_title('viirs_DLCF_RGB')
+    ax[0,1].set_title('source_lat grid')
+    ax[0,2].set_title('source_lon grid')
+
+    ax[1,0].set_title('viirs_DLCF_RGB regridded')
+    ax[1,1].set_title('source_lat regridded')
+    ax[1,2].set_title('source_lon regridded')
+
+
+    plt.tight_layout()
+    plt.show()
+    # #
     # import matplotlib.pyplot as plt
     # import h5py
     # import copy
