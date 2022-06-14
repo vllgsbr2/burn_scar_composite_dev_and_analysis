@@ -228,11 +228,68 @@ if __name__ == "__main__":
     #to the grid properly. Will need to upscale the VIIRS data and common grid
     #to match SAR, or downscale the SAR to the VIIRS data (might be better)
 
-    source_lat, source_lon = np.copy(common_grid_lat), np.copy(common_grid_lon)
-    target_lat, target_lon = np.copy(viirs_lat), np.copy(viirs_lon)
-    source_data            = viirs_DLCF_RGB
-    regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
-                                            target_lat, target_lon, source_data)
+    viirs_nx, viirs_ny             = np.shape(viirs_DLCF_RGB[:,:,0])
+    viirs_rows                     = np.arange(viirs_nx).astype(np.float64)
+    viirs_cols                     = np.arange(viirs_ny).astype(np.float64)
+    viirs_col_mesh, viirs_row_mesh = np.meshgrid(viirs_cols, viirs_rows)
+    # print(common_grid_lon)
+
+    target_lat = common_grid_lat.astype(np.float64)
+    target_lon = common_grid_lon.astype(np.float64)
+    source_lat, source_lon = np.copy(viirs_lat), np.copy(viirs_lon)
+
+    import time
+    start=time.time()
+
+    print('regridding rows')
+    regrid_row_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                 np.copy(source_lon),\
+                                                 np.copy(target_lat),\
+                                                 np.copy(target_lon),\
+                                                 viirs_row_mesh.astype(np.float64)).astype(int)
+    print(-start+time.time())
+    print('rigridding cols')
+    regrid_col_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                 np.copy(source_lon),\
+                                                 np.copy(target_lat),\
+                                                 np.copy(target_lon),\
+                                                 viirs_col_mesh.astype(np.float64)).astype(int)
+    print(-start+time.time())
+
+    # print(np.where(regrid_row_idx != -999))
+    # #grab -999 fill values in regrid col/row idx
+    # #use these positions to write fill values when regridding the rest of the data
+    # fill_val = -999
+    # fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+    #                         (regrid_col_idx == fill_val)   )
+    #
+    # regrid_row_idx[fill_val_idx] = regrid_row_idx[0,0]
+    # regrid_col_idx[fill_val_idx] = regrid_col_idx[0,0]
+    #
+    # for i in range(3):
+    #     viirs_DLCF_RGB[fill_val_idx,i] = np.nan
+
+    f, ax = plt.subplots(nrows=2, ncols=3, sharex=True, sharey=True, figsize=(12,12))
+
+    ax[0,0].imshow(viirs_DLCF_RGB)
+    ax[0,1].imshow(flip_arr(source_lat), cmap='jet')
+    ax[0,2].imshow(flip_arr(source_lon), cmap='jet')
+
+    ax[1,0].imshow(flip_arr(viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]), cmap='Greys_r')
+    ax[1,1].imshow(source_lat[regrid_row_idx, regrid_col_idx], cmap='jet')
+    ax[1,2].imshow(source_lon[regrid_row_idx, regrid_col_idx], cmap='jet')
+
+    ax[0,0].set_title('viirs_DLCF_RGB')
+    ax[0,1].set_title('source_lat grid')
+    ax[0,2].set_title('source_lon grid')
+
+    ax[1,0].set_title('viirs_DLCF_RGB regridded')
+    ax[1,1].set_title('source_lat regridded')
+    ax[1,2].set_title('source_lon regridded')
+
+
+    plt.tight_layout()
+    plt.show()
     #
     # #loop to regrid any subset of granules
     # with h5py.File(h5_viirs_name, 'r') as h5_viirs_f:
