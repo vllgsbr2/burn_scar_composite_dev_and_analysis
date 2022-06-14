@@ -178,6 +178,7 @@ def get_lat_lon_grid_from_geotiff(tif_sar_f_name):
     return lat, lon
 
 if __name__ == "__main__":
+    import sys
     # make_custom_lat_lon_grid()
     commongrid_file = 'C:/Users/Javi/Documents/NOAA/Grids_West_CONUS.h5'
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
@@ -218,10 +219,41 @@ if __name__ == "__main__":
     timestamp       = '2021226.2000'
     viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
     # print(viirs_data_dict)
-    viirs_lat      = viirs_data_dict['lat'].astype(np.float64)
-    viirs_lon      = viirs_data_dict['lon'].astype(np.float64)*-1
+    viirs_lat      = flip_arr(viirs_data_dict['lat']).astype(np.float64)
+    viirs_lon      = flip_arr(viirs_data_dict['lon']).astype(np.float64)*-1
     viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
-    print(viirs_lon)
+    # print(viirs_lon)
+
+    #debugging #################################################################
+    # f, ax = plt.subplots(nrows=2, ncols=3, sharex=True, sharey=True, figsize=(12,12))
+    #
+    # cmap='jet'
+    # vmin_lat, vmax_lat = np.min(common_grid_lat), np.max(common_grid_lat)
+    # vmin_lon, vmax_lon = np.min(common_grid_lon), np.max(common_grid_lon)
+    # ax[0,0].imshow(viirs_DLCF_RGB)
+    # ax[0,1].imshow(viirs_lat, cmap=cmap, vmin=vmin_lat, vmax=vmax_lat)
+    # ax[0,2].imshow(viirs_lon, cmap=cmap, vmin=vmin_lon, vmax=vmax_lon)
+    #
+    # ax[1,1].imshow(common_grid_lat, cmap=cmap, vmin=vmin_lat, vmax=vmax_lat)
+    # ax[1,2].imshow(common_grid_lon, cmap=cmap, vmin=vmin_lon, vmax=vmax_lon)
+    # # ax[1,2].imshow()
+    #
+    #
+    # ax[0,0].set_title('viirs_DLCF_RGB')
+    # ax[0,1].set_title('viirs_lat')
+    # ax[0,2].set_title('viirs_lon')
+    #
+    # ax[1,1].set_title('common_grid_lat')
+    # ax[1,2].set_title('common_grid_lon')
+    #
+    # ax[1,0].axis('off')
+    #
+    # plt.tight_layout()
+    # plt.show()
+    #
+    #
+    # sys.exit()
+    #debugging #################################################################
 
     #put both on common grid using the pytaf resample_n wrapper function
     #just VIIRS for now, since the SAR is such a higher res, it won't snap
@@ -256,36 +288,59 @@ if __name__ == "__main__":
                                                  viirs_col_mesh.astype(np.float64)).astype(int)
     print(-start+time.time())
 
+    viirs_DLCF_RGB_regridded = viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]
+    source_lat_regridded     = source_lat[regrid_row_idx    , regrid_col_idx]
+    source_lon_regridded     = source_lon[regrid_row_idx    , regrid_col_idx]
+
     # print(np.where(regrid_row_idx != -999))
-    # #grab -999 fill values in regrid col/row idx
-    # #use these positions to write fill values when regridding the rest of the data
-    # fill_val = -999
-    # fill_val_idx = np.where((regrid_row_idx == fill_val) | \
-    #                         (regrid_col_idx == fill_val)   )
-    #
+    #grab -999 fill values in regrid col/row idx
+    #use these positions to write fill values when regridding the rest of the data
+    fill_val     = -999
+    fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+                            (regrid_col_idx == fill_val)   )
+
     # regrid_row_idx[fill_val_idx] = regrid_row_idx[0,0]
     # regrid_col_idx[fill_val_idx] = regrid_col_idx[0,0]
-    #
-    # for i in range(3):
-    #     viirs_DLCF_RGB[fill_val_idx,i] = np.nan
 
-    f, ax = plt.subplots(nrows=2, ncols=3, sharex=True, sharey=True, figsize=(12,12))
+    # for i in range(3):
+    #     viirs_DLCF_RGB_regridded[fill_val_idx,i] = np.nan
+    #     if i==0:
+    #         source_lat_regridded[fill_val_idx] = np.nan
+    #         source_lon_regridded[fill_val_idx] = np.nan
+
+    viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
+    source_lat_regridded[fill_val_idx] = np.nan
+    source_lon_regridded[fill_val_idx] = np.nan
+
+
+    f, ax = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(12,12))
 
     ax[0,0].imshow(viirs_DLCF_RGB)
-    ax[0,1].imshow(flip_arr(source_lat), cmap='jet')
-    ax[0,2].imshow(flip_arr(source_lon), cmap='jet')
+    ax[0,1].imshow(source_lat, cmap='jet')
+    ax[0,2].imshow(source_lon, cmap='jet')
 
-    ax[1,0].imshow(flip_arr(viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]), cmap='Greys_r')
-    ax[1,1].imshow(source_lat[regrid_row_idx, regrid_col_idx], cmap='jet')
-    ax[1,2].imshow(source_lon[regrid_row_idx, regrid_col_idx], cmap='jet')
+    ax[1,0].imshow(viirs_DLCF_RGB_regridded)
+    ax[1,1].imshow(source_lat_regridded, cmap='jet')
+    ax[1,2].imshow(source_lon_regridded, cmap='jet')
+
+    ax[2,1].imshow(common_grid_lat, cmap='jet')
+    ax[2,2].imshow(common_grid_lon, cmap='jet')
 
     ax[0,0].set_title('viirs_DLCF_RGB')
-    ax[0,1].set_title('source_lat grid')
-    ax[0,2].set_title('source_lon grid')
+    ax[0,1].set_title('source_lat')
+    ax[0,2].set_title('source_lon')
 
     ax[1,0].set_title('viirs_DLCF_RGB regridded')
     ax[1,1].set_title('source_lat regridded')
     ax[1,2].set_title('source_lon regridded')
+
+    ax[2,0].axis('off')
+    ax[2,1].set_title('common_grid_lat')
+    ax[2,2].set_title('common_grid_lon')
+
+    for a in ax.flat:
+        a.set_xticks([])
+        a.set_yticks([])
 
 
     plt.tight_layout()
