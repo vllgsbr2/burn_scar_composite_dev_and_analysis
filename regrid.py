@@ -217,21 +217,71 @@ if __name__ == "__main__":
     source_data            = viirs_DLCF_RGB
     regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
                                             target_lat, target_lon, source_data)
+
+
+
     #
-    # #loop to regrid any subset of granules
-    # with h5py.File(h5_viirs_name, 'r') as h5_viirs_f:
-    #     timestamps = list(h5_viirs_f.keys())
-    #     # timestamps_modifed = [x[:12] for x in timestamps]
-    #     data_names = list(h5_viirs_f[timestamps[0]].keys())
+    # import matplotlib.pyplot as plt
+    # import h5py
+    # import copy
+    # #home       = '/data/keeling/a/vllgsbr2/c/LA_test_case_data/'
+    # #file_mod03 = home + 'MOD03.A2017246.1855.061.2017257170030.hdf'
+    # #file_mod02 = home + 'MOD021KM.A2017246.1855.061.2017258202757.hdf'
+    # home       = '/data/keeling/a/vllgsbr2/c/MAIA_Threshold_Dev/LA_PTA_MODIS_Data'
+    # file_mod03 = home + '/MOD_03/MOD03.A2002002.1920.061.2017179152611.hdf'
+    # file_mod02 = home + '/MOD_02/MOD021KM.A2002002.1920.061.2017179161255.hdf'
     #
-    #     for timestamp in timestamps:
-    #         data_dict = {}
-    #         for data_name in data_names:
-    #             data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
-    #             viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+    # file_MAIA  = '/data/keeling/a/vllgsbr2/c/LA_PTA_MAIA.hdf5'
+    # file_MAIA  = h5py.File(file_MAIA, 'r')
     #
-    #             source_lat, source_lon = np.copy(common_grid_lat), np.copy(common_grid_lon)
-    #             target_lat, target_lon = np.copy(viirs_lat), np.copy(viirs_lon)
-    #             source_data            = viirs_DLCF_RGB
-    #             regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
-    #                                                 target_lat, target_lon, source_data)
+    # #load in lat/lon from modis granule
+    # s_lat = get_lat(file_mod03).astype(np.float64)
+    # s_lon = get_lon(file_mod03).astype(np.float64)
+    # t_lat = file_MAIA['lat'][()].astype(np.float64)
+    # t_lon = file_MAIA['lon'][()].astype(np.float64)
+    #
+    # #load in data to be regridded from modis granule
+    # red_band = prepare_data(file_mod02, 'EV_250_Aggr1km_RefSB', False)
+    # s_data   = red_band[0,:,:].astype(np.float64)
+    #
+    #
+    # #do something illegal
+    # #make copies for regridding routine to modify
+    # target_lat_row = np.copy(t_lat)
+    # target_lon_row = np.copy(t_lon)
+    # target_lat_col = np.copy(t_lat)
+    # target_lon_col = np.copy(t_lon)
+    # #new indices to regrid, use that as numpy where if you will
+    # nx, ny = 2030, 1354
+    # rows = np.arange(nx)
+    # cols = np.arange(ny)
+    # col_mesh, row_mesh = np.meshgrid(cols, rows)
+    #
+    # import time
+    #
+    # for i in range(5):
+    #
+    #     start=time.time()
+    #
+    #     regrid_row_idx =regrid_latlon_source2target(np.copy(s_lat), np.copy(s_lon), np.copy(t_lat), np.copy(t_lon),\
+    #                                      np.copy(row_mesh).astype(np.float64)).astype(np.int)
+    #
+    #     regrid_col_idx = regrid_latlon_source2target(np.copy(s_lat), np.copy(s_lon), np.copy(t_lat), np.copy(t_lon),\
+    #                                      np.copy(col_mesh).astype(np.float64)).astype(np.int)
+    #
+    #     print(-start+time.time())
+    #     #print(regrid_row_idx.shape, regrid_col_idx.shape)
+    #
+    #     #get the regridded data
+    #     target_data = s_data[regrid_row_idx, regrid_col_idx]#regrid_MODIS_2_MAIA(s_lat, s_lon, t_lat, t_lon, s_data)
+    #     s_data[regrid_row_idx, regrid_col_idx] += 0.5
+    #
+    #     #plot the MAIA data next to modis data to see if result makes sense
+    #     #print(np.shape(s_data), np.shape(target_data))
+    #     f, ax = plt.subplots(ncols=2)
+    #     #ax[0].imshow(regrid_col_idx)
+    #     #ax[1].imshow(regrid_row_idx)
+    #     ax[0].imshow(s_data)
+    #     ax[1].imshow(target_data)
+    #     #f.savefig('./test_pytaf.png', dpi=300)
+    #     plt.show()
