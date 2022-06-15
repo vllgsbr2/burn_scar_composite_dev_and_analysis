@@ -299,15 +299,6 @@ if __name__ == "__main__":
     fill_val_idx = np.where((regrid_row_idx == fill_val) | \
                             (regrid_col_idx == fill_val)   )
 
-    # regrid_row_idx[fill_val_idx] = regrid_row_idx[0,0]
-    # regrid_col_idx[fill_val_idx] = regrid_col_idx[0,0]
-
-    # for i in range(3):
-    #     viirs_DLCF_RGB_regridded[fill_val_idx,i] = np.nan
-    #     if i==0:
-    #         source_lat_regridded[fill_val_idx] = np.nan
-    #         source_lon_regridded[fill_val_idx] = np.nan
-
     viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
     source_lat_regridded[fill_val_idx] = np.nan
     source_lon_regridded[fill_val_idx] = np.nan
