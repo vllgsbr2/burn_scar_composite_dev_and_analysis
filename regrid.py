@@ -38,9 +38,52 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
     import pytaf
     #radius in meters to search around pixel for a neighbor
     max_radius = 5556.
-    target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
-                                   target_lon, source_data, max_radius)
-    return target_data
+    # target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
+    #                                target_lon, source_data, max_radius)
+
+    #############################
+    # source_lat, source_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+
+    data_nx, data_ny             = np.shape(source_lat)
+    data_rows                    = np.arange(data_nx).astype(np.float64)
+    data_cols                    = np.arange(data_ny).astype(np.float64)
+    data_col_mesh, data_row_mesh = np.meshgrid(data_cols, data_rows)
+    # print(common_grid_lon)
+
+    target_lat = target_lat.astype(np.float64)
+    target_lon = target_lat.astype(np.float64)
+
+    import time
+    start=time.time()
+
+    print('regridding rows')
+    regrid_row_idx = pytaf.resample_n(np.copy(source_lat),\
+                                      np.copy(source_lon),\
+                                      np.copy(target_lat),\
+                                      np.copy(target_lon),\
+                                      data_row_mesh.astype(np.float64),\
+                                      max_radius).astype(int)
+    print(-start+time.time())
+    start=time.time()
+
+    print('rigridding cols')
+    regrid_col_idx = pytaf.resample_n(np.copy(source_lat),\
+                                      np.copy(source_lon),\
+                                      np.copy(target_lat),\
+                                      np.copy(target_lon),\
+                                      data_col_mesh.astype(np.float64),\
+                                      max_radius).astype(int)
+    print(-start+time.time())
+
+    #grab -999 fill values in regrid col/row idx
+    #use these positions to write fill values when regridding the rest of the data
+    fill_val     = -999
+    fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+                            (regrid_col_idx == fill_val)   )
+
+    return regrid_row_idx, regrid_col_idx, fill_val_idx
+    #############################
+    # return target_data
 
 def make_custom_lat_lon_grid():
     '''
@@ -176,6 +219,69 @@ def get_lat_lon_grid_from_geotiff(tif_sar_f_name):
     # longs, lats = transform(p1, p2, eastings, northings)
 
     return lat, lon
+
+def running_composite(viirs_database_file, num_days_2_composite=8):
+    '''
+    Inputs:
+        viirs_database_file {str}: path to h5 database of viirs burnscar bands
+        num_days_2_composite {int}: either 8 or 16 should be good
+    regrids data to common grid, then lays down latest cloud free data starting
+    with the 1st day until the last day. Such that the latest cloud free obs is
+    visibile on the image.
+
+    return the bands stacked, reprojected, and cloud free ready for further
+    processing.
+    '''
+
+    #loop to regrid any subset of granules
+    with h5py.File(viirs_database_file, 'r') as h5_viirs_f:
+        timestamps = list(h5_viirs_f.keys())
+        # timestamps_modifed = [x[:12] for x in timestamps]
+        data_names = list(h5_viirs_f[timestamps[0]].keys())
+
+        for timestamp in timestamps:
+            data_dict = {}
+            for data_name in data_names:
+                data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
+                viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+
+                viirs_nx, viirs_ny             = np.shape(viirs_lat)
+                viirs_rows                     = np.arange(viirs_nx).astype(np.float64)
+                viirs_cols                     = np.arange(viirs_ny).astype(np.float64)
+                viirs_col_mesh, viirs_row_mesh = np.meshgrid(viirs_cols, viirs_rows)
+                # print(common_grid_lon)
+
+                target_lat = common_grid_lat.astype(np.float64)
+                target_lon = common_grid_lon.astype(np.float64)
+                source_lat, source_lon = np.copy(viirs_lat), np.copy(viirs_lon)
+
+                import time
+                start=time.time()
+
+                print('regridding rows')
+                regrid_row_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                             np.copy(source_lon),\
+                                                             np.copy(target_lat),\
+                                                             np.copy(target_lon),\
+                                                             viirs_row_mesh.astype(np.float64)).astype(int)
+                print(-start+time.time())
+                start=time.time()
+                print('rigridding cols')
+                regrid_col_idx = regrid_latlon_source2target(np.copy(source_lat),\
+                                                             np.copy(source_lon),\
+                                                             np.copy(target_lat),\
+                                                             np.copy(target_lon),\
+                                                             viirs_col_mesh.astype(np.float64)).astype(int)
+                print(-start+time.time())
+
+                #grab -999 fill values in regrid col/row idx
+                #use these positions to write fill values when regridding the rest of the data
+                fill_val     = -999
+                fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+                                        (regrid_col_idx == fill_val)   )
+
+
+
 
 if __name__ == "__main__":
     import sys
@@ -336,21 +442,3 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
-    #
-    # #loop to regrid any subset of granules
-    # with h5py.File(h5_viirs_name, 'r') as h5_viirs_f:
-    #     timestamps = list(h5_viirs_f.keys())
-    #     # timestamps_modifed = [x[:12] for x in timestamps]
-    #     data_names = list(h5_viirs_f[timestamps[0]].keys())
-    #
-    #     for timestamp in timestamps:
-    #         data_dict = {}
-    #         for data_name in data_names:
-    #             data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
-    #             viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
-    #
-    #             source_lat, source_lon = np.copy(common_grid_lat), np.copy(common_grid_lon)
-    #             target_lat, target_lon = np.copy(viirs_lat), np.copy(viirs_lon)
-    #             source_data            = viirs_DLCF_RGB
-    #             regridded_viirs        = regrid_latlon_source2target(source_lat, source_lon,\
-    #                                                 target_lat, target_lon, source_data)
