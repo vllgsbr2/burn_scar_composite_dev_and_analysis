@@ -38,20 +38,40 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
     import pytaf
     #radius in meters to search around pixel for a neighbor
     max_radius = 5556.
-    # target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
-    #                                target_lon, source_data, max_radius)
+    target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
+                                   target_lon, source_data, max_radius)
+    return target_data
 
-    #############################
-    # source_lat, source_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
+def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_lon):
+    '''
+    https://github.com/TerraFusion/pytaf
+    Objective:
+        take source geolocation and source data, and regrid it to a target
+        geolocation using nearest nieghbor.
+    Arguments:
+        source_lat, source_lon {2D narrays} -- lat/lon of data to be regridded
+        target_lat, target_lon {2D narrays} -- lat/lon of refrence grid
+    Returns:
+        regrid_row_idx {2D narray} -- regridded row mesh which can be used
+                                      to reindex all data associated with the
+                                      source_lat/source_lon
+        regrid_col_idx {2D narray} -- regridded col mesh which can be used
+                                      to reindex all data associated with the
+                                      source_lat/source_lon
+        fill_val_idx {2D narray}   -- numpy where return of indicies of data
+                                      that did not lie in the refrence grid
+    '''
+    import pytaf
+    #radius in meters to search around pixel for a neighbor
+    max_radius = 5556.
 
     data_nx, data_ny             = np.shape(source_lat)
     data_rows                    = np.arange(data_nx).astype(np.float64)
     data_cols                    = np.arange(data_ny).astype(np.float64)
     data_col_mesh, data_row_mesh = np.meshgrid(data_cols, data_rows)
-    # print(common_grid_lon)
 
     target_lat = target_lat.astype(np.float64)
-    target_lon = target_lat.astype(np.float64)
+    target_lon = target_lon.astype(np.float64)
 
     import time
     start=time.time()
@@ -82,8 +102,7 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
                             (regrid_col_idx == fill_val)   )
 
     return regrid_row_idx, regrid_col_idx, fill_val_idx
-    #############################
-    # return target_data
+
 
 def make_custom_lat_lon_grid():
     '''
@@ -324,92 +343,43 @@ if __name__ == "__main__":
     h5_viirs_name   = 'R:/satellite_data/viirs_data/noaa20/databases/VIIRS_burn_Scar_database.h5'
     timestamp       = '2021226.2000'
     viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
-    # print(viirs_data_dict)
+
     viirs_lat      = flip_arr(viirs_data_dict['lat']).astype(np.float64)
     viirs_lon      = flip_arr(viirs_data_dict['lon']).astype(np.float64)*-1
     viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
-    # print(viirs_lon)
-
-    #debugging #################################################################
-    # f, ax = plt.subplots(nrows=2, ncols=3, sharex=True, sharey=True, figsize=(12,12))
-    #
-    # cmap='jet'
-    # vmin_lat, vmax_lat = np.min(common_grid_lat), np.max(common_grid_lat)
-    # vmin_lon, vmax_lon = np.min(common_grid_lon), np.max(common_grid_lon)
-    # ax[0,0].imshow(viirs_DLCF_RGB)
-    # ax[0,1].imshow(viirs_lat, cmap=cmap, vmin=vmin_lat, vmax=vmax_lat)
-    # ax[0,2].imshow(viirs_lon, cmap=cmap, vmin=vmin_lon, vmax=vmax_lon)
-    #
-    # ax[1,1].imshow(common_grid_lat, cmap=cmap, vmin=vmin_lat, vmax=vmax_lat)
-    # ax[1,2].imshow(common_grid_lon, cmap=cmap, vmin=vmin_lon, vmax=vmax_lon)
-    # # ax[1,2].imshow()
-    #
-    #
-    # ax[0,0].set_title('viirs_DLCF_RGB')
-    # ax[0,1].set_title('viirs_lat')
-    # ax[0,2].set_title('viirs_lon')
-    #
-    # ax[1,1].set_title('common_grid_lat')
-    # ax[1,2].set_title('common_grid_lon')
-    #
-    # ax[1,0].axis('off')
-    #
-    # plt.tight_layout()
-    # plt.show()
-    #
-    #
-    # sys.exit()
-    #debugging #################################################################
 
     #put both on common grid using the pytaf resample_n wrapper function
     #just VIIRS for now, since the SAR is such a higher res, it won't snap
     #to the grid properly. Will need to upscale the VIIRS data and common grid
     #to match SAR, or downscale the SAR to the VIIRS data (might be better)
 
-    viirs_nx, viirs_ny             = np.shape(viirs_DLCF_RGB[:,:,0])
-    viirs_rows                     = np.arange(viirs_nx).astype(np.float64)
-    viirs_cols                     = np.arange(viirs_ny).astype(np.float64)
-    viirs_col_mesh, viirs_row_mesh = np.meshgrid(viirs_cols, viirs_rows)
-    # print(common_grid_lon)
+    target_lat = common_grid_lat
+    target_lon = common_grid_lon
+    source_lat, source_lon = viirs_lat, viirs_lon
 
-    target_lat = common_grid_lat.astype(np.float64)
-    target_lon = common_grid_lon.astype(np.float64)
-    source_lat, source_lon = np.copy(viirs_lat), np.copy(viirs_lon)
-
-    import time
-    start=time.time()
-
-    print('regridding rows')
-    regrid_row_idx = regrid_latlon_source2target(np.copy(source_lat),\
-                                                 np.copy(source_lon),\
-                                                 np.copy(target_lat),\
-                                                 np.copy(target_lon),\
-                                                 viirs_row_mesh.astype(np.float64)).astype(int)
-    print(-start+time.time())
-    print('rigridding cols')
-    regrid_col_idx = regrid_latlon_source2target(np.copy(source_lat),\
-                                                 np.copy(source_lon),\
-                                                 np.copy(target_lat),\
-                                                 np.copy(target_lon),\
-                                                 viirs_col_mesh.astype(np.float64)).astype(int)
-    print(-start+time.time())
+    regrid_row_idx,\
+    regrid_col_idx,\
+    fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
+                                                     source_lon,\
+                                                     target_lat,\
+                                                     target_lon)
 
     viirs_DLCF_RGB_regridded = viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]
     source_lat_regridded     = source_lat[regrid_row_idx    , regrid_col_idx]
     source_lon_regridded     = source_lon[regrid_row_idx    , regrid_col_idx]
 
-    # print(np.where(regrid_row_idx != -999))
-    #grab -999 fill values in regrid col/row idx
-    #use these positions to write fill values when regridding the rest of the data
-    fill_val     = -999
-    fill_val_idx = np.where((regrid_row_idx == fill_val) | \
-                            (regrid_col_idx == fill_val)   )
+    # #grab -999 fill values in regrid col/row idx
+    # #use these positions to write fill values when regridding the rest of the data
+    # fill_val     = -999
+    # fill_val_idx = np.where((regrid_row_idx == fill_val) | \
+    #                         (regrid_col_idx == fill_val)   )
 
     viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
     source_lat_regridded[fill_val_idx] = np.nan
     source_lon_regridded[fill_val_idx] = np.nan
 
-
+    #plotting###################################################################
+    plt.style.use('dark_background')
     f, ax = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(12,12))
 
     ax[0,0].imshow(viirs_DLCF_RGB)
