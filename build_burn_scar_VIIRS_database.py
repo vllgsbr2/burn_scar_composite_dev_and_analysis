@@ -84,7 +84,7 @@ if __name__=='__main__':
     start, end = 604, -1
 
     if True:
-        with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r+') as hf_database:
+        with h5py.File(home+'databases/VIIRS_burn_Scar_database_regridded.h5','r+') as hf_database:
             for i, (geo_file, ref_file, cldmsk_file) in enumerate(zip(geo_filepaths[start:end],\
                         ref_filepaths[start:end], cldmsk_filepaths[start:end])):
 
@@ -115,6 +115,8 @@ if __name__=='__main__':
                 burn_scar_RGB   = flip_arr(burn_scar_RGB)
                 cldmsk          = flip_arr(cldmsk)
                 land_water_mask = flip_arr(land_water_mask)
+                lat             = flip_arr(lat)
+                lon             = flip_arr(lon)
 
                 # group.create_dataset(observables[i], data=data[:,:,i], compression='gzip')
                 # group = hf_observables.create_group(time_stamp)

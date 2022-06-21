@@ -17,7 +17,7 @@ def flip_arr(arr):
     ax.imshow(arr)
     '''
     arr=np.flip(arr, axis=0)
-    # arr=np.flip(arr, axis=1)
+    arr=np.flip(arr, axis=1)
     return arr
 
 
@@ -102,7 +102,6 @@ def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_l
                             (regrid_col_idx == fill_val)   )
 
     return regrid_row_idx, regrid_col_idx, fill_val_idx
-
 
 def make_custom_lat_lon_grid():
     '''
@@ -262,44 +261,27 @@ def running_composite(viirs_database_file, num_days_2_composite=8):
             data_dict = {}
             for data_name in data_names:
                 data_dict[data_name] =  h5_viirs_f[timestamp+'/'+data_name][:]
-                viirs_lat, viirs_lon = viirs_data_dict['lat'], viirs_data_dict['lon']
 
-                viirs_nx, viirs_ny             = np.shape(viirs_lat)
-                viirs_rows                     = np.arange(viirs_nx).astype(np.float64)
-                viirs_cols                     = np.arange(viirs_ny).astype(np.float64)
-                viirs_col_mesh, viirs_row_mesh = np.meshgrid(viirs_cols, viirs_rows)
-                # print(common_grid_lon)
+            viirs_lat = data_dict['lat'][:]
+            viirs_lon = data_dict['lon'][:]
 
-                target_lat = common_grid_lat.astype(np.float64)
-                target_lon = common_grid_lon.astype(np.float64)
-                source_lat, source_lon = np.copy(viirs_lat), np.copy(viirs_lon)
+            target_lat, target_lon = common_grid_lat, common_grid_lon
+            source_lat, source_lon = viirs_lat, viirs_lon
 
-                import time
-                start=time.time()
+            regrid_row_idx,\
+            regrid_col_idx,\
+            fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
+                                                             source_lon,\
+                                                             target_lat,\
+                                                             target_lon)
 
-                print('regridding rows')
-                regrid_row_idx = regrid_latlon_source2target(np.copy(source_lat),\
-                                                             np.copy(source_lon),\
-                                                             np.copy(target_lat),\
-                                                             np.copy(target_lon),\
-                                                             viirs_row_mesh.astype(np.float64)).astype(int)
-                print(-start+time.time())
-                start=time.time()
-                print('rigridding cols')
-                regrid_col_idx = regrid_latlon_source2target(np.copy(source_lat),\
-                                                             np.copy(source_lon),\
-                                                             np.copy(target_lat),\
-                                                             np.copy(target_lon),\
-                                                             viirs_col_mesh.astype(np.float64)).astype(int)
-                print(-start+time.time())
+            viirs_DLCF_RGB_regridded = viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]
+            source_lat_regridded     = source_lat[regrid_row_idx    , regrid_col_idx]
+            source_lon_regridded     = source_lon[regrid_row_idx    , regrid_col_idx]
 
-                #grab -999 fill values in regrid col/row idx
-                #use these positions to write fill values when regridding the rest of the data
-                fill_val     = -999
-                fill_val_idx = np.where((regrid_row_idx == fill_val) | \
-                                        (regrid_col_idx == fill_val)   )
-
-
+            viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
+            source_lat_regridded[fill_val_idx]     = np.nan
+            source_lon_regridded[fill_val_idx]     = np.nan
 
 
 if __name__ == "__main__":
@@ -309,6 +291,8 @@ if __name__ == "__main__":
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
         common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
         common_grid_lon = hf_west_conus_grid['Geolocation/Longitude'][:]
+
+    common_grid_lon = np.flip(common_grid_lon, axis=1)*-1
     # #put viirs and SAR data on same grid made by make_custom_lat_lon_grid()
     # #grab sar lat/lon grid
     # tif_sar_f_name   = 'C:/Users/Javi/Documents/NOAA/Roger_SAR_data/for_javier(2)/for_javier/view_descending_1th interferogram_07_21_2020-08_14_2020.tif'
@@ -345,7 +329,7 @@ if __name__ == "__main__":
     viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
 
     viirs_lat      = flip_arr(viirs_data_dict['lat']).astype(np.float64)
-    viirs_lon      = flip_arr(viirs_data_dict['lon']).astype(np.float64)*-1
+    viirs_lon      = flip_arr(viirs_data_dict['lon']).astype(np.float64)
     viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
 
     #put both on common grid using the pytaf resample_n wrapper function
@@ -367,12 +351,6 @@ if __name__ == "__main__":
     viirs_DLCF_RGB_regridded = viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]
     source_lat_regridded     = source_lat[regrid_row_idx    , regrid_col_idx]
     source_lon_regridded     = source_lon[regrid_row_idx    , regrid_col_idx]
-
-    # #grab -999 fill values in regrid col/row idx
-    # #use these positions to write fill values when regridding the rest of the data
-    # fill_val     = -999
-    # fill_val_idx = np.where((regrid_row_idx == fill_val) | \
-    #                         (regrid_col_idx == fill_val)   )
 
     viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
     source_lat_regridded[fill_val_idx] = np.nan
@@ -408,7 +386,6 @@ if __name__ == "__main__":
     for a in ax.flat:
         a.set_xticks([])
         a.set_yticks([])
-
 
     plt.tight_layout()
     plt.show()
