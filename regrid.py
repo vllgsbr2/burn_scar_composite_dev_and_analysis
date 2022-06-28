@@ -42,7 +42,7 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
                                    target_lon, source_data, max_radius)
     return target_data
 
-def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_lon):
+def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_lon, max_radius = 5556.):
     '''
     https://github.com/TerraFusion/pytaf
     Objective:
@@ -63,12 +63,15 @@ def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_l
     '''
     import pytaf
     #radius in meters to search around pixel for a neighbor
-    max_radius = 5556.
+    # max_radius = 5556.
 
     data_nx, data_ny             = np.shape(source_lat)
     data_rows                    = np.arange(data_nx).astype(np.float64)
     data_cols                    = np.arange(data_ny).astype(np.float64)
     data_col_mesh, data_row_mesh = np.meshgrid(data_cols, data_rows)
+
+    source_lat = source_lat.astype(np.float64)
+    source_lon = source_lon.astype(np.float64)
 
     target_lat = target_lat.astype(np.float64)
     target_lon = target_lon.astype(np.float64)
@@ -193,7 +196,7 @@ def make_custom_lat_lon_grid():
             lons,lats = get_lonlats(lat_p1,lat_p2,lat_c,lon_c,lat_lc,lon_lc,lat_rc,lon_rc,resolution)
 
             #write grid to h5 file
-            grid_name = "{}Grids_{}.h5".format(home_dir, ptaname)
+            grid_name = "{}Grids_{}_new.h5".format(home_dir, ptaname)
             with h5py.File(grid_name,'w') as f:
                 grpm = f.create_group("Geolocation")
                 h = grpm.create_dataset('Latitude', data=lats,dtype='float32')
@@ -287,7 +290,7 @@ def running_composite(viirs_database_file, num_days_2_composite=8):
 if __name__ == "__main__":
     import sys
     # make_custom_lat_lon_grid()
-    commongrid_file = 'C:/Users/Javi/Documents/NOAA/Grids_West_CONUS.h5'
+    commongrid_file = 'C:/Users/Javi/Documents/NOAA/Grids_West_CONUS_new.h5'
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
         common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
         common_grid_lon = hf_west_conus_grid['Geolocation/Longitude'][:]
@@ -325,11 +328,11 @@ if __name__ == "__main__":
                 # print(timestamps)
 
     h5_viirs_name   = 'R:/satellite_data/viirs_data/noaa20/databases/VIIRS_burn_Scar_database.h5'
-    timestamp       = '2021226.2000'
+    timestamp       = '2021227.0954'#'2021225.1842'
     viirs_data_dict = get_VIIRS_database_composites(h5_viirs_name, timestamp)
 
-    viirs_lat      = flip_arr(viirs_data_dict['lat']).astype(np.float64)
-    viirs_lon      = flip_arr(viirs_data_dict['lon']).astype(np.float64)
+    viirs_lat      = viirs_data_dict['lat']
+    viirs_lon      = viirs_data_dict['lon']
     viirs_DLCF_RGB = viirs_data_dict['burn_scar_RGB']
 
     #put both on common grid using the pytaf resample_n wrapper function
@@ -340,36 +343,48 @@ if __name__ == "__main__":
     target_lat = common_grid_lat
     target_lon = common_grid_lon
     source_lat, source_lon = viirs_lat, viirs_lon
+    max_radius = 2000.
 
-    regrid_row_idx,\
-    regrid_col_idx,\
-    fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
-                                                     source_lon,\
-                                                     target_lat,\
-                                                     target_lon)
+    # regrid_row_idx,\
+    # regrid_col_idx,\
+    # fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
+    #                                                  source_lon,\
+    #                                                  target_lat,\
+    #                                                  target_lon,\
+    #                                                  max_radius)
 
+    regrid_row_idx = viirs_data_dict['regrid_row_idx']
+    regrid_col_idx = viirs_data_dict['regrid_col_idx']
+    fill_val_idx   = viirs_data_dict['fill_val_idx']
+
+    # print(regrid_row_idx-regrid_row_idx_database)
+    # print(regrid_col_idx-regrid_col_idx_database)
+    # print(fill_val_idx-fill_val_idx_database)
+    #
+    # sys.exit()
     viirs_DLCF_RGB_regridded = viirs_DLCF_RGB[regrid_row_idx, regrid_col_idx]
     source_lat_regridded     = source_lat[regrid_row_idx    , regrid_col_idx]
     source_lon_regridded     = source_lon[regrid_row_idx    , regrid_col_idx]
 
-    viirs_DLCF_RGB_regridded[fill_val_idx] = np.nan
-    source_lat_regridded[fill_val_idx] = np.nan
-    source_lon_regridded[fill_val_idx] = np.nan
+    viirs_DLCF_RGB_regridded[fill_val_idx[0], fill_val_idx[1]] = np.nan
+    source_lat_regridded[fill_val_idx[0], fill_val_idx[1]]     = np.nan
+    source_lon_regridded[fill_val_idx[0], fill_val_idx[1]]     = np.nan
 
     #plotting###################################################################
     plt.style.use('dark_background')
     f, ax = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(12,12))
 
-    ax[0,0].imshow(viirs_DLCF_RGB)
-    ax[0,1].imshow(source_lat, cmap='jet')
-    ax[0,2].imshow(source_lon, cmap='jet')
+    vminlat, vmaxlat, vminlon, vmaxlon = 28,51,-127,-100
+    ax[0,0].imshow(2*viirs_DLCF_RGB)
+    ax[0,1].imshow(source_lat, cmap='jet',vmin=vminlat,vmax=vmaxlat)
+    ax[0,2].imshow(source_lon, cmap='jet',vmin=vminlon,vmax=vmaxlon)
 
-    ax[1,0].imshow(viirs_DLCF_RGB_regridded)
-    ax[1,1].imshow(source_lat_regridded, cmap='jet')
-    ax[1,2].imshow(source_lon_regridded, cmap='jet')
+    ax[1,0].imshow(2*viirs_DLCF_RGB_regridded)
+    ax[1,1].imshow(source_lat_regridded, cmap='jet',vmin=vminlat,vmax=vmaxlat)
+    ax[1,2].imshow(source_lon_regridded, cmap='jet',vmin=vminlon,vmax=vmaxlon)
 
-    ax[2,1].imshow(common_grid_lat, cmap='jet')
-    ax[2,2].imshow(common_grid_lon, cmap='jet')
+    ax[2,1].imshow(common_grid_lat, cmap='jet',vmin=vminlat,vmax=vmaxlat)
+    ax[2,2].imshow(common_grid_lon, cmap='jet',vmin=vminlon,vmax=vmaxlon)
 
     ax[0,0].set_title('viirs_DLCF_RGB')
     ax[0,1].set_title('source_lat')
