@@ -16,6 +16,6 @@ def mask_water_and_cloud(data, cldmsk, land_water_mask, clear_water = True, clea
         desert  = 3
         land    = 4
 
-        data[land_water_mask >= coastal] = -997
+        data[land_water_mask == water] = -997
 
     return data

@@ -92,14 +92,14 @@ if __name__=='__main__':
     warnings.filterwarnings("ignore")
     start, end = 0, -1
 
-    with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r+') as hf_database:
+    with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r') as hf_database:
         for i, (geo_file, ref_file, cldmsk_file) in enumerate(zip(geo_filepaths[start:end],\
                     ref_filepaths[start:end], cldmsk_filepaths[start:end])):
 
-            start_time = time.time()
-            which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
-            #             [0,1,2,3,4]
-            M_bands_BRF, lat, lon = get_BRF_lat_lon(geo_file, ref_file, which_bands)
+            # start_time = time.time()
+            # which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
+            # #             [0,1,2,3,4]
+            # M_bands_BRF, lat, lon = get_BRF_lat_lon(geo_file, ref_file, which_bands)
 
             # R_M3, R_M4, R_M5, R_M7, R_M11 = \
             #                           M_bands_BRF[:,:,0], M_bands_BRF[:,:,1],\
@@ -123,8 +123,8 @@ if __name__=='__main__':
             # burn_scar_RGB   = flip_arr(burn_scar_RGB)
             # cldmsk          = flip_arr(cldmsk)
             # land_water_mask = flip_arr(land_water_mask)
-            lat             = flip_arr(lat)
-            lon             = flip_arr(lon)
+            # lat             = flip_arr(lat)
+            # lon             = flip_arr(lon)
 
             # group.create_dataset(observables[i], data=data[:,:,i], compression='gzip')
             # group = hf_observables.create_group(time_stamp)
@@ -137,25 +137,25 @@ if __name__=='__main__':
             UTC_min  = time_stamp_current[8:][2:]
             date     = datetime.strptime(year + "-" + DOY, "%Y-%j").strftime("_%m.%d.%Y")
 
-            group_timestamp_check = time_stamp_current+date
-            if group_timestamp_check in hf_database:
-                # regrid
-                target_lat = common_grid_lat
-                target_lon = common_grid_lon
-                source_lat, source_lon = lat, lon
-
-                max_radius = 6000. #most deggraded pixel size according to https://agupubs.onlinelibrary.wiley.com/doi/10.1002/jgrd.50873
-
-                regrid_row_idx,\
-                regrid_col_idx,\
-                fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
-                                                                 source_lon,\
-                                                                 target_lat,\
-                                                                 target_lon,\
-                                                                 max_radius)
-            else:
-                 print(group_timestamp_check, 'not processed')
-                 continue
+            # group_timestamp_check = time_stamp_current+date
+            # if group_timestamp_check in hf_database:
+            #     # regrid
+            #     target_lat = common_grid_lat
+            #     target_lon = common_grid_lon
+            #     source_lat, source_lon = lat, lon
+            #
+            #     max_radius = 6000. #most deggraded pixel size according to https://agupubs.onlinelibrary.wiley.com/doi/10.1002/jgrd.50873
+            #
+            #     regrid_row_idx,\
+            #     regrid_col_idx,\
+            #     fill_val_idx   = regrid_latlon_source2target_new(source_lat,\
+            #                                                      source_lon,\
+            #                                                      target_lat,\
+            #                                                      target_lon,\
+            #                                                      max_radius)
+            # else:
+            #      print(group_timestamp_check, 'not processed')
+            #      continue
 
             # print(time_stamp_current+date)
             # group_timestamp = hf_database.create_group(time_stamp_current+date)
@@ -167,14 +167,15 @@ if __name__=='__main__':
             # group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
             # group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
 
-            hf_database[time_stamp_current+date+'/lat'][:] = lat
-            hf_database[time_stamp_current+date+'/lon'][:] = lon
-
-            hf_database[time_stamp_current+date+'/regrid_row_idx'][:] = regrid_row_idx
-            hf_database[time_stamp_current+date+'/regrid_col_idx'][:] = regrid_col_idx
-            del hf_database[time_stamp_current+date+'/fill_val_idx']
-            hf_database[time_stamp_current+date].create_dataset('fill_val_idx'  , data=fill_val_idx   , compression='gzip')
-
-            #print some diagnostics
-            run_time = time.time() - start_time
-            print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'.format(i, date[1:], time_stamp_current, run_time))
+            # hf_database[time_stamp_current+date+'/lat'][:] = lat
+            # hf_database[time_stamp_current+date+'/lon'][:] = lon
+            #
+            # hf_database[time_stamp_current+date+'/regrid_row_idx'][:] = regrid_row_idx
+            # hf_database[time_stamp_current+date+'/regrid_col_idx'][:] = regrid_col_idx
+            # del hf_database[time_stamp_current+date+'/fill_val_idx']
+            # hf_database[time_stamp_current+date].create_dataset('fill_val_idx'  , data=fill_val_idx   , compression='gzip')
+            #
+            # #print some diagnostics
+            # run_time = time.time() - start_time
+            # print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'.format(i, date[1:], time_stamp_current, run_time))
+            print('{:02d} VIIRS NOAA-20, {} ({})'.format(i, date[1:], time_stamp_current))
