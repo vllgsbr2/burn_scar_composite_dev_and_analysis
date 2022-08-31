@@ -92,14 +92,14 @@ if __name__=='__main__':
     warnings.filterwarnings("ignore")
     start, end = 0, -1
 
-    with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r') as hf_database:
+    with h5py.File(home+'databases/VIIRS_burn_Scar_database.h5','r+') as hf_database:
         for i, (geo_file, ref_file, cldmsk_file) in enumerate(zip(geo_filepaths[start:end],\
                     ref_filepaths[start:end], cldmsk_filepaths[start:end])):
 
             # start_time = time.time()
             # which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
             # #             [0,1,2,3,4]
-            # M_bands_BRF, lat, lon = get_BRF_lat_lon(geo_file, ref_file, which_bands)
+            # M_bands_BRF, lat, lon, land_water_mask = get_BRF_lat_lon(geo_file, ref_file, which_bands)
 
             # R_M3, R_M4, R_M5, R_M7, R_M11 = \
             #                           M_bands_BRF[:,:,0], M_bands_BRF[:,:,1],\
@@ -109,20 +109,20 @@ if __name__=='__main__':
             # BRF_RGB                 = get_BRF_RGB(R_M5,R_M4,R_M3)
             # NBR                     = get_normalized_burn_ratio(R_M7, R_M11)
             # burn_scar_RGB           = get_burn_scar_RGB(R_M11, R_M7, R_M5)
-            # cldmsk, land_water_mask = get_CLDMSK(cldmsk_file)
-
+            # cldmsk                  = get_CLDMSK(cldmsk_file)[0]
+            land_water_mask           = get_VJ103_geo(geo_file, include_lwm=True)['land_water_mask']
 
             # BRF_RGB[np.isnan(BRF_RGB)]                 = -999
             # NBR[np.isnan(NBR)]                         = -999
             # burn_scar_RGB[np.isnan(burn_scar_RGB)]     = -999
             # cldmsk[np.isnan(cldmsk)]                   = -999
-            # land_water_mask[np.isnan(land_water_mask)] = -999
+            land_water_mask[np.isnan(land_water_mask)] = -999
 
             # BRF_RGB         = flip_arr(BRF_RGB)
             # NBR             = flip_arr(NBR)
             # burn_scar_RGB   = flip_arr(burn_scar_RGB)
             # cldmsk          = flip_arr(cldmsk)
-            # land_water_mask = flip_arr(land_water_mask)
+            land_water_mask = flip_arr(land_water_mask)
             # lat             = flip_arr(lat)
             # lon             = flip_arr(lon)
 
@@ -166,6 +166,15 @@ if __name__=='__main__':
             # group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
             # group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
             # group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
+
+            # change to vj103 land water mask that has more categories
+            try:
+                hf_database[time_stamp_current+date+'/land_water_mask'][:] = land_water_mask
+            except:
+                try:
+                    group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
+                except:
+                    print("broken")
 
             # hf_database[time_stamp_current+date+'/lat'][:] = lat
             # hf_database[time_stamp_current+date+'/lon'][:] = lon

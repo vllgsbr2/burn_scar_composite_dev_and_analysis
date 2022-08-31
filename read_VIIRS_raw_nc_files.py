@@ -3,10 +3,10 @@ from netCDF4 import Dataset
 
 
 def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
-                  include_VZA=False, include_SAAVAA=False):
+                  include_VZA=False, include_SAAVAA=False, include_lwm=False):
     '''
     input: VIIRS VJ103 (or VNP103) .nc file
-    return: conditionally; lat, lon, SZA, VZA, SAA, VAA
+    return: conditionally; lat, lon, SZA, VZA, SAA, VAA, land_water_mask
     '''
 
     with Dataset(geo_file, 'r') as nc_geo_file_obj:
@@ -23,6 +23,17 @@ def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
         if include_SAAVAA:
             return_dict['SAA'] = geolocation_ncObj['solar_azimuth'][:]
             return_dict['VAA'] =  geolocation_ncObj['sensor_azimuth'][:]
+        if include_lwm:
+            # 0 Shallow_Ocean
+            # 1 Land
+            # 2 Coastline
+            # 3 Shallow_Inland
+            # 4 Ephemeral
+            # 5 Deep_Inland
+            # 6 Continental
+            # 7 Deep_Ocean
+
+            return_dict['land_water_mask'] = geolocation_ncObj['land_water_mask'][:]
 
     return return_dict
 
@@ -175,3 +186,70 @@ def get_CLDMSK(cldmsk_file):
         land_water_mask        = cldmsk_and_misc_fields[-1]
 
         return integer_cldmsk, land_water_mask
+
+if __name__=='__main__':
+
+    import warnings
+    from datetime import datetime
+    import os
+    import time
+    import sys
+    from netCDF4 import Dataset
+    import h5py
+    import numpy as np
+    import cartopy.crs as ccrs
+    import matplotlib.pyplot as plt
+
+
+    def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
+                      include_VZA=False, include_SAAVAA=False):
+        '''
+        input: VIIRS VJ103 (or VNP103) .nc file
+        return: conditionally; lat, lon, SZA, VZA, SAA, VAA
+        '''
+
+        with Dataset(geo_file, 'r') as nc_geo_file_obj:
+            geolocation_ncObj = nc_geo_file_obj['geolocation_data']
+
+            return_dict = {}
+            if include_latlon:
+                return_dict['lat'] = geolocation_ncObj['latitude'][:]
+                return_dict['lon'] = geolocation_ncObj['longitude'][:]
+            if include_SZA:
+                return_dict['SZA'] = geolocation_ncObj['solar_zenith'][:]
+            if include_VZA:
+                return_dict['VZA'] = geolocation_ncObj['sensor_zenith'][:]
+            if include_SAAVAA:
+                return_dict['SAA'] = geolocation_ncObj['solar_azimuth'][:]
+                return_dict['VAA'] =  geolocation_ncObj['sensor_azimuth'][:]
+
+            # 0 Shallow_Ocean
+            # 1 Land
+            # 2 Coastline
+            # 3 Shallow_Inland
+            # 4 Ephemeral
+            # 5 Deep_Inland
+            # 6 Continental
+            # 7 Deep_Ocean
+
+            land_Water_mask = geolocation_ncObj['land_water_mask'][:]
+            return land_Water_mask
+
+
+        # return return_dict
+
+    home = 'R:/satellite_data/viirs_data/noaa20/geolocation/'
+    geo_file = home + 'VJ103MOD.A2021154.2048.021.2021155015136.nc'
+    # print(land_water_mask)
+    def flip_arr(arr):
+        '''
+        return: array flipped over each of the 1st 2 axes for proper display using
+        ax.imshow(arr)
+        '''
+        arr=np.flip(arr, axis=0)
+        arr=np.flip(arr, axis=1)
+        return arr
+    land_water_mask = flip_arr(get_VJ103_geo(geo_file))
+
+    plt.imshow(land_water_mask)
+    plt.show()

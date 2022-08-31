@@ -17,8 +17,8 @@ def get_burn_scar_RGB(R_M11, R_M7, R_M5):
 
 def get_BRF_lat_lon(geo_file, ref_file, which_bands):
     from read_VIIRS_raw_nc_files import get_VJ103_geo, get_VJ102_ref
-    geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True)
-    lat, lon, SZA = geolocation_dict['lat'], geolocation_dict['lon'], geolocation_dict['SZA']
+    geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True, include_lwm=True)
+    lat, lon, SZA, LWM = geolocation_dict['lat'], geolocation_dict['lon'], geolocation_dict['SZA'], geolocation_dict['land_water_mask']
     time_stamp_current = geo_file[-33:-21]
     M_bands = get_VJ102_ref(ref_file, which_bands)
 
@@ -31,7 +31,7 @@ def get_BRF_lat_lon(geo_file, ref_file, which_bands):
         #
         #     M_bands[:3216,:,i] /=  cosSZA[:3216,:]
 
-    return M_bands, lat, lon
+    return M_bands, lat, lon, LWM
 
 def get_BRF_RGB(R_M5,R_M4,R_M3):
     return np.dstack((R_M5,R_M4,R_M3))
