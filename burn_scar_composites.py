@@ -15,6 +15,10 @@ def get_burn_scar_RGB(R_M11, R_M7, R_M5):
 
     return np.dstack((R_M11, R_M7, R_M5))
 
+def get_normalized_differenced_vegetation_index(R_M1, R_M7):
+
+    return (R_M7 - R_M1)/(R_M7 + R_M1)
+
 def get_BRF_lat_lon(geo_file, ref_file, which_bands):
     from read_VIIRS_raw_nc_files import get_VJ103_geo, get_VJ102_ref
     geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True, include_lwm=True)
@@ -45,7 +49,7 @@ def flip_arr(arr):
     arr=np.flip(arr, axis=1)
     return arr
 
-def get_burn_scar_composite(R_M7, R_M11, geotiff=False):
+def get_burn_scar_composite(R_M7, R_M11, geotiff=False, landwater_mask=None):
     from scipy import ndimage
 
     if not geotiff:
@@ -56,8 +60,12 @@ def get_burn_scar_composite(R_M7, R_M11, geotiff=False):
         # R_M11[R_M7  > 0.1346] = np.nan #for clear no smoke only
         # R_M11[R_M11 < 0.0281]
 
-        return ndimage.gaussian_filter(R_M11, sigma=1)
-        # return R_M11
+        burn_scar_mask = ndimage.gaussian_filter(R_M11, sigma=1)
+        if landwater_mask == None:
+            return burn_scar_mask
+        else:
+            burn_scar_mask[landwater_mask==desert] = 0
+            return burn_scar_mask
     else:
         R_M11[R_M7  > 55] = 0
         R_M11[R_M11 < 45] = 0

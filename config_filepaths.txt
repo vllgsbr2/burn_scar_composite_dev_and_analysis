@@ -1,0 +1,7 @@
+[file paths mac]
+
+database dir : /Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/
+
+[file paths windows]
+
+database dir : R:/satellite_data/viirs_data/noaa20/databases/

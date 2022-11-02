@@ -1,0 +1,7 @@
+each line is a set of coordinates in the following format
+
+row1, row2, col1, col2
+
+where xxx2 > xxx1 and the row col numbers correspond to the whole domain
+
+row1, row2, col1, col2
