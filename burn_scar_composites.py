@@ -53,14 +53,23 @@ def get_burn_scar_composite(R_M7, R_M11, geotiff=False, landwater_mask=None):
     from scipy import ndimage
 
     if not geotiff:
-        R_M11[R_M7  > 0.12] = np.nan #for clear no smoke only
-        R_M11[R_M7 < 0.0281] = np.nan
-        R_M11[R_M11 < 0.01] = np.nan
+        # R_M11[R_M7  > 0.12] = np.nan #for clear no smoke only
+        # R_M11[R_M7 < 0.0281] = np.nan
+        # R_M11[R_M11 < 0.01] = np.nan
 
         # R_M11[R_M7  > 0.1346] = np.nan #for clear no smoke only
         # R_M11[R_M11 < 0.0281]
 
-        burn_scar_mask = ndimage.gaussian_filter(R_M11, sigma=1)
+        # R_M11 = ndimage.gaussian_filter(R_M11, sigma=1)
+        # R_M7 = ndimage.gaussian_filter(R_M7, sigma=1)
+
+        R_M11[R_M7  > 0.2]   = np.nan #for clear no smoke only
+        R_M11[R_M7  < 0.0281] = np.nan
+        R_M11[R_M11 < 0.05]   = np.nan
+
+        NBR = get_normalized_burn_ratio(R_M7, R_M11)
+        NBR[NBR<-0.35] = np.nan
+        burn_scar_mask = NBR
         if landwater_mask == None:
             return burn_scar_mask
         else:

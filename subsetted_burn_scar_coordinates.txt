@@ -1,7 +1,42 @@
 each line is a set of coordinates in the following format
 
-row1, row2, col1, col2
+x0,y0,x1,y2
+col1, row1, col2, row2, description
 
 where xxx2 > xxx1 and the row col numbers correspond to the whole domain
 
-row1, row2, col1, col2
+col1, row1, col2, row2, description
+0372, 1260, 0457, 1335, australia
+0462, 1690, 0500, 1730, bottom right dixie
+0328, 1725, 0415, 1763, bottom left dixie
+0328, 1611, 0456, 1713, left dixie smokie with fire
+0114, 1611, 0214, 1760, inverted michigan next to dixie
+0500, 1887, 0543, 1911, below dixie and lake
+0538, 2068, 0600, 2160, na
+0135, 1368, 0161, 1406, na
+0207, 1156, 0254, 1194, smokey and weak
+0260, 1050, 0310, 1080, weak
+0340, 1040, 0370, 1080, dark maybe weak
+0290, 0908, 0390, 1000, lots of veg to filter
+0790, 0740, 0900, 0850, smokey and bowtie
+0525, 0694, 0535, 0705, weird small one in north
+0420, 0635, 0443, 0663, na
+0450, 0140, 0490, 0173, very textured
+0590, 0138, 0642, 0183, smokey textured fire
+0413, 0035, 0438, 0080, fire and smoke
+0484, 0086, 0533, 0121, fire and smoke
+0510, 0037, 0554, 0090, fire and smoke
+0644, 0472, 0672, 0500, na
+0682, 0482, 0705, 0507, na
+0565, 0400, 0580, 0426, na
+1807, 0754, 1826, 0780, na
+1837, 0809, 1861, 0854, na
+1900, 0817, 1965, 0845, active fire well defined
+1959, 0795, 2007, 0820, very weak and smokey
+2004, 1500, 2054, 1556, na
+2076, 1568, 2150, 1615, na
+2040, 1630, 2115, 1672, cumulus cloud shadows
+2068, 1706, 2083, 1721, small with cumulus cloud shadows
+1974, 1582, 1987, 1606, weak and small
+2141, 1653, 2150, 1659, very very weak and small
+0279, 2256, 0287, 2260, very small kinda weak
