@@ -4,6 +4,27 @@
 # from pyhdf.SD import SD
 # import pytaf#!pip install git+https://github.com/TerraFusion/pytaf.git
 # #from multicore_processing import multi_core_crop
+
+
+
+
+
+
+
+
+# code to try in gdal for gis ; https://gdal.org
+
+# shape = data.shape
+# outdata = driver.Create(filename, shape[1], shape[0], 1, gdal.GDT_int16)
+# outdata.SetGeoTransform(geo_transform)
+# outdata.SetProjection(projection)
+# outdata.GetRasterBand(1).SetNoDataValue(no_data_value)
+# outdata.GetRasterBand(1).WriteArray(data)
+# outdata.FlushCache()
+# data = numpy array representing the data
+# from osgeo import gdal
+
+#
 import h5py
 import sys
 import os

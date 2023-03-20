@@ -34,7 +34,7 @@ burnscar_mask    = get_burn_scar_composite(Rveg, Rbrn)
 burnscar_semi_labeled_dataset_file = 'subsetted_burn_scar_coordinates.txt'
 df_burnscar_semi_labeled = pd.read_csv(burnscar_semi_labeled_dataset_file,\
                                          header=0, delimiter=', ', skiprows=7)
-print(df_burnscar_semi_labeled)
+# print(df_burnscar_semi_labeled)
 
 #build boxes around burn scars then visualize on RGB
 col1 = df_burnscar_semi_labeled['col1'].tolist()
@@ -47,76 +47,106 @@ for i in range(len(col1)):
     x=burnscar_mask[row1[i]:row2[i],col1[i]:col2[i]]
     idx_valid = np.where(np.isnan(x)==False)
     count += np.nansum(len(idx_valid[0]))
-print(count)
+# print(count)
 
-plt.rcParams.update({'font.size': 15})
-plt.style.use('dark_background')
-f, ax = plt.subplots(ncols=2, figsize=(35,20), sharex=True, sharey=True)
-ax[0].imshow(1.5*rgb_OG)
-ax[1].imshow(1.5*rgb_OG)
-im = ax[1].imshow(burnscar_mask, cmap='jet', vmax=0.25, alpha=0.75)
-area_total = 0
-for i in range(len(col1)):
-    width, length = col2[i]-col1[i], row2[i]-row1[i]
-    area_total += width*length
-    rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
-                             edgecolor='r', facecolor='none')
-    rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
-                             edgecolor='r', facecolor='none')
-    ax[0].add_patch(rect)
-    ax[1].add_patch(rect1)
-
-#[left, bottom, width, height]
-cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
-cbar = f.colorbar(im, cax=cax, orientation='vertical')
-ticks = np.arange(-.350, 0.30, 0.050)
-cbar.ax.set_yticks(ticks)
-labels = [round(x, 2) for x in ticks]
-cbar.ax.set_yticklabels(labels)
-
-ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
-             +str(area_total), y=-0.1)
-ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm')
-ax[1].set_title('Primitive Burn Scar Mask; NBR Shaded\nR_M7<0.2, R_M7>0.0281, R_M11>0.05, NBR>-0.35')
-f.suptitle('NOAA-20 VIIRS Valid Sept 1, 2021\nComposited and Cloud-Cleared Over Previous 8 Days')
-
-for a in ax:
-    a.set_xticks([])
-    a.set_yticks([])
-
-plt.subplots_adjust(left=0.125,
-                    bottom=0.,
-                    right=0.9,
-                    top=0.82,
-                    wspace=0.2,
-                    hspace=0.2)
-
+# plt.rcParams.update({'font.size': 15})
+# plt.style.use('dark_background')
+# f, ax = plt.subplots(ncols=2, figsize=(35,20), sharex=True, sharey=True)
+# ax[0].imshow(1.5*rgb_OG)
+# ax[1].imshow(1.5*rgb_OG)
+# im = ax[1].imshow(burnscar_mask, cmap='jet', vmax=0.25, alpha=0.75)
+# area_total = 0
+# for i in range(len(col1)):
+#     width, length = col2[i]-col1[i], row2[i]-row1[i]
+#     area_total += width*length
+#     rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+#                              edgecolor='r', facecolor='none')
+#     rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+#                              edgecolor='r', facecolor='none')
+#     ax[0].add_patch(rect)
+#     ax[1].add_patch(rect1)
+#
+# #[left, bottom, width, height]
+# cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
+# cbar = f.colorbar(im, cax=cax, orientation='vertical')
+# ticks = np.arange(-.350, 0.30, 0.050)
+# cbar.ax.set_yticks(ticks)
+# labels = [round(x, 2) for x in ticks]
+# cbar.ax.set_yticklabels(labels)
+#
+# ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
+#              +str(area_total), y=-0.1)
+# ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm')
+# ax[1].set_title('Primitive Burn Scar Mask; NBR Shaded\nR_M7<0.2, R_M7>0.0281, R_M11>0.05, NBR>-0.35')
+# f.suptitle('NOAA-20 VIIRS Valid Sept 1, 2021\nComposited and Cloud-Cleared Over Previous 8 Days')
+#
+# for a in ax:
+#     a.set_xticks([])
+#     a.set_yticks([])
+#
+# plt.subplots_adjust(left=0.125,
+#                     bottom=0.,
+#                     right=0.9,
+#                     top=0.82,
+#                     wspace=0.2,
+#                     hspace=0.2)
+#
+# plt.show()
 
 #open up netcdf4 file and save the RGB, primitive mask, lat/lon, timestamp
+grid_file_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/Grids_West_CONUS_new.h5'
+save_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/'
 from netCDF4 import Dataset
-with Dataset('./burn_scar_mask_awips_sample.nc', 'w') as nc_burnscar and\
-     h5py.File('','r') as h5_lat_lon:
+import pyproj as proj
 
-    lat_dim  = nc_burnscar.createDimension('lat', 73)     # latitude axis
-    lon_dim  = nc_burnscar.createDimension('lon', 144)    # longitude axis
+with Dataset(save_path + 'burn_scar_mask_awips_sample.nc', 'w') as nc_burnscar,\
+     h5py.File(grid_file_path,'r') as h5_lat_lon:
+
+    r1, r2, c1, c2 = 1260, 1340, 360, 480
+    pbsm_shape = np.shape(burnscar_mask[r1:r2,c1:c2])
+
+
+    lat_dim  = nc_burnscar.createDimension('lat', pbsm_shape[0])     # latitude axis
+    lon_dim  = nc_burnscar.createDimension('lon', pbsm_shape[1])    # longitude axis
     time_dim = nc_burnscar.createDimension('time', None) # unlimited axis (can be appended to).
 
     nc_burnscar.title= 'primitive burn scar mask'
 
-    lat           = nc_burnscar.createVariable('lat', np.float32, ('lat',))
+    time           = nc_burnscar.createVariable('time', np.int8, ('time'))
+    time.units     = 'hours since 2021-10-14 20:54:00'
+    time.long_name = 'time'
+    time.calendar  = 'none'
+
+    lat           = nc_burnscar.createVariable('lat', np.float32, ('lat','lon'), fill_value=-999)
     lat.units     = 'degrees_north'
     lat.long_name = 'latitude'
-    lon           = nc_burnscar.createVariable('lon', np.float32, ('lon',))
+    lon           = nc_burnscar.createVariable('lon', np.float32, ('lat','lon'), fill_value=-999)
     lon.units     = 'degrees_east'
     lon.long_name = 'longitude'
 
-    lat[:] = h5_lat_lon['lat'][:]
-    lon[:] = h5_lat_lon['laon'][:]
+    lat[:,:] = h5_lat_lon['Geolocation/Latitude' ][r1:r2,c1:c2]
+    lon[:,:] = h5_lat_lon['Geolocation/Longitude'][r1:r2,c1:c2]
 
-    pbsm               = nc_burnscar.createVariable('temp',np.float64,('time','lat','lon')) # note: unlimited dimension is leftmost
+    #convert lat lon into GIS friendly projection
+    # setup your projections
+    # crs_wgs = proj.Proj(init='epsg:4326') # assuming you're using WGS84 geographic
+    crs_bng = proj.Proj(init='epsg:27700') # use a locally appropriate projected CRS
+    # then cast your geographic coordinate pair to the projected system
+    x, y = proj.transform(crs_wgs, crs_bng, input_lon, input_lat)
+
+    pbsm               = nc_burnscar.createVariable('pbsm',np.float64,('time','lat','lon'), fill_value=-999) # note: unlimited dimension is leftmost
     pbsm.units         = 'unitless'
     pbsm.standard_name = 'primitive burn scar mask'
-    pbsm[:,:]          = burnscar_mask
+    pbsm[:,:]          = burnscar_mask[r1:r2,c1:c2].reshape((1,pbsm_shape[0], pbsm_shape[1]))
+
+
+
+with Dataset(save_path + 'burn_scar_mask_awips_sample.nc', 'r') as nc_burnscar:
+    print(nc_burnscar['pbsm'])
+    x=nc_burnscar['pbsm'][:]
+
+plt.imshow(x[0])
+plt.show()
 
 
 # #make hists of RGB values and total values superimposed
@@ -167,7 +197,7 @@ with Dataset('./burn_scar_mask_awips_sample.nc', 'w') as nc_burnscar and\
 
 
 # plt.tight_layout()
-plt.show()
+# plt.show()
 
 # #subset X to focus on ROI
 # # r1,r2, c1,c2 = 1555,1841, 0  ,600 # general large case
