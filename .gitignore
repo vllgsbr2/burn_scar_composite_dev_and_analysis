@@ -3,3 +3,5 @@ system_paths.txt
 __pycache__
 *.h5
 *.nc
+.DS_Store
+.ipynb_checkpoints
