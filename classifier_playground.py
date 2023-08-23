@@ -98,20 +98,22 @@ grid_file_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS
 save_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/'
 from netCDF4 import Dataset
 import pyproj as proj
-
-with Dataset(save_path + 'burn_scar_mask_awips_sample.nc', 'w') as nc_burnscar,\
+sample_fname = 'burn_scar_mask_GIS_sample_v2.nc'
+with Dataset(save_path + sample_fname, 'w', format='NETCDF4_CLASSIC') as nc_burnscar,\
      h5py.File(grid_file_path,'r') as h5_lat_lon:
 
-    r1, r2, c1, c2 = 1260, 1340, 360, 480
+    # coordinates for the single burn scar that looks like australia
+    # r1, r2, c1, c2 = 1260, 1340, 360, 480
+    r1, r2, c1, c2 = 0, -1, 0, -1
     pbsm_shape = np.shape(burnscar_mask[r1:r2,c1:c2])
 
+    # create dimensions of data
+    nc_burnscar.createDimension('lat', pbsm_shape[0])
+    nc_burnscar.createDimension('lon', pbsm_shape[1])
+    nc_burnscar.createDimension('time', None)
+    nc_burnscar.createDimension('channel', 3)
 
-    lat_dim  = nc_burnscar.createDimension('lat', pbsm_shape[0])     # latitude axis
-    lon_dim  = nc_burnscar.createDimension('lon', pbsm_shape[1])    # longitude axis
-    time_dim = nc_burnscar.createDimension('time', None) # unlimited axis (can be appended to).
-
-    nc_burnscar.title= 'primitive burn scar mask'
-
+    # define lat/lon and time variables
     time           = nc_burnscar.createVariable('time', np.int8, ('time'))
     time.units     = 'hours since 2021-10-14 20:54:00'
     time.long_name = 'time'
@@ -124,29 +126,38 @@ with Dataset(save_path + 'burn_scar_mask_awips_sample.nc', 'w') as nc_burnscar,\
     lon.units     = 'degrees_east'
     lon.long_name = 'longitude'
 
+    #save data into created variables
     lat[:,:] = h5_lat_lon['Geolocation/Latitude' ][r1:r2,c1:c2]
-    lon[:,:] = h5_lat_lon['Geolocation/Longitude'][r1:r2,c1:c2]
-
-    #convert lat lon into GIS friendly projection
-    # setup your projections
-    # crs_wgs = proj.Proj(init='epsg:4326') # assuming you're using WGS84 geographic
-    crs_bng = proj.Proj(init='epsg:27700') # use a locally appropriate projected CRS
-    # then cast your geographic coordinate pair to the projected system
-    x, y = proj.transform(crs_wgs, crs_bng, input_lon, input_lat)
+    lon[:,:] = h5_lat_lon['Geolocation/Longitude'][r1:r2,c1:c2]*(-1)
+    #adjust lon to go from west to east
+    lon_adjust = lon * np.nan
+    for k in range(0, len(lon)):
+        lon_adjust[k] = sorted(lon[k])
+    lon[:,:] = np.copy(lon_adjust)
 
     pbsm               = nc_burnscar.createVariable('pbsm',np.float64,('time','lat','lon'), fill_value=-999) # note: unlimited dimension is leftmost
     pbsm.units         = 'unitless'
     pbsm.standard_name = 'primitive burn scar mask'
     pbsm[:,:]          = burnscar_mask[r1:r2,c1:c2].reshape((1,pbsm_shape[0], pbsm_shape[1]))
 
+    day_land_cloud_fire_RGB               = nc_burnscar.createVariable('day_land_cloud_fire_RGB',np.float64,('time','lat','lon','channel'), fill_value=-999) # note: unlimited dimension is leftmost
+    day_land_cloud_fire_RGB.units         = 'unitless'
+    day_land_cloud_fire_RGB.standard_name = 'day_land_cloud_fire_RGB'
+    day_land_cloud_fire_RGB[:,:,:]        = np.copy(X)[r1:r2,c1:c2,:].reshape((1,pbsm_shape[0], pbsm_shape[1], 3))
+
+    # define CRS for file
+    crs = nc_burnscar.createVariable('spatial_ref', 'i4')
+    crs.spatial_ref = 'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
 
 
-with Dataset(save_path + 'burn_scar_mask_awips_sample.nc', 'r') as nc_burnscar:
-    print(nc_burnscar['pbsm'])
-    x=nc_burnscar['pbsm'][:]
-
-plt.imshow(x[0])
-plt.show()
+# with Dataset(save_path + sample_fname, 'r') as nc_burnscar:
+#     print(nc_burnscar['pbsm'])
+#     x=nc_burnscar['pbsm'][:]
+#     y=nc_burnscar['day_land_cloud_fire_RGB'][:]
+#
+# plt.imshow(y[0])
+# plt.imshow(x[0], cmap='jet', alpha=0.5, vmax=0.5, vmin=-0.3)
+# plt.show()
 
 
 # #make hists of RGB values and total values superimposed

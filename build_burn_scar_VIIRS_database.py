@@ -110,21 +110,35 @@ if __name__=='__main__':
             # NBR                     = get_normalized_burn_ratio(R_M7, R_M11)
             # burn_scar_RGB           = get_burn_scar_RGB(R_M11, R_M7, R_M5)
             # cldmsk                  = get_CLDMSK(cldmsk_file)[0]
-            land_water_mask           = get_VJ103_geo(geo_file, include_lwm=True)['land_water_mask']
+            # land_water_mask           = get_VJ103_geo(geo_file, include_lwm=True)['land_water_mask']
+
+            geofile_dict = get_VJ103_geo(geo_file, include_latlon=False,\
+                           include_SZA=True, include_VZA=True, include_SAAVAA=True,\
+                           include_lwm=True)
+            land_water_mask = geofile_dict['land_water_mask']
+            VZA = geofile_dict['VZA']
+            SZA = geofile_dict['SZA']
+            RAA = geofile_dict['VAA'] - geofile_dict['SAA']
 
             # BRF_RGB[np.isnan(BRF_RGB)]                 = -999
             # NBR[np.isnan(NBR)]                         = -999
             # burn_scar_RGB[np.isnan(burn_scar_RGB)]     = -999
             # cldmsk[np.isnan(cldmsk)]                   = -999
-            land_water_mask[np.isnan(land_water_mask)] = -999
+            # land_water_mask[np.isnan(land_water_mask)] = -999
+            VZA[np.isnan(VZA)]                         = -999
+            SZA[np.isnan(VZA)]                         = -999
+            RAA[np.isnan(VZA)]                         = -999
 
             # BRF_RGB         = flip_arr(BRF_RGB)
             # NBR             = flip_arr(NBR)
             # burn_scar_RGB   = flip_arr(burn_scar_RGB)
             # cldmsk          = flip_arr(cldmsk)
-            land_water_mask = flip_arr(land_water_mask)
+            # land_water_mask = flip_arr(land_water_mask)
             # lat             = flip_arr(lat)
             # lon             = flip_arr(lon)
+            VZA             = flip_arr(VZA)
+            SZA             = flip_arr(SZA)
+            RAA             = flip_arr(RAA)
 
             # group.create_dataset(observables[i], data=data[:,:,i], compression='gzip')
             # group = hf_observables.create_group(time_stamp)
@@ -166,15 +180,18 @@ if __name__=='__main__':
             # group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
             # group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
             # group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
+            group_timestamp.create_dataset('VZA'            , data=VZA            , compression='gzip')
+            group_timestamp.create_dataset('SZA'            , data=SZA            , compression='gzip')
+            group_timestamp.create_dataset('RAA'            , data=RAA            , compression='gzip')
 
-            # change to vj103 land water mask that has more categories
-            try:
-                hf_database[time_stamp_current+date+'/land_water_mask'][:] = land_water_mask
-            except:
-                try:
-                    group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
-                except:
-                    print("broken")
+            # # change to vj103 land water mask that has more categories
+            # try:
+            #     hf_database[time_stamp_current+date+'/land_water_mask'][:] = land_water_mask
+            # except:
+            #     try:
+            #         group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
+            #     except:
+            #         print("broken")
 
             # hf_database[time_stamp_current+date+'/lat'][:] = lat
             # hf_database[time_stamp_current+date+'/lon'][:] = lon
