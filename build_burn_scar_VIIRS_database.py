@@ -118,7 +118,7 @@ if __name__=='__main__':
             land_water_mask = geofile_dict['land_water_mask']
             VZA = geofile_dict['VZA']
             SZA = geofile_dict['SZA']
-            RAA = geofile_dict['VAA'] - geofile_dict['SAA']
+            RAA = geofile_dict['SAA'] - geofile_dict['VAA']
 
             # BRF_RGB[np.isnan(BRF_RGB)]                 = -999
             # NBR[np.isnan(NBR)]                         = -999
