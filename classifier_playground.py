@@ -48,106 +48,117 @@ for i in range(len(col1)):
     idx_valid = np.where(np.isnan(x)==False)
     count += np.nansum(len(idx_valid[0]))
 # print(count)
+#only show NBR when burnscar_mask is not nan and index is within rectangles
+burnscar_mask_manual_labels_combined = np.copy(burnscar_mask)
+burnscar_mask_manual_labels_combined[:,:] = np.nan
+manual_labels = np.copy(burnscar_mask)
+manual_labels[:,:] = np.nan
+for i in range(len(col1)):
+    manual_labels[row1[i]:row2[i],col1[i]:col2[i]] = 1
+# print(manual_labels)
+# idx_valid = np.where(np.any(manual_labels==1) and np.any(np.isnan(burnscar_mask)==True))
+burnscar_mask_manual_labels_combined[manual_labels==1] = burnscar_mask[manual_labels==1]
+# print(idx_valid)
 
-# plt.rcParams.update({'font.size': 15})
-# plt.style.use('dark_background')
-# f, ax = plt.subplots(ncols=2, figsize=(35,20), sharex=True, sharey=True)
-# ax[0].imshow(1.5*rgb_OG)
-# ax[1].imshow(1.5*rgb_OG)
-# im = ax[1].imshow(burnscar_mask, cmap='jet', vmax=0.25, alpha=0.75)
-# area_total = 0
-# for i in range(len(col1)):
-#     width, length = col2[i]-col1[i], row2[i]-row1[i]
-#     area_total += width*length
-#     rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
-#                              edgecolor='r', facecolor='none')
-#     rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
-#                              edgecolor='r', facecolor='none')
-#     ax[0].add_patch(rect)
-#     ax[1].add_patch(rect1)
+plt.rcParams.update({'font.size': 15})
+plt.style.use('dark_background')
+f, ax = plt.subplots(ncols=2, figsize=(35,20), sharex=True, sharey=True)
+ax[0].imshow(burnscar_mask_manual_labels_combined, cmap='jet', vmax=0.25)
+ax[1].imshow(1.5*rgb_OG)
+im = ax[1].imshow(burnscar_mask, cmap='jet', vmax=0.25, alpha=0.75)
+area_total = 0
+for i in range(len(col1)):
+    width, length = col2[i]-col1[i], row2[i]-row1[i]
+    area_total += width*length
+    rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+                             edgecolor='r', facecolor='none')
+    rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+                             edgecolor='r', facecolor='none')
+    ax[0].add_patch(rect)
+    ax[1].add_patch(rect1)
+
+#[left, bottom, width, height]
+cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
+cbar = f.colorbar(im, cax=cax, orientation='vertical')
+ticks = np.arange(-.350, 0.30, 0.050)
+cbar.ax.set_yticks(ticks)
+labels = [round(x, 2) for x in ticks]
+cbar.ax.set_yticklabels(labels)
+
+ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
+             +str(area_total), y=-0.1)
+ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm')
+ax[1].set_title('Primitive Burn Scar Mask; NBR Shaded\nR_M7<0.2, R_M7>0.0281, R_M11>0.05, NBR>-0.35')
+f.suptitle('NOAA-20 VIIRS Valid Sept 1, 2021\nComposited and Cloud-Cleared Over Previous 8 Days')
+
+for a in ax:
+    a.set_xticks([])
+    a.set_yticks([])
+
+plt.subplots_adjust(left=0.125,
+                    bottom=0.,
+                    right=0.9,
+                    top=0.82,
+                    wspace=0.2,
+                    hspace=0.2)
+
+plt.show()
+
+# #open up netcdf4 file and save the RGB, primitive mask, lat/lon, timestamp
+# grid_file_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/Grids_West_CONUS_new.h5'
+# save_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/'
+# from netCDF4 import Dataset
+# import pyproj as proj
+# sample_fname = 'burn_scar_mask_GIS_sample_v2.nc'
+# with Dataset(save_path + sample_fname, 'w', format='NETCDF4_CLASSIC') as nc_burnscar,\
+#      h5py.File(grid_file_path,'r') as h5_lat_lon:
 #
-# #[left, bottom, width, height]
-# cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
-# cbar = f.colorbar(im, cax=cax, orientation='vertical')
-# ticks = np.arange(-.350, 0.30, 0.050)
-# cbar.ax.set_yticks(ticks)
-# labels = [round(x, 2) for x in ticks]
-# cbar.ax.set_yticklabels(labels)
+#     # coordinates for the single burn scar that looks like australia
+#     # r1, r2, c1, c2 = 1260, 1340, 360, 480
+#     r1, r2, c1, c2 = 0, -1, 0, -1
+#     pbsm_shape = np.shape(burnscar_mask[r1:r2,c1:c2])
 #
-# ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
-#              +str(area_total), y=-0.1)
-# ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm')
-# ax[1].set_title('Primitive Burn Scar Mask; NBR Shaded\nR_M7<0.2, R_M7>0.0281, R_M11>0.05, NBR>-0.35')
-# f.suptitle('NOAA-20 VIIRS Valid Sept 1, 2021\nComposited and Cloud-Cleared Over Previous 8 Days')
+#     # create dimensions of data
+#     nc_burnscar.createDimension('lat', pbsm_shape[0])
+#     nc_burnscar.createDimension('lon', pbsm_shape[1])
+#     nc_burnscar.createDimension('time', None)
+#     nc_burnscar.createDimension('channel', 3)
 #
-# for a in ax:
-#     a.set_xticks([])
-#     a.set_yticks([])
+#     # define lat/lon and time variables
+#     time           = nc_burnscar.createVariable('time', np.int8, ('time'))
+#     time.units     = 'hours since 2021-10-14 20:54:00'
+#     time.long_name = 'time'
+#     time.calendar  = 'none'
 #
-# plt.subplots_adjust(left=0.125,
-#                     bottom=0.,
-#                     right=0.9,
-#                     top=0.82,
-#                     wspace=0.2,
-#                     hspace=0.2)
+#     lat           = nc_burnscar.createVariable('lat', np.float32, ('lat','lon'), fill_value=-999)
+#     lat.units     = 'degrees_north'
+#     lat.long_name = 'latitude'
+#     lon           = nc_burnscar.createVariable('lon', np.float32, ('lat','lon'), fill_value=-999)
+#     lon.units     = 'degrees_east'
+#     lon.long_name = 'longitude'
 #
-# plt.show()
-
-#open up netcdf4 file and save the RGB, primitive mask, lat/lon, timestamp
-grid_file_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/Grids_West_CONUS_new.h5'
-save_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/'
-from netCDF4 import Dataset
-import pyproj as proj
-sample_fname = 'burn_scar_mask_GIS_sample_v2.nc'
-with Dataset(save_path + sample_fname, 'w', format='NETCDF4_CLASSIC') as nc_burnscar,\
-     h5py.File(grid_file_path,'r') as h5_lat_lon:
-
-    # coordinates for the single burn scar that looks like australia
-    # r1, r2, c1, c2 = 1260, 1340, 360, 480
-    r1, r2, c1, c2 = 0, -1, 0, -1
-    pbsm_shape = np.shape(burnscar_mask[r1:r2,c1:c2])
-
-    # create dimensions of data
-    nc_burnscar.createDimension('lat', pbsm_shape[0])
-    nc_burnscar.createDimension('lon', pbsm_shape[1])
-    nc_burnscar.createDimension('time', None)
-    nc_burnscar.createDimension('channel', 3)
-
-    # define lat/lon and time variables
-    time           = nc_burnscar.createVariable('time', np.int8, ('time'))
-    time.units     = 'hours since 2021-10-14 20:54:00'
-    time.long_name = 'time'
-    time.calendar  = 'none'
-
-    lat           = nc_burnscar.createVariable('lat', np.float32, ('lat','lon'), fill_value=-999)
-    lat.units     = 'degrees_north'
-    lat.long_name = 'latitude'
-    lon           = nc_burnscar.createVariable('lon', np.float32, ('lat','lon'), fill_value=-999)
-    lon.units     = 'degrees_east'
-    lon.long_name = 'longitude'
-
-    #save data into created variables
-    lat[:,:] = h5_lat_lon['Geolocation/Latitude' ][r1:r2,c1:c2]
-    lon[:,:] = h5_lat_lon['Geolocation/Longitude'][r1:r2,c1:c2]*(-1)
-    #adjust lon to go from west to east
-    lon_adjust = lon * np.nan
-    for k in range(0, len(lon)):
-        lon_adjust[k] = sorted(lon[k])
-    lon[:,:] = np.copy(lon_adjust)
-
-    pbsm               = nc_burnscar.createVariable('pbsm',np.float64,('time','lat','lon'), fill_value=-999) # note: unlimited dimension is leftmost
-    pbsm.units         = 'unitless'
-    pbsm.standard_name = 'primitive burn scar mask'
-    pbsm[:,:]          = burnscar_mask[r1:r2,c1:c2].reshape((1,pbsm_shape[0], pbsm_shape[1]))
-
-    day_land_cloud_fire_RGB               = nc_burnscar.createVariable('day_land_cloud_fire_RGB',np.float64,('time','lat','lon','channel'), fill_value=-999) # note: unlimited dimension is leftmost
-    day_land_cloud_fire_RGB.units         = 'unitless'
-    day_land_cloud_fire_RGB.standard_name = 'day_land_cloud_fire_RGB'
-    day_land_cloud_fire_RGB[:,:,:]        = np.copy(X)[r1:r2,c1:c2,:].reshape((1,pbsm_shape[0], pbsm_shape[1], 3))
-
-    # define CRS for file
-    crs = nc_burnscar.createVariable('spatial_ref', 'i4')
-    crs.spatial_ref = 'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
+#     #save data into created variables
+#     lat[:,:] = h5_lat_lon['Geolocation/Latitude' ][r1:r2,c1:c2]
+#     lon[:,:] = h5_lat_lon['Geolocation/Longitude'][r1:r2,c1:c2]*(-1)
+#     #adjust lon to go from west to east
+#     lon_adjust = lon * np.nan
+#     for k in range(0, len(lon)):
+#         lon_adjust[k] = sorted(lon[k])
+#     lon[:,:] = np.copy(lon_adjust)
+#
+#     pbsm               = nc_burnscar.createVariable('pbsm',np.float64,('time','lat','lon'), fill_value=-999) # note: unlimited dimension is leftmost
+#     pbsm.units         = 'unitless'
+#     pbsm.standard_name = 'primitive burn scar mask'
+#     pbsm[:,:]          = burnscar_mask[r1:r2,c1:c2].reshape((1,pbsm_shape[0], pbsm_shape[1]))
+#
+#     day_land_cloud_fire_RGB               = nc_burnscar.createVariable('day_land_cloud_fire_RGB',np.float64,('time','lat','lon','channel'), fill_value=-999) # note: unlimited dimension is leftmost
+#     day_land_cloud_fire_RGB.units         = 'unitless'
+#     day_land_cloud_fire_RGB.standard_name = 'day_land_cloud_fire_RGB'
+#     day_land_cloud_fire_RGB[:,:,:]        = np.copy(X)[r1:r2,c1:c2,:].reshape((1,pbsm_shape[0], pbsm_shape[1], 3))
+#
+#     # define CRS for file
+#     crs = nc_burnscar.createVariable('spatial_ref', 'i4')
+#     crs.spatial_ref = 'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
 
 
 # with Dataset(save_path + sample_fname, 'r') as nc_burnscar:
