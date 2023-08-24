@@ -1,5 +1,7 @@
 from matplotlib import pyplot as plt
 import matplotlib.patches as patches
+import matplotlib.colors as matCol
+import os
 import numpy as np
 import pandas as pd
 import h5py
@@ -42,11 +44,11 @@ col2 = df_burnscar_semi_labeled['col2'].tolist()
 row1 = df_burnscar_semi_labeled['row1'].tolist()
 row2 = df_burnscar_semi_labeled['row2'].tolist()
 
-count = 0
-for i in range(len(col1)):
-    x=burnscar_mask[row1[i]:row2[i],col1[i]:col2[i]]
-    idx_valid = np.where(np.isnan(x)==False)
-    count += np.nansum(len(idx_valid[0]))
+# count = 0
+# for i in range(len(col1)):
+#     x=burnscar_mask[row1[i]:row2[i],col1[i]:col2[i]]
+#     idx_valid = np.where(np.isnan(x)==False)
+#     count += np.nansum(len(idx_valid[0]))
 # print(count)
 #only show NBR when burnscar_mask is not nan and index is within rectangles
 burnscar_mask_manual_labels_combined = np.copy(burnscar_mask)
@@ -60,11 +62,40 @@ for i in range(len(col1)):
 burnscar_mask_manual_labels_combined[manual_labels==1] = burnscar_mask[manual_labels==1]
 # print(idx_valid)
 
-plt.rcParams.update({'font.size': 15})
+'''************************ open GMM to analyze *****************************'''
+# read in file
+home_path = '/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/'
+results_files  = np.sort(os.listdir(home_path+'databases/GMM_results/'))
+results_file   = [home_path + 'databases/GMM_results/' + x for x in results_files]
+fig_file_names = [home_path + 'figures/GMM_results/'   + x[:-3] for x in results_files]
+from burn_scar_gaussian_mixture_model import open_GMM_results_file
+for i in range(2,15):
+    if i==14:
+        # print('\n******** Training GMM w/ {} clusters *******************\n'.format(i))
+        # train_GMM(n_clusters=i)
+        # plot_GMM_clusters(X, means, covariances, weights)
+        gmm_params  ,\
+        means       ,\
+        covariances ,\
+        weights     ,\
+        labels      ,\
+        X           ,\
+        DLCF_RGB    = open_GMM_results_file(results_file[i-2])
+        # Plot data2 in the second panel
+        n_clusters=i
+        DLCF_RGB_shape = DLCF_RGB.shape
+        labeled_DLCF_RGB = np.zeros((DLCF_RGB_shape[0], DLCF_RGB_shape[1]))
+        labeled_DLCF_RGB[np.where(np.isnan(DLCF_RGB[:,:,0])==False)] = labels
+
+        values = np.arange(n_clusters+1)
+
+
+plt.rcParams.update({'font.size': 10})
 plt.style.use('dark_background')
-f, ax = plt.subplots(ncols=2, figsize=(35,20), sharex=True, sharey=True)
-ax[0].imshow(burnscar_mask_manual_labels_combined, cmap='jet', vmax=0.25)
+f, ax = plt.subplots(ncols=4, figsize=(35,20), sharex=True, sharey=True)
+ax[2].imshow(burnscar_mask_manual_labels_combined, cmap='jet', vmax=0.25)
 ax[1].imshow(1.5*rgb_OG)
+ax[0].imshow(1.5*rgb_OG)
 im = ax[1].imshow(burnscar_mask, cmap='jet', vmax=0.25, alpha=0.75)
 area_total = 0
 for i in range(len(col1)):
@@ -74,33 +105,47 @@ for i in range(len(col1)):
                              edgecolor='r', facecolor='none')
     rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
                              edgecolor='r', facecolor='none')
+    rect2 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+                             edgecolor='r', facecolor='none')
+    rect3 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+                             edgecolor='r', facecolor='none')
+
     ax[0].add_patch(rect)
     ax[1].add_patch(rect1)
+    ax[2].add_patch(rect2)
+    ax[3].add_patch(rect3)
 
-#[left, bottom, width, height]
-cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
-cbar = f.colorbar(im, cax=cax, orientation='vertical')
-ticks = np.arange(-.350, 0.30, 0.050)
-cbar.ax.set_yticks(ticks)
-labels = [round(x, 2) for x in ticks]
-cbar.ax.set_yticklabels(labels)
+# #[left, bottom, width, height]
+# cax  = f.add_axes([0.9, 0.02, 0.02, 0.78])
+# cbar = f.colorbar(im, cax=cax, orientation='vertical')
+# ticks = np.arange(-.350, 0.30, 0.050)
+# cbar.ax.set_yticks(ticks)
+# labels = [round(x, 2) for x in ticks]
+# cbar.ax.set_yticklabels(labels)
 
-ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
-             +str(area_total), y=-0.1)
-ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm')
-ax[1].set_title('Primitive Burn Scar Mask; NBR Shaded\nR_M7<0.2, R_M7>0.0281, R_M11>0.05, NBR>-0.35')
-f.suptitle('NOAA-20 VIIRS Valid Sept 1, 2021\nComposited and Cloud-Cleared Over Previous 8 Days')
+# ax[0].set_title('Red rectangles contain burned areas, total pixels contained: '\
+#              +str(area_total), y=-0.1)
+ax[2].set_title('Intersection of Primitive Burn Scar Mask\nand Manual Labels')
+ax[1].set_title('Day Land Cloud Fire RGB\nManual Labels\nPrimitive Burn Scar Mask')
+ax[0].set_title('Day Land Cloud Fire RGB\n[2.25, 0.86, 0.67]µm\nManual Labels (Red Squares) ')
+f.suptitle('NOAA-20 VIIRS Valid 08.10.2021 Composited & Cloud-Cleared Over Previous 8 Days')
 
 for a in ax:
     a.set_xticks([])
     a.set_yticks([])
 
-plt.subplots_adjust(left=0.125,
-                    bottom=0.,
-                    right=0.9,
-                    top=0.82,
-                    wspace=0.2,
-                    hspace=0.2)
+plt.subplots_adjust(left  =0.000,
+                    bottom=0.011,
+                    right =1.000,
+                    top   =0.911,
+                    wspace=0.000,
+                    hspace=0.200)
+cmap=plt.cm.viridis
+norm = matCol.BoundaryNorm(np.arange(n_clusters+1), cmap.N)
+im2 = ax[3].imshow(labeled_DLCF_RGB, cmap=cmap, norm=norm)
+ax[3].set_title('Segmented by {} GMM Clusters'.format(n_clusters))
+
+# plt.tight_layout()
 
 plt.show()
 
