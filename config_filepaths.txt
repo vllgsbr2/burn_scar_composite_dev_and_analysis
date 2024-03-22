@@ -1,6 +1,6 @@
 [file paths mac]
 
-database dir : /Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/
+database dir : /Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/VIIRS_database/databases/daily_composite_files/
 
 [file paths windows]
 

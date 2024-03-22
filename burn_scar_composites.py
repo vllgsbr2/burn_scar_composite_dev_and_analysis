@@ -72,7 +72,7 @@ def get_burn_scar_composite(R_M7, R_M11, geotiff=False, landwater_mask=None):
         burn_scar_mask = NBR
         if landwater_mask == None:
             return burn_scar_mask
-        else:
+        else:#need to add some flags from cloud mask
             burn_scar_mask[landwater_mask==desert] = 0
             return burn_scar_mask
     else:

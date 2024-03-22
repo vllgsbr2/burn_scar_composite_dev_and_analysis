@@ -90,7 +90,7 @@ for i in range(2,15):
         values = np.arange(n_clusters+1)
 
 
-plt.rcParams.update({'font.size': 10})
+plt.rcParams.update({'font.size': 18})
 plt.style.use('dark_background')
 f, ax = plt.subplots(ncols=4, figsize=(35,20), sharex=True, sharey=True)
 ax[2].imshow(burnscar_mask_manual_labels_combined, cmap='jet', vmax=0.25)
@@ -101,13 +101,13 @@ area_total = 0
 for i in range(len(col1)):
     width, length = col2[i]-col1[i], row2[i]-row1[i]
     area_total += width*length
-    rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+    rect = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=2,\
                              edgecolor='r', facecolor='none')
-    rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+    rect1 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=2,\
                              edgecolor='r', facecolor='none')
-    rect2 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+    rect2 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=2,\
                              edgecolor='r', facecolor='none')
-    rect3 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=1,\
+    rect3 = patches.Rectangle((col1[i], row1[i]), width, length, linewidth=2,\
                              edgecolor='r', facecolor='none')
 
     ax[0].add_patch(rect)

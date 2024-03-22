@@ -42,7 +42,7 @@ def flip_arr(arr):
     return arr
 
 
-def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, source_data):
+def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, source_data,max_radius = 5556.):
     '''
     https://github.com/TerraFusion/pytaf
     Objective:
@@ -58,7 +58,7 @@ def regrid_latlon_source2target(source_lat, source_lon, target_lat, target_lon, 
     '''
     import pytaf
     #radius in meters to search around pixel for a neighbor
-    max_radius = 5556.
+
     target_data = pytaf.resample_n(source_lat, source_lon, target_lat,\
                                    target_lon, source_data, max_radius)
     return target_data
@@ -110,7 +110,7 @@ def regrid_latlon_source2target_new(source_lat, source_lon, target_lat, target_l
     print(-start+time.time())
     start=time.time()
 
-    print('rigridding cols')
+    print('regridding cols')
     regrid_col_idx = pytaf.resample_n(np.copy(source_lat),\
                                       np.copy(source_lon),\
                                       np.copy(target_lat),\
@@ -156,16 +156,14 @@ def make_custom_lat_lon_grid():
         yr = np.abs(y)
 
         proj_dict = {'proj': 'aea', 'lat_1': lat_p1, 'lat_2': lat_p2, 'lat_0': lat_c, 'lon_0': lon_c,'x_0': 0,'y_0':0, 'units': 'm'}
-
         area_extent = (xl, yl, xr, yr)
         # print((area_extent[2]-area_extent[0])/2, (area_extent[3]-area_extent[1])/2)
-        print(area_extent)
         area_def = create_area_def('pta_la', proj_dict, area_extent=area_extent,resolution=resolution)
         lons, lats = area_def.get_lonlats()
         #save_quicklook('check_grid.png', area_def, lats, label='Quick Check')
         return lons, lats
 
-    home_dir = "C:/Users/Javi/Documents/NOAA/"
+    home_dir = "/Users/javiervillegasbravo/Documents/NOAA/burn_scar_proj/"
     excelfile = 'Master_Target_List_ancillary_file_prelim_v0.0.xlsx'
     with pd.ExcelFile(home_dir+excelfile) as reader:
         df = pd.read_excel(reader, sheet_name='Master_Target_List')
@@ -213,6 +211,8 @@ def make_custom_lat_lon_grid():
             lon_lc = lon_sw
             lat_rc = lat_ne
             lon_rc = lon_ne
+
+            # print(lat_lc, lat_rc, lon_lc, lon_rc)
 
             lons,lats = get_lonlats(lat_p1,lat_p2,lat_c,lon_c,lat_lc,lon_lc,lat_rc,lon_rc,resolution)
 
@@ -310,7 +310,7 @@ def running_composite(viirs_database_file, num_days_2_composite=8):
 
 if __name__ == "__main__":
     import sys
-    # make_custom_lat_lon_grid()
+    make_custom_lat_lon_grid()
     commongrid_file = 'C:/Users/Javi/Documents/NOAA/Grids_West_CONUS_new.h5'
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
         common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
