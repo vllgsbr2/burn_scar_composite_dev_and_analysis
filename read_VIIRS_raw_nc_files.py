@@ -69,41 +69,257 @@ def get_VJ102_ref(ref_file, which_bands=None):
         M_bands[M_bands >=65532 ] = np.nan
 
         return M_bands
+def get_bits(data_SD, N, cMask_or_QualityAssur=True):
+    '''
+    INPUT:
+          data_SD               - 3D numpy array  - cloud mask SD from HDF
+          N                     - int             - byte to work on
+          cMask_or_QualityAssur - boolean         - True for mask, False for QA
+    RETURNS:
+          numpy.bytes array of byte stack of shape 2030x1354
+          expands integer byte into 8 bits to read individually
+    '''
+    shape = np.shape(data_SD)
+
+    #convert MODIS 35 signed ints to unsigned ints
+    if cMask_or_QualityAssur:
+        data_unsigned = np.bitwise_and(data_SD[N, :, :], 0xff)
+    else:
+        data_unsigned = np.bitwise_and(data_SD[:, :, N], 0xff)
+
+
+
+    #type is int16, but unpackbits taks int8, so cast array
+    data_unsigned = data_unsigned.astype(np.uint8)#data_unsigned.view('uint8')
+
+    #return numpy array of length 8 lists for every element of data_SD
+    data_bits = np.unpackbits(data_unsigned)
+
+    if cMask_or_QualityAssur:
+        data_bits = np.reshape(data_bits, (shape[1], shape[2], 8))
+    else:
+        data_bits = np.reshape(data_bits, (shape[0], shape[1], 8))
+
+    return data_bits
+
+
+def decode_QFX_bytes_VJ109(qfx_byte, x):
+    '''
+    VJ109 user guide source for QFX tables:
+    https://viirsland.gsfc.nasa.gov/PDF/VIIRS_Surf_Refl_UserGuide_v2.0.pdf
+
+    INPUT:
+          qfx_byte: - numpy array (y,x,8) - contains 8 bits from the byte for y by x array
+          x       : - int - tells which QFX, i.e. QF1 from VJ109
+                    QF1 - bits 0 & 1 => cloud mask quality 
+                          - 00 - Poor
+                          - 01 - Low
+                          - 10 - Medium
+                          - 11 - High
+                        - bits 2 & 3 => cloud mask confidence
+                          - 00 - Confident Clear
+                          - 01 - Probably Clear
+                          - 10 - Probably Cloudy
+                          - 11 - Confident Cloudy
+                    QF2 - bit 3 => Shadow Mask (Cloud Shadows)
+                          - 0 - No Cloud Shadow
+                          - 1 - Shadow
+                          bit 5 => Snow/Ice
+                          - 0 - No  Snow/Ice
+                          - 1 - Yes Snow/Ice
+                    QF5 - bit 6 - Overall Quality M5  red  Surface Reflcetance
+                          - 0 - Good
+                          - 1 - Bad
+                        - bit 7 - Overall Quality M7  burn Surface Reflcetance
+                          - 0 - Good
+                          - 1 - Bad
+                    QF6 - bit 2 - Overall Quality M11 veg  Surface Reflcetance
+                          - 0 - Good
+                          - 1 - Bad
+                        - bit 3 - Overall Quality I1  red  Surface Reflcetance
+                          - 0 - Good
+                          - 1 - Bad
+                        - bit 4 - Overall Quality I2  veg  Surface Reflcetance
+                          - 0 - Good
+                          - 1 - Bad
+    RETURN:
+          cldmsk_qual,
+          cldmsk,
+          shadow_mask,
+          snow_ice_mask,
+          m5_qual_mask,
+          m7_qual_mask,
+          m11_qual_mask,
+          i1_qual_mask,
+          i2_qual_mask
+    '''
+    qfx_byte_mask_shape = np.shape(qfx_byte)
+
+    if x==1:
+        '''
+        QF1 - bits 0 & 1 => cloud mask quality
+              - 00 - Poor
+              - 01 - Low
+              - 10 - Medium
+              - 11 - High
+            - bits 2 & 3 => cloud mask confidence
+              - 00 - Confident Clear
+              - 01 - Probably Clear
+              - 10 - Probably Cloudy
+              - 11 - Confident Cloudy
+        '''
+        cldmsk_qual = qfx_byte[:,:,0:2]
+        cldmsk      = qfx_byte[:,:,2:4]
+    
+        #convert bits to integer mask (cloud mask)
+        new_cldmsk = np.empty((shape[0], shape[1]))
+        confident_clear_idx  = np.where((cldmsk[:,:, 0]==0) &\
+                                        (cldmsk[:,:, 1]==0))
+        probably_clear_idx   = np.where((cldmsk[:,:, 0]==0)& \
+                                        (cldmsk[:,:, 1]==1))
+        probably_cloudy_idx  = np.where((cldmsk[:,:, 0]==1) &\
+                                        (cldmsk[:,:, 1]==0))
+        confident_cloudy_idx = np.where((cldmsk[:,:, 0]==1) &\
+                                        (cldmsk[:,:, 1]==1))
+
+        new_cldmsk[confident_cloudy_idx] = 0
+        new_cldmsk[probably_cloudy_idx]  = 1
+        new_cldmsk[probably_clear_idx]   = 2
+        new_cldmsk[confident_clear_idx]  = 3
+
+        #convert bits to integer mask (cloud mask quality)
+        new_cldmsk_qual = np.empty((shape[0], shape[1]))
+        poor_qual_idx   = np.where((cldmsk_qual[:,:, 0]==0) &\
+                                   (cldmsk_qual[:,:, 1]==0))
+        low_qual_idx    = np.where((cldmsk_qual[:,:, 0]==0)& \
+                                   (cldmsk_qual[:,:, 1]==1))
+        med_qual_idx    = np.where((cldmsk_qual[:,:, 0]==1) &\
+                                   (cldmsk_qual[:,:, 1]==0))
+        high_qual_idx   = np.where((cldmsk_qual[:,:, 0]==1) &\
+                                   (cldmsk_qual[:,:, 1]==1))
+
+        new_cldmsk_qual[poor_qual_idx] = 0
+        new_cldmsk_qual[low_qual_idx]  = 1
+        new_cldmsk_qual[med_qual_idx]  = 2
+        new_cldmsk_qual[high_qual_idx] = 3
+
+        return new_cldmsk, new_cldmsk_qual
+
+    elif x==2:
+        '''
+        QF2 - bit 3 => Shadow Mask (Cloud Shadows)
+              - 0 - No Cloud Shadow
+              - 1 - Shadow
+            - bit 5 => Snow/Ice
+              - 0 - No  Snow/Ice
+              - 1 - Yes Snow/Ice
+        '''
+        shadow_mask   = qfx_byte[:,:,3]
+        snow_ice_mask = qfx_byte[:,:,5]
+        
+        return shadow_mask, snow_ice_mask
+
+    elif x==5:
+        '''
+        QF5 - bit 6 - Overall Quality M5  red  Surface Reflcetance
+              - 0 - Good
+              - 1 - Bad
+            - bit 7 - Overall Quality M7  burn Surface Reflcetance
+              - 0 - Good
+              - 1 - Bad
+        '''
+
+        m5_qual_mask = qfx_byte[:,:,6]
+        m7_qual_mask = qfx_byte[:,:,7]
+
+        return m5_qual_mask, m7_qual_mask
+
+    elif x==6:
+        '''
+        QF6 - bit 2 - Overall Quality M11 veg  Surface Reflcetance
+              - 0 - Good
+              - 1 - Bad
+            - bit 3 - Overall Quality I1  red  Surface Reflcetance
+              - 0 - Good
+              - 1 - Bad
+            - bit 4 - Overall Quality I2  veg  Surface Reflcetance
+              - 0 - Good
+              - 1 - Bad
+        '''
+
+        m11_qual_mask = qfx_byte[:,:,2]
+        i1_qual_mask = qfx_byte[:,:,3]
+        i2_qual_mask = qfx_byte[:,:,4]
+
+        return m11_qual_mask, i1_qual_mask, i2_qual_mask
+
+    else:
+        print('not supported bit')
+
+
+def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
+    '''
+    input: VIIRS VJ109 (or VNP109) .nc file
+    return: lat, lon, SZA, VZA, SAA, VAA
+    '''
+
+    with Dataset(ref_file, 'r') as nc_ref_file_obj:
+        observation_data_ncObj = nc_ref_file_obj['SurfReflect_VNP/Data_Fields']
+
+        n = len(which_bands)
+
+        M_bands = []
+        # qaulity control flag set to -999
+        # https://viirsland.gsfc.nasa.gov/PDF/VIIRS_Surf_Refl_UserGuide_v1.3.pdf
+        # overall sfc ref quality (bits zero indexed)
+        # QF5 (bit4 M3, bit5 M4, bit6 M5, bit7 M7)
+        # QF6 (bit2, M11, bit3 I1, bit4 I2) 
+        # M3 blue,4 green,5 red,7 veggie,11 burn I1 640,I2 865
+        if cld_shadow_snowice:
+            QF1 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF1_Surface_Reflectance'][:], 0),1)
+            QF2 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF2_Surface_Reflectance'][:], 0),2)
+        QF5 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF5_Surface_Reflectance'][:], 0),5)
+        QF6 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF6_Surface_Reflectance'][:], 0),6)
+        
+        # unpack returns from QF<X>
+        if cld_shadow_snowice:
+            new_cldmsk   , new_cldmsk_qual            = QF1
+            shadow_mask  , snow_ice_mask              = QF2
+        m5_qual_mask , m7_qual_mask               = QF5
+        m11_qual_mask, i1_qual_mask, i2_qual_mask = QF6
+
+        for i, band_num in enumerate(which_bands):
+            #band names 1 indexed
+            # print(band_num)
+            M_bands_temp = observation_data_ncObj['750m_Surface_Reflectance_Band_M{}'\
+                                                  .format(band_num)][:]
+            
+            # now use masks from QF<X> to quality control bands
+            if band_num==5:
+                M_bands_temp[m5_qual_mask==1]=-999
+            elif band_num==7:
+                M_bands_temp[m7_qual_mask==1]=-999
+            elif band_num==11:
+                M_bands_temp[m11_qual_mask==1]=-999
+            else:
+                print('band not yet supported')
+
+            # add filtered band to band list for return
+            M_bands.append(M_bands_temp)
+
+        if cld_shadow_snowice:
+            # if cloud mask is poor quality, set to -999
+            # becuase burn scars dont exhibit spectral
+            # properties similar to clouds, this is ok
+            new_cldmsk[cldmsk_qual==0]=-999
+
+    if cld_shadow_snowice:
+        return M_bands, new_cldmsk, snow_ice_mask, shadow_mask
+    else:
+        return M_bands
 
 
 def get_CLDMSK(cldmsk_file):
-
-    def get_bits(data_SD, N, cMask_or_QualityAssur=True):
-        '''
-        INPUT:
-              data_SD               - 3D numpy array  - cloud mask SD from HDF
-              N                     - int             - byte to work on
-              cMask_or_QualityAssur - boolean         - True for mask, False for QA
-        RETURNS:
-              numpy.bytes array of byte stack of shape 2030x1354
-        '''
-        shape = np.shape(data_SD)
-
-        #convert MODIS 35 signed ints to unsigned ints
-        if cMask_or_QualityAssur:
-            data_unsigned = np.bitwise_and(data_SD[N, :, :], 0xff)
-        else:
-            data_unsigned = np.bitwise_and(data_SD[:, :, N], 0xff)
-
-
-
-        #type is int16, but unpackbits taks int8, so cast array
-        data_unsigned = data_unsigned.astype(np.uint8)#data_unsigned.view('uint8')
-
-        #return numpy array of length 8 lists for every element of data_SD
-        data_bits = np.unpackbits(data_unsigned)
-
-        if cMask_or_QualityAssur:
-            data_bits = np.reshape(data_bits, (shape[1], shape[2], 8))
-        else:
-            data_bits = np.reshape(data_bits, (shape[0], shape[1], 8))
-
-        return data_bits
 
     def decode_byte_1(decoded_mod35_hdf):
         '''
@@ -253,3 +469,4 @@ if __name__=='__main__':
 
     plt.imshow(land_water_mask)
     plt.show()
+

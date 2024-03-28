@@ -145,3 +145,22 @@ if __name__ == '__main__':
         sys.exit(_main(sys.argv))
     except KeyboardInterrupt:
         sys.exit(-1)
+
+    token                 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbF9hZGRyZXNzIjoiamF2aWVyLmEudmlsbGVnYXNicmF2b0Bub2FhLmdvdiIsImlzcyI6IkFQUyBPQXV0aDIgQXV0aGVudGljYXRvciIsImlhdCI6MTcxMDk1NjkxMSwibmJmIjoxNzEwOTU2OTExLCJleHAiOjE4Njg2MzY5MTEsInVpZCI6InZsbGdzYnIyIiwidG9rZW5DcmVhdG9yIjoidmxsZ3NicjIifQ.hK7ULSDjMBLm-uHTPApUj7OBHOGFZQA0KsxtzcriQUA' 
+    destination_directory = '/scratch/zt1/project/vllgsbr2-prj/burnscar_project/data/noaa_20_vj109_files'
+    source_url            = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/502141057/'
+
+    #_main()
+
+    '''
+    how to run
+
+    python laads-data-download.py -s <url of order> -d <destination directory> -t <token>
+
+    to generate a token, log into the NASA LAADS DAAC and goto find data and then goto orders, in 
+    top right of screen click login drop down menu. There, hit generate token.
+
+    i.e.
+
+    python laads-data-download.py -s https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/502141057/ -d /scratch/zt1/project/vllgsbr2-prj/burnscar_project/data/noaa_20_vj109_files -t eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbF9hZGRyZXNzIjoiamF2aWVyLmEudmlsbGVnYXNicmF2b0Bub2FhLmdvdiIsImlzcyI6IkFQUyBPQXV0aDIgQXV0aGVudGljYXRvciIsImlhdCI6MTcxMDk1NjkxMSwibmJmIjoxNzEwOTU2OTExLCJleHAiOjE4Njg2MzY5MTEsInVpZCI6InZsbGdzYnIyIiwidG9rZW5DcmVhdG9yIjoidmxsZ3NicjIifQ.hK7ULSDjMBLm-uHTPApUj7OBHOGFZQA0KsxtzcriQUA
+    '''

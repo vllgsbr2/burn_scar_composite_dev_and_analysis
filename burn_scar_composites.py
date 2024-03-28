@@ -19,7 +19,8 @@ def get_normalized_differenced_vegetation_index(R_M1, R_M7):
 
     return (R_M7 - R_M1)/(R_M7 + R_M1)
 
-def get_BRF_lat_lon(geo_file, ref_file, which_bands):
+def get_BRF_lat_lon_TOA_VJ102(geo_file, ref_file, which_bands):
+    #this is for get_VJ102 TOA reflectance; use other func for VJ109
     from read_VIIRS_raw_nc_files import get_VJ103_geo, get_VJ102_ref
     geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True, include_lwm=True)
     lat, lon, SZA, LWM = geolocation_dict['lat'], geolocation_dict['lon'], geolocation_dict['SZA'], geolocation_dict['land_water_mask']
@@ -36,6 +37,27 @@ def get_BRF_lat_lon(geo_file, ref_file, which_bands):
         #     M_bands[:3216,:,i] /=  cosSZA[:3216,:]
 
     return M_bands, lat, lon, LWM
+
+def get_BRF_lat_lon(geo_file, ref_file, which_bands):
+    #this is for get_VJ109 surface  reflectance; use other func for VJ102
+    from read_VIIRS_raw_nc_files import get_VJ103_geo, get_VJ109_ref
+    geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True, include_lwm=True)
+    lat, lon, SZA, LWM = geolocation_dict['lat'], geolocation_dict['lon'], geolocation_dict['SZA'], geolocation_dict['land_water_mask']
+    time_stamp_current = geo_file[-33:-21]
+    M_bands = get_VJ109_ref(ref_file, which_bands)
+
+    cosSZA = np.cos(np.deg2rad(SZA))
+
+    for i in range(len(which_bands)):
+        # try:
+        M_bands[:,:,i] /=  cosSZA
+        # except:
+        #
+        #     M_bands[:3216,:,i] /=  cosSZA[:3216,:]
+
+    return M_bands, lat, lon, LWM
+
+
 
 def get_BRF_RGB(R_M5,R_M4,R_M3):
     return np.dstack((R_M5,R_M4,R_M3))
