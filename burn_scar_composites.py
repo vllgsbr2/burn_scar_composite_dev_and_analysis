@@ -44,13 +44,19 @@ def get_BRF_lat_lon(geo_file, ref_file, which_bands):
     geolocation_dict = get_VJ103_geo(geo_file, include_latlon=True, include_SZA=True, include_lwm=True)
     lat, lon, SZA, LWM = geolocation_dict['lat'], geolocation_dict['lon'], geolocation_dict['SZA'], geolocation_dict['land_water_mask']
     time_stamp_current = geo_file[-33:-21]
-    M_bands = get_VJ109_ref(ref_file, which_bands)
+    M_bands = get_VJ109_ref(ref_file, which_bands, cld_shadow_snowice=False)
 
     cosSZA = np.cos(np.deg2rad(SZA))
 
     for i in range(len(which_bands)):
         # try:
-        M_bands[:,:,i] /=  cosSZA
+        '''
+        print(type(M_bands))
+        print(np.shape(M_bands), np.shape(cosSZA))
+        import sys
+        sys.exit()
+        '''
+        M_bands[i,:,:] /=  cosSZA
         # except:
         #
         #     M_bands[:3216,:,i] /=  cosSZA[:3216,:]

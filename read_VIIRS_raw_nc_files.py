@@ -83,7 +83,10 @@ def get_bits(data_SD, N, cMask_or_QualityAssur=True):
 
     #convert MODIS 35 signed ints to unsigned ints
     if cMask_or_QualityAssur:
-        data_unsigned = np.bitwise_and(data_SD[N, :, :], 0xff)
+        if np.ndim(data_SD)==3:
+            data_unsigned = np.bitwise_and(data_SD[N, :, :], 0xff)
+        elif np.ndim(data_SD)==2:
+            data_unsigned = np.bitwise_and(data_SD, 0xff)
     else:
         data_unsigned = np.bitwise_and(data_SD[:, :, N], 0xff)
 
@@ -96,7 +99,10 @@ def get_bits(data_SD, N, cMask_or_QualityAssur=True):
     data_bits = np.unpackbits(data_unsigned)
 
     if cMask_or_QualityAssur:
-        data_bits = np.reshape(data_bits, (shape[1], shape[2], 8))
+        if np.ndim(data_SD)==3:
+            data_bits = np.reshape(data_bits, (shape[1], shape[2], 8))
+        elif np.ndim(data_SD)==2:
+            data_bits = np.reshape(data_bits, (shape[0], shape[1], 8))
     else:
         data_bits = np.reshape(data_bits, (shape[0], shape[1], 8))
 
@@ -168,10 +174,11 @@ def decode_QFX_bytes_VJ109(qfx_byte, x):
               - 10 - Probably Cloudy
               - 11 - Confident Cloudy
         '''
-        cldmsk_qual = qfx_byte[:,:,0:2]
-        cldmsk      = qfx_byte[:,:,2:4]
+        cldmsk_qual = qfx_byte[:,:,6:8][::-1]
+        cldmsk      = qfx_byte[:,:,4:6][::-1]
     
         #convert bits to integer mask (cloud mask)
+        shape = cldmsk.shape
         new_cldmsk = np.empty((shape[0], shape[1]))
         confident_clear_idx  = np.where((cldmsk[:,:, 0]==0) &\
                                         (cldmsk[:,:, 1]==0))
@@ -214,8 +221,8 @@ def decode_QFX_bytes_VJ109(qfx_byte, x):
               - 0 - No  Snow/Ice
               - 1 - Yes Snow/Ice
         '''
-        shadow_mask   = qfx_byte[:,:,3]
-        snow_ice_mask = qfx_byte[:,:,5]
+        shadow_mask   = qfx_byte[:,:,4]
+        snow_ice_mask = qfx_byte[:,:,2]
         
         return shadow_mask, snow_ice_mask
 
@@ -229,8 +236,8 @@ def decode_QFX_bytes_VJ109(qfx_byte, x):
               - 1 - Bad
         '''
 
-        m5_qual_mask = qfx_byte[:,:,6]
-        m7_qual_mask = qfx_byte[:,:,7]
+        m5_qual_mask = qfx_byte[:,:,1]
+        m7_qual_mask = qfx_byte[:,:,0]
 
         return m5_qual_mask, m7_qual_mask
 
@@ -247,9 +254,9 @@ def decode_QFX_bytes_VJ109(qfx_byte, x):
               - 1 - Bad
         '''
 
-        m11_qual_mask = qfx_byte[:,:,2]
-        i1_qual_mask = qfx_byte[:,:,3]
-        i2_qual_mask = qfx_byte[:,:,4]
+        m11_qual_mask = qfx_byte[:,:,5]
+        i1_qual_mask = qfx_byte[:,:,4]
+        i2_qual_mask = qfx_byte[:,:,3]
 
         return m11_qual_mask, i1_qual_mask, i2_qual_mask
 
@@ -264,11 +271,19 @@ def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
     '''
 
     with Dataset(ref_file, 'r') as nc_ref_file_obj:
-        observation_data_ncObj = nc_ref_file_obj['SurfReflect_VNP/Data_Fields']
+        '''
+        print(nc_ref_file_obj.variables.keys())
+        import sys
+        sys.exit()
+        
+        dict_keys(['375m Surface Reflectance Band I1', '375m Surface Reflectance Band I2', '375m Surface Reflectance Band I3', '750m Surface Reflectance Band M1', '750m Surface Reflectance Band M2', '750m Surface Reflectance Band M3', '750m Surface Reflectance Band M4', '750m Surface Reflectance Band M5', '750m Surface Reflectance Band M7', '750m Surface Reflectance Band M8', '750m Surface Reflectance Band M10', '750m Surface Reflectance Band M11', 'QF1 Surface Reflectance', 'QF2 Surface Reflectance', 'QF3 Surface Reflectance', 'QF4 Surface Reflectance', 'QF5 Surface Reflectance', 'QF6 Surface Reflectance', 'QF7 Surface Reflectance', 'land_water_mask'])
+        
+        '''
+        #observation_data_ncObj = nc_ref_file_obj['SurfReflect_VNP/Data_Fields/']
+        if not cld_shadow_snowice:
+            n = len(which_bands)
+            M_bands = []
 
-        n = len(which_bands)
-
-        M_bands = []
         # qaulity control flag set to -999
         # https://viirsland.gsfc.nasa.gov/PDF/VIIRS_Surf_Refl_UserGuide_v1.3.pdf
         # overall sfc ref quality (bits zero indexed)
@@ -276,47 +291,49 @@ def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
         # QF6 (bit2, M11, bit3 I1, bit4 I2) 
         # M3 blue,4 green,5 red,7 veggie,11 burn I1 640,I2 865
         if cld_shadow_snowice:
-            QF1 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF1_Surface_Reflectance'][:], 0),1)
-            QF2 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF2_Surface_Reflectance'][:], 0),2)
-        QF5 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF5_Surface_Reflectance'][:], 0),5)
-        QF6 = decode_QFX_bytes_VJ109(get_bits(observation_data_ncObj['Data_Fields/QF6_Surface_Reflectance'][:], 0),6)
+            QF1 = decode_QFX_bytes_VJ109(get_bits(nc_ref_file_obj.variables['QF1 Surface Reflectance'][:], 0),1)
+            QF2 = decode_QFX_bytes_VJ109(get_bits(nc_ref_file_obj.variables['QF2 Surface Reflectance'][:], 0),2)
+        else:
+            QF5 = decode_QFX_bytes_VJ109(get_bits(nc_ref_file_obj.variables['QF5 Surface Reflectance'][:], 0),5)
+            QF6 = decode_QFX_bytes_VJ109(get_bits(nc_ref_file_obj.variables['QF6 Surface Reflectance'][:], 0),6)
         
         # unpack returns from QF<X>
         if cld_shadow_snowice:
             new_cldmsk   , new_cldmsk_qual            = QF1
             shadow_mask  , snow_ice_mask              = QF2
-        m5_qual_mask , m7_qual_mask               = QF5
-        m11_qual_mask, i1_qual_mask, i2_qual_mask = QF6
+        else:
+            m5_qual_mask , m7_qual_mask               = QF5
+            m11_qual_mask, i1_qual_mask, i2_qual_mask = QF6
 
-        for i, band_num in enumerate(which_bands):
-            #band names 1 indexed
-            # print(band_num)
-            M_bands_temp = observation_data_ncObj['750m_Surface_Reflectance_Band_M{}'\
-                                                  .format(band_num)][:]
-            
-            # now use masks from QF<X> to quality control bands
-            if band_num==5:
-                M_bands_temp[m5_qual_mask==1]=-999
-            elif band_num==7:
-                M_bands_temp[m7_qual_mask==1]=-999
-            elif band_num==11:
-                M_bands_temp[m11_qual_mask==1]=-999
-            else:
-                print('band not yet supported')
+            for i, band_num in enumerate(which_bands):
+                #band names 1 indexed
+                # print(band_num)
+                M_bands_temp = nc_ref_file_obj.variables['750m Surface Reflectance Band M{}'\
+                                                      .format(band_num)][:]
+                
+                # now use masks from QF<X> to quality control bands
+                if band_num==5:
+                    M_bands_temp[m5_qual_mask==1]=-999
+                elif band_num==7:
+                    M_bands_temp[m7_qual_mask==1]=-999
+                elif band_num==11:
+                    M_bands_temp[m11_qual_mask==1]=-999
+                else:
+                    print('band not yet supported')
 
-            # add filtered band to band list for return
-            M_bands.append(M_bands_temp)
+                # add filtered band to band list for return
+                M_bands.append(M_bands_temp)
 
         if cld_shadow_snowice:
             # if cloud mask is poor quality, set to -999
             # becuase burn scars dont exhibit spectral
             # properties similar to clouds, this is ok
-            new_cldmsk[cldmsk_qual==0]=-999
+            new_cldmsk[new_cldmsk_qual==0]=-999
 
     if cld_shadow_snowice:
-        return M_bands, new_cldmsk, snow_ice_mask, shadow_mask
+        return new_cldmsk, snow_ice_mask, shadow_mask
     else:
-        return M_bands
+        return np.array(M_bands)
 
 
 def get_CLDMSK(cldmsk_file):
@@ -416,43 +433,6 @@ if __name__=='__main__':
     import cartopy.crs as ccrs
     import matplotlib.pyplot as plt
 
-
-    def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
-                      include_VZA=False, include_SAAVAA=False):
-        '''
-        input: VIIRS VJ103 (or VNP103) .nc file
-        return: conditionally; lat, lon, SZA, VZA, SAA, VAA
-        '''
-
-        with Dataset(geo_file, 'r') as nc_geo_file_obj:
-            geolocation_ncObj = nc_geo_file_obj['geolocation_data']
-
-            return_dict = {}
-            if include_latlon:
-                return_dict['lat'] = geolocation_ncObj['latitude'][:]
-                return_dict['lon'] = geolocation_ncObj['longitude'][:]
-            if include_SZA:
-                return_dict['SZA'] = geolocation_ncObj['solar_zenith'][:]
-            if include_VZA:
-                return_dict['VZA'] = geolocation_ncObj['sensor_zenith'][:]
-            if include_SAAVAA:
-                return_dict['SAA'] = geolocation_ncObj['solar_azimuth'][:]
-                return_dict['VAA'] =  geolocation_ncObj['sensor_azimuth'][:]
-
-            # 0 Shallow_Ocean
-            # 1 Land
-            # 2 Coastline
-            # 3 Shallow_Inland
-            # 4 Ephemeral
-            # 5 Deep_Inland
-            # 6 Continental
-            # 7 Deep_Ocean
-
-            land_Water_mask = geolocation_ncObj['land_water_mask'][:]
-            return land_Water_mask
-
-
-        # return return_dict
 
     home = 'R:/satellite_data/viirs_data/noaa20/geolocation/'
     geo_file = home + 'VJ103MOD.A2021154.2048.021.2021155015136.nc'

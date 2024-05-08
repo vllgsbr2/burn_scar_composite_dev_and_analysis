@@ -146,9 +146,15 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         sys.exit(-1)
 
-    token                 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbF9hZGRyZXNzIjoiamF2aWVyLmEudmlsbGVnYXNicmF2b0Bub2FhLmdvdiIsImlzcyI6IkFQUyBPQXV0aDIgQXV0aGVudGljYXRvciIsImlhdCI6MTcxMDk1NjkxMSwibmJmIjoxNzEwOTU2OTExLCJleHAiOjE4Njg2MzY5MTEsInVpZCI6InZsbGdzYnIyIiwidG9rZW5DcmVhdG9yIjoidmxsZ3NicjIifQ.hK7ULSDjMBLm-uHTPApUj7OBHOGFZQA0KsxtzcriQUA' 
+    token                 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbF9hZGRyZXNzIjoiamF2aWVyLmEudmlsbGVnYXNicmF2b0Bub2FhLmdvdiIsImlzcyI6IkFQUyBPQXV0aDIgQXV0aGVudGljYXRvciIsImlhdCI6MTcxMjAwOTA5MywibmJmIjoxNzEyMDA5MDkzLCJleHAiOjE4Njk2ODkwOTMsInVpZCI6InZsbGdzYnIyIiwidG9rZW5DcmVhdG9yIjoidmxsZ3NicjIifQ.d33j4uglmnzAo7g2ICCSIIVqZWiIeUOhO-Kb3e7bR_s' 
     destination_directory = '/scratch/zt1/project/vllgsbr2-prj/burnscar_project/data/noaa_20_vj109_files'
-    source_url            = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/502141057/'
+    source_url            = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/502165538/'
+
+
+    order_2020_vj103 = '502165538/' # done
+    order_2020_vj109 = '502165537/' # done
+    order_2021_vj103 = '502165516/' # done
+    order_2021_vj109 = '502165515/' # in pregresso
 
     #_main()
 

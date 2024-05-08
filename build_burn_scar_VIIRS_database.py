@@ -2,29 +2,29 @@
 Author       : Javier Alfredo Villegas Bravo
 Affiliation  : University of Maryland College Park
                Cooperative Institute for Satellite Earth Systems Studies
-Date modified: 03/22/2024
+Date modified: 05/03/2024
 '''
-
-if __name__=='__main__':
+def build_burn_scar_database():
     print('Setting up environment')
     import warnings
     from datetime import datetime
     import os
     import time
     import sys
-    from netCDF4 import Dataset
+    #from netCDF4 import Dataset
     import h5py
     import numpy as np
-    import cartopy.crs as ccrs
-    import matplotlib.pyplot as plt
+    #import cartopy.crs as ccrs
+    #import matplotlib.pyplot as plt
 
     #python modules I made
     from burn_scar_composites import get_burn_scar_RGB,\
                                      get_normalized_burn_ratio,\
-                                     get_BRF_lat_lon,\  # change to VJ109
+                                     get_BRF_lat_lon,\
                                      get_BRF_RGB,\
                                      flip_arr
     from read_VIIRS_raw_nc_files import get_VJ103_geo,\
+                                        get_VJ109_ref,\
                                         get_CLDMSK
 
     from regrid import regrid_latlon_source2target_new
@@ -70,30 +70,31 @@ if __name__=='__main__':
     M15	10.26 - 11.26	Longwave Infrared
     M16	11.54 - 12.49	Day/Night
     '''
-
+    
+    analysis_year        = '2020'
     home                 = '/scratch/zt1/project/vllgsbr2-prj/'
-    home_data            = home + 'burnscar_dev_javier/data/NOAA_20/2021/'
-    ref_filepath_home    = home_data + 'reflectance/' # this is specifically now surface reflectance
-    geo_filepath_home    = home_data + 'geolocation/'
-    cldmsk_filepath_home = home_data + 'cldmsk/'
-    commongrid_file      = home_data + 'grid/Grids_West_CONUS_new.h5'
-    database_file        = home_data + 'databases/viirs_burnscar_database_2021.h5'
+    home_data            = home      + 'raw_data_burnscar/data/'
+    ref_filepath_home    = home_data + f'noaa_20_viirs/{analysis_year}_fire_season/VJ109/'
+    geo_filepath_home    = home_data + f'noaa_20_viirs/{analysis_year}_fire_season/VJ103/'
+    #cldmsk_filepath_home = home_data + 'cldmsk/'
+    commongrid_file      = home_data + 'grids/Grids_West_CONUS_new.h5'
+    database_file        = home_data + f'databases/viirs_burnscar_database_{analysis_year}.h5'
 
     ref_filepaths    = np.sort([ref_filepath_home    + x for x in os.listdir(ref_filepath_home)])
     geo_filepaths    = np.sort([geo_filepath_home    + x for x in os.listdir(geo_filepath_home)])
-    cldmsk_filepaths = np.sort([cldmsk_filepath_home + x for x in os.listdir(cldmsk_filepath_home)])
+    #cldmsk_filepaths = np.sort([cldmsk_filepath_home + x for x in os.listdir(cldmsk_filepath_home)])
 
-    ref_file_timestamps    = [x[-33:-21] for x in ref_filepaths]
+    ref_file_timestamps    = [x[-34:-22] for x in ref_filepaths] # for TOA ref -33:-21
     geo_file_timestamps    = [x[-33:-21] for x in geo_filepaths]
-    cldmsk_file_timestamps = [x[-33:-21] for x in cldmsk_filepaths]
+    #cldmsk_file_timestamps = [x[-33:-21] for x in cldmsk_filepaths]
 
-    boolean_intersection_ref_cldmsk = np.in1d(ref_file_timestamps, cldmsk_file_timestamps)
-    idx_last_not_match              = np.where(boolean_intersection_ref_cldmsk==False)[0][-1]
-
-    ref_filepaths       = ref_filepaths[idx_last_not_match+1:]
-    geo_filepaths       = geo_filepaths[idx_last_not_match+1:]
-    ref_file_timestamps = ref_file_timestamps[idx_last_not_match+1:]
-    geo_file_timestamps = geo_file_timestamps[idx_last_not_match+1:]
+    #checks that files are exact sets of each other but I'm depricating this now
+    #boolean_intersection_ref_geo    = np.in1d(ref_file_timestamps, geo_file_timestamps)
+    #idx_last_not_match              = np.where(boolean_intersection_ref_geo==False)[0][-1]
+    #ref_filepaths       = ref_filepaths[idx_last_not_match+1:]
+    #geo_filepaths       = geo_filepaths[idx_last_not_match+1:]
+    #ref_file_timestamps = ref_file_timestamps[idx_last_not_match+1:]
+    #geo_file_timestamps = geo_file_timestamps[idx_last_not_match+1:]
 
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
         common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
@@ -102,89 +103,91 @@ if __name__=='__main__':
     common_grid_lon = np.flip(common_grid_lon, axis=1)*-1
 
     warnings.filterwarnings("ignore")
-    start, end = 0, -1
+    start, end = 0,-1 
 
     print('Building Database')
     with h5py.File(database_file,'r+') as hf_database:
-        for i, (geo_file, ref_file, cldmsk_file) in enumerate(zip(geo_filepaths[start:end],\
-                    ref_filepaths[start:end], cldmsk_filepaths[start:end])):
-
-            # grab what we need from the raw files
-            start_time = time.time()
-            which_bands = [3,4,5,7,11] # [blue, green, red, veggie, burn]
-            #             [0,1,2,3,4]
-            # modify get_BRF_lat_lon() to use VJ109 file
-            M_bands_BRF, lat, lon, land_water_mask = get_BRF_lat_lon(geo_file, ref_file, which_bands)
-            
-            # make sure this retains meaning to VJ109 file
-            R_M3, R_M4, R_M5, R_M7, R_M11 = \
-                                       M_bands_BRF[:,:,0], M_bands_BRF[:,:,1],\
-                                       M_bands_BRF[:,:,2], M_bands_BRF[:,:,3],\
-                                       M_bands_BRF[:,:,4]
-            
-            BRF_RGB         = get_BRF_RGB(R_M5,R_M4,R_M3)
-            # NBR             = get_normalized_burn_ratio(R_M7, R_M11)
-            # burn_scar_RGB   = get_burn_scar_RGB(R_M11, R_M7, R_M5)
-            # Cloud_Mask_Flag,\
-            # new_Unobstructed_FOV_Quality_Flag,\
-            # Day_Night_Flag,\
-            # Sun_glint_Flag,\
-            # Snow_Ice_Background_Flag,\
-            # new_Land_Water_Flag
-            cldmsk_return   = get_CLDMSK(cldmsk_file)
-            cldmsk          = cldmsk_return[0]
-            snow_ice_flag   = cldmsk_return[4] # cloud mask includes this flag
-            land_water_mask = get_VJ103_geo(geo_file, include_lwm=True)['land_water_mask']
-
-            geofile_dict    = get_VJ103_geo(geo_file, include_latlon=False, include_SZA=True,\
-                                            include_VZA=True, include_SAAVAA=True, include_lwm=True)
-            
-            # land_water_mask	Land/Water mask	ubyte(number_of_lines, number_of_pixels)
-	    # long_name	string	"Land/Water mask at pixel locations"
-	    # _FillValue	ubyte		255
-	    # flag_values	ubyte[8]	0, 1, 2, 3, 4, 5, 6, 7
-	    # flag_meanings	string		
-            # "Shallow_Ocean Land Coastline Shallow_Inland Ephemeral Deep_Inland Continental Deep_Ocean"
-            land_water_mask = geofile_dict['land_water_mask']
-            VZA             = geofile_dict['VZA']
-            SZA             = geofile_dict['SZA']
-            RAA             = geofile_dict['SAA'] - geofile_dict['VAA']
-
-            # force nan values to -999 if any
-            BRF_RGB[np.isnan(BRF_RGB)]                 = -999
-            # NBR[np.isnan(NBR)]                         = -999
-            # burn_scar_RGB[np.isnan(burn_scar_RGB)]     = -999
-            cldmsk[np.isnan(cldmsk)]                   = -999
-            land_water_mask[np.isnan(land_water_mask)] = -999
-            VZA[np.isnan(VZA)]                         = -999
-            SZA[np.isnan(VZA)]                         = -999
-            RAA[np.isnan(VZA)]                         = -999
-
-            # flip arrays so the top is North and left is West
-            BRF_RGB         = flip_arr(BRF_RGB)
-            # NBR             = flip_arr(NBR)
-            # burn_scar_RGB   = flip_arr(burn_scar_RGB)
-            cldmsk          = flip_arr(cldmsk)
-            land_water_mask = flip_arr(land_water_mask)
-            lat             = flip_arr(lat)
-            lon             = flip_arr(lon)
-            VZA             = flip_arr(VZA)
-            SZA             = flip_arr(SZA)
-            RAA             = flip_arr(RAA)
-
-            # define time stamp to write to file
-            time_stamp_current = geo_file[-33:-21]
-            year               = time_stamp_current[:4]
-            DOY                = '{}'.format(time_stamp_current[4:7])
-            UTC_hr             = time_stamp_current[8:][:2]
-            UTC_min            = time_stamp_current[8:][2:]
-            date               = datetime.strptime(year + "-" + DOY, "%Y-%j")\
-                                 .strftime("_%m.%d.%Y")
-            
-            # regrid the data to fixed grid defined by common grid file
-            group_timestamp_check = time_stamp_current+date
-            if group_timestamp_check in hf_database:
+        for i, (geo_file, ref_file) in enumerate(zip(geo_filepaths[start:end],\
+                ref_filepaths[start:end])):#, cldmsk_file cldmsk_filepaths[start:end])):
+            try:
+                # check if timestamps from geo and ref files match
+                if geo_file_timestamps[i] != ref_file_timestamps[i]:
+                    print('Error: geo and ref file time stamps do not match. Must sort')
+                    sys.exit()
+                    
+                # grab what we need from the raw files
+                start_time = time.time()
+                which_bands = [5,7,11] # [red, veggie, burn]
+                #             [0,1,2]
+                M_bands_BRF, lat, lon, land_water_mask = get_BRF_lat_lon(geo_file, ref_file, which_bands)
+                # make sure this retains meaning to VJ109 file
+                R_M5, R_M7, R_M11 = M_bands_BRF[0,:,:],\
+                                    M_bands_BRF[1,:,:],\
+                                    M_bands_BRF[2,:,:]
                 
+                burn_scar_RGB   = get_burn_scar_RGB(R_M11, R_M7, R_M5)
+                #****************************************************************
+                # modify to work with 
+                cldmsk         ,\
+                snow_ice_mask  ,\
+                cld_shadow_mask \
+                                = get_VJ109_ref(ref_file, cld_shadow_snowice=True)
+
+                #cldmsk_return   = get_CLDMSK(cldmsk_file)
+                #cldmsk          = cldmsk_return[0]
+                #snow_ice_flag   = cldmsk_return[4] # cloud mask includes this flag
+                
+                geofile_dict    = get_VJ103_geo(geo_file, include_latlon=False, include_SZA=True,\
+                                                include_VZA=True, include_SAAVAA=True, include_lwm=True)
+                
+                # land_water_mask	Land/Water mask	ubyte(number_of_lines, number_of_pixels)
+                # long_name	string	"Land/Water mask at pixel locations"
+                # _FillValue	ubyte		255
+                # flag_values	ubyte[8]	0, 1, 2, 3, 4, 5, 6, 7
+                # flag_meanings	string		
+                # "Shallow_Ocean Land Coastline Shallow_Inland Ephemeral Deep_Inland Continental Deep_Ocean"
+                land_water_mask = geofile_dict['land_water_mask']
+                #****************************************************************
+
+                VZA             = geofile_dict['VZA']
+                SZA             = geofile_dict['SZA']
+                RAA             = geofile_dict['SAA'] - geofile_dict['VAA']
+
+                # force nan values to -999 if any
+                burn_scar_RGB[np.isnan(burn_scar_RGB)]     = -999
+                cldmsk[np.isnan(cldmsk)]                   = -999
+                cld_shadow_mask[np.isnan(cld_shadow_mask)] = -999
+                snow_ice_mask[np.isnan(snow_ice_mask)]     = -999
+                land_water_mask[np.isnan(land_water_mask)] = -999
+                VZA[np.isnan(VZA)]                         = -999
+                SZA[np.isnan(VZA)]                         = -999
+                RAA[np.isnan(VZA)]                         = -999
+
+                # flip arrays so the top is North and left is West
+                burn_scar_RGB   = flip_arr(burn_scar_RGB)
+                cldmsk          = flip_arr(cldmsk)
+                cld_shadow_mask = flip_arr(cld_shadow_mask)
+                snow_ice_mask   = flip_arr(snow_ice_mask)
+                land_water_mask = flip_arr(land_water_mask)
+                lat             = flip_arr(lat)
+                lon             = flip_arr(lon)
+                VZA             = flip_arr(VZA)
+                SZA             = flip_arr(SZA)
+                RAA             = flip_arr(RAA)
+
+                # define time stamp to write to file
+                time_stamp_current = geo_file[-33:-21]
+                year               = time_stamp_current[:4]
+                DOY                = '{}'.format(time_stamp_current[4:7])
+                UTC_hr             = time_stamp_current[8:][:2]
+                UTC_min            = time_stamp_current[8:][2:]
+                date               = datetime.strptime(year + "-" + DOY, "%Y-%j")\
+                                     .strftime("_%m.%d.%Y")
+
+                # regrid the data to fixed grid defined by common grid file
+                #group_timestamp_check = time_stamp_current+date
+                #if group_timestamp_check in hf_database:
+                    
                 target_lat = common_grid_lat
                 target_lon = common_grid_lon
                 source_lat = lat
@@ -211,37 +214,154 @@ if __name__=='__main__':
                                                                  target_lat,\
                                                                  target_lon,\
                                                                  max_radius)
-            else:
-                print(group_timestamp_check, 'in dataset, not reprocessed')
-                continue
+                #else:
+                #    print(group_timestamp_check, 'in dataset, not reprocessed')
+                #    continue
 
-            group_timestamp = hf_database.create_group(time_stamp_current+date)
-            #group_timestamp.create_dataset('surface_BRF_RGB', data=BRF_RGB        , compression='gzip')
-            group_timestamp.create_dataset('burn_scar_RGB'  , data=burn_scar_RGB  , compression='gzip')
-            group_timestamp.create_dataset('cldmsk'         , data=cldmsk         , compression='gzip')
-            group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
-            group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
-            group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
-            group_timestamp.create_dataset('VZA'            , data=VZA            , compression='gzip')
-            group_timestamp.create_dataset('SZA'            , data=SZA            , compression='gzip')
-            group_timestamp.create_dataset('RAA'            , data=RAA            , compression='gzip')
-            group_timestamp.create_dataset('regrid_row_idx' , data=regrid_row_idx , compression='gzip')
-            group_timestamp.create_dataset('regrid_col_idx' , data=regrid_col_idx , compression='gzip')
-            group_timestamp.create_dataset('fill_val_idx'   ,data=fill_val_idx    , compression='gzip')
+                group_timestamp = hf_database.create_group(time_stamp_current+date)
+                group_timestamp.create_dataset('burn_scar_RGB'  , data=burn_scar_RGB  , compression='gzip')
+                group_timestamp.create_dataset('cldmsk'         , data=cldmsk         , compression='gzip')
+                group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
+                group_timestamp.create_dataset('snow_ice_mask'  , data=snow_ice_mask  , compression='gzip')
+                group_timestamp.create_dataset('cld_shadow_mask', data=cld_shadow_mask, compression='gzip')
+                #group_timestamp.create_dataset('lat'            , data=lat            , compression='gzip')
+                #group_timestamp.create_dataset('lon'            , data=lon            , compression='gzip')
+                group_timestamp.create_dataset('VZA'            , data=VZA            , compression='gzip')
+                group_timestamp.create_dataset('SZA'            , data=SZA            , compression='gzip')
+                group_timestamp.create_dataset('RAA'            , data=RAA            , compression='gzip')
+                group_timestamp.create_dataset('regrid_row_idx' , data=regrid_row_idx , compression='gzip')
+                group_timestamp.create_dataset('regrid_col_idx' , data=regrid_col_idx , compression='gzip')
+                group_timestamp.create_dataset('fill_val_idx'   , data=fill_val_idx   , compression='gzip')
+                
+                # Just keeping this here incase want to change data in existing dataset 
+                #try:
+                #    hf_database[time_stamp_current+date+'/land_water_mask'][:] = land_water_mask
+                #except:
+                #    try:
+                #        group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
+                #    except:
+                #        print("broken")
+
+                 
+                # print some diagnostics
+                run_time = time.time() - start_time
+                print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'\
+                        .format(i, date[1:], time_stamp_current, run_time))
+            except Exception as e:
+                run_time = time.time() - start_time
+                print(f'Failed **** {i} {ref_file} {e}')
+
+
+def plot_hdf_for_inspection(database_file, savefig_path):
+    import h5py
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    with h5py.File(database_file, 'r') as hf_database:
+        for group_name in hf_database.keys():
+            group = hf_database[group_name]
             
-            # change to vj103 land water mask that has more categories
-            # Just keeping this here incase want to change data in existing dataset 
-            #try:
-            #    hf_database[time_stamp_current+date+'/land_water_mask'][:] = land_water_mask
-            #except:
-            #    try:
-            #        group_timestamp.create_dataset('land_water_mask', data=land_water_mask, compression='gzip')
-            #    except:
-            #        print("broken")
-
+            regrid_col_idx = group['regrid_col_idx'][:]
+            regrid_row_idx = group['regrid_row_idx'][:]
+            regrid_col_idx[regrid_col_idx==-999] = 0
+            regrid_row_idx[regrid_row_idx==-999] = 0
             
-            # print some diagnostics
-            run_time = time.time() - start_time
-            print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'\
-                    .format(i, date[1:], time_stamp_current, run_time))
+            fill_val_idx = group['fill_val_idx'  ][:]
 
+            for dataset_name in group.keys():
+                
+                if not ('regrid' in dataset_name or 'fill' in dataset_name):
+                    print(dataset_name)
+                    
+                    dataset = group[dataset_name][:]
+                    dataset = dataset.astype(dtype=np.float64)
+                    dataset[dataset==-999] = np.nan
+
+                    dataset_list = [dataset]
+                    
+                    dataset_regrid = dataset[regrid_row_idx, regrid_col_idx]
+                    dataset_regrid[fill_val_idx[0], fill_val_idx[1]] = np.nan 
+                    
+                    dataset_list.append(dataset_regrid)
+
+                    # Plot the dataset
+                    
+                    #plt.figure()
+                    
+                    if 'burn_scar_RGB' == dataset_name:
+                        f, ax = plt.subplots(ncols=2)
+                        im = ax[0].imshow(dataset_list[0])
+                        ax[1].imshow(dataset_list[1])
+                    elif 'cldmsk' == dataset_name:
+                        f, ax = plt.subplots(ncols=2)
+                        im = ax[0].imshow(dataset_list[0], cmap='bone_r', vmin=0, vmax=3)
+                        ax[1].imshow(dataset_list[1], cmap='bone_r', vmin=0, vmax=3)
+                    elif 'RAA' in dataset_name or \
+                         'SZA' in dataset_name or \
+                         'VZA' in dataset_name:
+                        f, ax = plt.subplots(ncols=2) 
+                        im = ax[0].imshow(dataset_list[0], cmap='jet',\
+                                     vmin=dataset_list[0].min() ,\
+                                     vmax=dataset_list[0].max() )
+                        ax[1].imshow(dataset_list[1], cmap='jet',\
+                                     vmin=dataset_list[0].min() ,\
+                                     vmax=dataset_list[0].max() )
+                    else:
+                        f, ax = plt.subplots(ncols=2)
+                        im = ax[0].imshow(dataset_list[0], cmap='bone',\
+                                     vmin=dataset_list[0].min()  ,\
+                                     vmax=dataset_list[0].max()  )
+                        ax[1].imshow(dataset_list[1], cmap='bone',\
+                                     vmin=dataset_list[0].min()  ,\
+                                     vmax=dataset_list[0].max()  )
+                    
+                    ax[0].set_title(f'{group_name}\n{dataset_name}')
+                    ax[1].set_title('regrid')
+                    
+                    f.colorbar(im, ax=ax[0])
+
+                    plt.tight_layout()
+
+                    # Save the plot to a PDF file at 300dpi resolution
+                    pdf_file_path = f'{savefig_path}/{group_name}_{dataset_name}.pdf'
+                    plt.savefig(pdf_file_path, dpi=300)
+                    plt.close()
+            
+        '''
+        for group_name in file.keys():
+        group = file[group_name]
+        num_datasets = len(group.keys())
+
+        # Create subplots based on the number of datasets in the group
+        fig, axs = plt.subplots(1, num_datasets, figsize=(num_datasets*5, 5))
+
+        for i, dataset_name in enumerate(group.keys()):
+            dataset = group[dataset_name]
+
+            # Plot the dataset in the corresponding subplot
+            axs[i].imshow(dataset, cmap='viridis')
+            axs[i].set_title(dataset_name)
+
+        # Save the subplots to a PDF file at 300dpi resolution
+        pdf_file_path = f'{group_name}_plots.pdf'
+        plt.savefig(pdf_file_path, dpi=300)
+        plt.close()
+        '''
+
+if __name__=='__main__':
+
+
+    analysis_year        = '2020'
+    home                 = '/scratch/zt1/project/vllgsbr2-prj/'
+    home_data            = home      + 'raw_data_burnscar/data/'
+    ref_filepath_home    = home_data + f'noaa_20_viirs/{analysis_year}_fire_season/VJ109/'
+    geo_filepath_home    = home_data + f'noaa_20_viirs/{analysis_year}_fire_season/VJ103/'
+    #cldmsk_filepath_home = home_data + 'cldmsk/'
+    commongrid_file      = home_data + 'grids/Grids_West_CONUS_new.h5'
+    database_file        = home_data + f'databases/viirs_burnscar_database_{analysis_year}.h5'
+
+    savefig_path         = home_data + 'database_inspect_figures'
+
+    build_burn_scar_database()
+
+    plot_hdf_for_inspection(database_file, savefig_path)
