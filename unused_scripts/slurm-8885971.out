@@ -1,0 +1,1180 @@
+Setting up environment
+Building Database
+2024183.1730_07.01.2024 already exists, continuing to next file
+2024183.1906_07.01.2024 already exists, continuing to next file
+2024183.1912_07.01.2024 already exists, continuing to next file
+2024183.2048_07.01.2024 already exists, continuing to next file
+2024183.2054_07.01.2024 already exists, continuing to next file
+2024183.2236_07.01.2024 already exists, continuing to next file
+2024184.1712_07.02.2024 already exists, continuing to next file
+2024184.1848_07.02.2024 already exists, continuing to next file
+2024184.1854_07.02.2024 already exists, continuing to next file
+2024184.2024_07.02.2024 already exists, continuing to next file
+2024184.2030_07.02.2024 already exists, continuing to next file
+2024184.2036_07.02.2024 already exists, continuing to next file
+2024184.2206_07.02.2024 already exists, continuing to next file
+2024184.2212_07.02.2024 already exists, continuing to next file
+2024184.2218_07.02.2024 already exists, continuing to next file
+2024185.1654_07.03.2024 already exists, continuing to next file
+2024185.1830_07.03.2024 already exists, continuing to next file
+2024185.1836_07.03.2024 already exists, continuing to next file
+2024185.2006_07.03.2024 already exists, continuing to next file
+2024185.2012_07.03.2024 already exists, continuing to next file
+2024185.2018_07.03.2024 already exists, continuing to next file
+2024185.2148_07.03.2024 already exists, continuing to next file
+2024185.2154_07.03.2024 already exists, continuing to next file
+2024186.1636_07.04.2024 already exists, continuing to next file
+2024186.1812_07.04.2024 already exists, continuing to next file
+2024186.1948_07.04.2024 already exists, continuing to next file
+2024186.1954_07.04.2024 already exists, continuing to next file
+2024186.2130_07.04.2024 already exists, continuing to next file
+2024186.2136_07.04.2024 already exists, continuing to next file
+2024187.1754_07.05.2024 already exists, continuing to next file
+2024187.1930_07.05.2024 already exists, continuing to next file
+2024187.1936_07.05.2024 already exists, continuing to next file
+2024187.2112_07.05.2024 already exists, continuing to next file
+2024187.2118_07.05.2024 already exists, continuing to next file
+2024188.1736_07.06.2024 already exists, continuing to next file
+2024188.1912_07.06.2024 already exists, continuing to next file
+2024188.1918_07.06.2024 already exists, continuing to next file
+2024188.2054_07.06.2024 already exists, continuing to next file
+2024188.2100_07.06.2024 already exists, continuing to next file
+2024188.2242_07.06.2024 already exists, continuing to next file
+2024189.1718_07.07.2024 already exists, continuing to next file
+2024189.1854_07.07.2024 already exists, continuing to next file
+2024189.1900_07.07.2024 already exists, continuing to next file
+2024189.2036_07.07.2024 already exists, continuing to next file
+2024189.2042_07.07.2024 already exists, continuing to next file
+2024189.2212_07.07.2024 already exists, continuing to next file
+2024189.2218_07.07.2024 already exists, continuing to next file
+2024189.2224_07.07.2024 already exists, continuing to next file
+2024190.1700_07.08.2024 already exists, continuing to next file
+2024190.1836_07.08.2024 already exists, continuing to next file
+2024190.1842_07.08.2024 already exists, continuing to next file
+2024190.2012_07.08.2024 already exists, continuing to next file
+2024190.2018_07.08.2024 already exists, continuing to next file
+2024190.2024_07.08.2024 already exists, continuing to next file
+2024190.2154_07.08.2024 already exists, continuing to next file
+2024190.2200_07.08.2024 already exists, continuing to next file
+2024190.2206_07.08.2024 already exists, continuing to next file
+2024191.1642_07.09.2024 already exists, continuing to next file
+2024191.1818_07.09.2024 already exists, continuing to next file
+2024191.1824_07.09.2024 already exists, continuing to next file
+2024191.1954_07.09.2024 already exists, continuing to next file
+2024191.2000_07.09.2024 already exists, continuing to next file
+2024191.2136_07.09.2024 already exists, continuing to next file
+2024191.2142_07.09.2024 already exists, continuing to next file
+2024192.1800_07.10.2024 already exists, continuing to next file
+2024192.1936_07.10.2024 already exists, continuing to next file
+2024192.1942_07.10.2024 already exists, continuing to next file
+2024192.2118_07.10.2024 already exists, continuing to next file
+2024192.2124_07.10.2024 already exists, continuing to next file
+2024193.1742_07.11.2024 already exists, continuing to next file
+2024193.1918_07.11.2024 already exists, continuing to next file
+2024193.1924_07.11.2024 already exists, continuing to next file
+2024193.2100_07.11.2024 already exists, continuing to next file
+2024193.2106_07.11.2024 already exists, continuing to next file
+2024194.1724_07.12.2024 already exists, continuing to next file
+2024194.1900_07.12.2024 already exists, continuing to next file
+2024194.1906_07.12.2024 already exists, continuing to next file
+2024194.2042_07.12.2024 already exists, continuing to next file
+2024194.2048_07.12.2024 already exists, continuing to next file
+2024194.2218_07.12.2024 already exists, continuing to next file
+2024194.2224_07.12.2024 already exists, continuing to next file
+2024194.2230_07.12.2024 already exists, continuing to next file
+2024195.1706_07.13.2024 already exists, continuing to next file
+2024195.1842_07.13.2024 already exists, continuing to next file
+2024195.1848_07.13.2024 already exists, continuing to next file
+2024195.2018_07.13.2024 already exists, continuing to next file
+2024195.2024_07.13.2024 already exists, continuing to next file
+2024195.2030_07.13.2024 already exists, continuing to next file
+2024195.2200_07.13.2024 already exists, continuing to next file
+2024195.2206_07.13.2024 already exists, continuing to next file
+2024195.2212_07.13.2024 already exists, continuing to next file
+2024196.1648_07.14.2024 already exists, continuing to next file
+2024196.1824_07.14.2024 already exists, continuing to next file
+2024196.1830_07.14.2024 already exists, continuing to next file
+2024196.2000_07.14.2024 already exists, continuing to next file
+2024196.2006_07.14.2024 already exists, continuing to next file
+2024196.2012_07.14.2024 already exists, continuing to next file
+2024196.2142_07.14.2024 already exists, continuing to next file
+2024196.2148_07.14.2024 already exists, continuing to next file
+2024197.1630_07.15.2024 already exists, continuing to next file
+2024197.1806_07.15.2024 already exists, continuing to next file
+2024197.1942_07.15.2024 already exists, continuing to next file
+2024197.1948_07.15.2024 already exists, continuing to next file
+2024197.2124_07.15.2024 already exists, continuing to next file
+2024197.2130_07.15.2024 already exists, continuing to next file
+2024198.1748_07.16.2024 already exists, continuing to next file
+2024198.1924_07.16.2024 already exists, continuing to next file
+2024198.1930_07.16.2024 already exists, continuing to next file
+2024198.2106_07.16.2024 already exists, continuing to next file
+2024198.2112_07.16.2024 already exists, continuing to next file
+2024199.1730_07.17.2024 already exists, continuing to next file
+2024199.1906_07.17.2024 already exists, continuing to next file
+2024199.1912_07.17.2024 already exists, continuing to next file
+2024199.2048_07.17.2024 already exists, continuing to next file
+2024199.2054_07.17.2024 already exists, continuing to next file
+2024199.2236_07.17.2024 already exists, continuing to next file
+2024200.1712_07.18.2024 already exists, continuing to next file
+2024200.1848_07.18.2024 already exists, continuing to next file
+2024200.1854_07.18.2024 already exists, continuing to next file
+2024200.2024_07.18.2024 already exists, continuing to next file
+2024200.2030_07.18.2024 already exists, continuing to next file
+2024200.2036_07.18.2024 already exists, continuing to next file
+2024200.2206_07.18.2024 already exists, continuing to next file
+2024200.2212_07.18.2024 already exists, continuing to next file
+2024200.2218_07.18.2024 already exists, continuing to next file
+2024201.1654_07.19.2024 already exists, continuing to next file
+2024201.1830_07.19.2024 already exists, continuing to next file
+2024201.1836_07.19.2024 already exists, continuing to next file
+2024201.2006_07.19.2024 already exists, continuing to next file
+2024201.2012_07.19.2024 already exists, continuing to next file
+2024201.2018_07.19.2024 already exists, continuing to next file
+2024201.2148_07.19.2024 already exists, continuing to next file
+2024201.2154_07.19.2024 already exists, continuing to next file
+2024201.2200_07.19.2024 already exists, continuing to next file
+2024202.1636_07.20.2024 already exists, continuing to next file
+2024202.1812_07.20.2024 already exists, continuing to next file
+2024202.1818_07.20.2024 already exists, continuing to next file
+2024202.1948_07.20.2024 already exists, continuing to next file
+2024202.1954_07.20.2024 already exists, continuing to next file
+2024202.2130_07.20.2024 already exists, continuing to next file
+2024202.2136_07.20.2024 already exists, continuing to next file
+2024203.1754_07.21.2024 already exists, continuing to next file
+2024203.1930_07.21.2024 already exists, continuing to next file
+2024203.1936_07.21.2024 already exists, continuing to next file
+2024203.2112_07.21.2024 already exists, continuing to next file
+2024203.2118_07.21.2024 already exists, continuing to next file
+2024204.1736_07.22.2024 already exists, continuing to next file
+2024204.1912_07.22.2024 already exists, continuing to next file
+2024204.1918_07.22.2024 already exists, continuing to next file
+2024204.2054_07.22.2024 already exists, continuing to next file
+2024204.2100_07.22.2024 already exists, continuing to next file
+2024205.1718_07.23.2024 already exists, continuing to next file
+2024205.1854_07.23.2024 already exists, continuing to next file
+2024205.1900_07.23.2024 already exists, continuing to next file
+2024205.2036_07.23.2024 already exists, continuing to next file
+2024205.2042_07.23.2024 already exists, continuing to next file
+2024205.2212_07.23.2024 already exists, continuing to next file
+2024205.2218_07.23.2024 already exists, continuing to next file
+2024205.2224_07.23.2024 already exists, continuing to next file
+2024206.1700_07.24.2024 already exists, continuing to next file
+2024206.1836_07.24.2024 already exists, continuing to next file
+2024206.1842_07.24.2024 already exists, continuing to next file
+2024206.2012_07.24.2024 already exists, continuing to next file
+2024206.2018_07.24.2024 already exists, continuing to next file
+2024206.2024_07.24.2024 already exists, continuing to next file
+2024206.2154_07.24.2024 already exists, continuing to next file
+2024206.2200_07.24.2024 already exists, continuing to next file
+2024206.2206_07.24.2024 already exists, continuing to next file
+2024207.1642_07.25.2024 already exists, continuing to next file
+2024207.1818_07.25.2024 already exists, continuing to next file
+2024207.1824_07.25.2024 already exists, continuing to next file
+2024207.1954_07.25.2024 already exists, continuing to next file
+2024207.2000_07.25.2024 already exists, continuing to next file
+2024207.2136_07.25.2024 already exists, continuing to next file
+2024207.2142_07.25.2024 already exists, continuing to next file
+2024208.1800_07.26.2024 already exists, continuing to next file
+2024208.1936_07.26.2024 already exists, continuing to next file
+2024208.1942_07.26.2024 already exists, continuing to next file
+2024208.2118_07.26.2024 already exists, continuing to next file
+Failed **** 179 /scratch/zt1/project/vllgsbr2-prj/raw_data_burnscar/data/noaa_20_viirs/2024_fire_season/VJ109/VJ109.A2024208.2124.002.2024209033540.hdf [Errno -51] NetCDF: Unknown file format: b'/scratch/zt1/project/vllgsbr2-prj/raw_data_burnscar/data/noaa_20_viirs/2024_fire_season/VJ109/VJ109.A2024208.2124.002.2024209033540.hdf'
+2024209.1742_07.27.2024 already exists, continuing to next file
+2024209.1918_07.27.2024 already exists, continuing to next file
+2024209.1924_07.27.2024 already exists, continuing to next file
+2024209.2100_07.27.2024 already exists, continuing to next file
+2024209.2106_07.27.2024 already exists, continuing to next file
+2024210.1724_07.28.2024 already exists, continuing to next file
+2024210.1900_07.28.2024 already exists, continuing to next file
+2024210.1906_07.28.2024 already exists, continuing to next file
+2024210.2042_07.28.2024 already exists, continuing to next file
+2024210.2048_07.28.2024 already exists, continuing to next file
+2024210.2224_07.28.2024 already exists, continuing to next file
+2024210.2230_07.28.2024 already exists, continuing to next file
+2024211.1706_07.29.2024 already exists, continuing to next file
+2024211.1842_07.29.2024 already exists, continuing to next file
+2024211.1848_07.29.2024 already exists, continuing to next file
+2024211.2018_07.29.2024 already exists, continuing to next file
+2024211.2024_07.29.2024 already exists, continuing to next file
+2024211.2030_07.29.2024 already exists, continuing to next file
+2024211.2200_07.29.2024 already exists, continuing to next file
+2024211.2206_07.29.2024 already exists, continuing to next file
+2024211.2212_07.29.2024 already exists, continuing to next file
+2024212.1648_07.30.2024 already exists, continuing to next file
+2024212.1824_07.30.2024 already exists, continuing to next file
+2024212.1830_07.30.2024 already exists, continuing to next file
+2024212.2000_07.30.2024 already exists, continuing to next file
+2024212.2006_07.30.2024 already exists, continuing to next file
+2024212.2012_07.30.2024 already exists, continuing to next file
+2024212.2142_07.30.2024 already exists, continuing to next file
+2024212.2148_07.30.2024 already exists, continuing to next file
+2024213.1630_07.31.2024 already exists, continuing to next file
+2024213.1806_07.31.2024 already exists, continuing to next file
+2024213.1942_07.31.2024 already exists, continuing to next file
+2024213.1948_07.31.2024 already exists, continuing to next file
+2024213.2124_07.31.2024 already exists, continuing to next file
+2024213.2130_07.31.2024 already exists, continuing to next file
+2024214.1748_08.01.2024 already exists, continuing to next file
+2024214.1924_08.01.2024 already exists, continuing to next file
+2024214.1930_08.01.2024 already exists, continuing to next file
+2024214.2106_08.01.2024 already exists, continuing to next file
+2024214.2112_08.01.2024 already exists, continuing to next file
+2024215.1730_08.02.2024 already exists, continuing to next file
+2024215.1906_08.02.2024 already exists, continuing to next file
+2024215.1912_08.02.2024 already exists, continuing to next file
+2024215.2048_08.02.2024 already exists, continuing to next file
+2024215.2054_08.02.2024 already exists, continuing to next file
+2024215.2236_08.02.2024 already exists, continuing to next file
+2024216.1712_08.03.2024 already exists, continuing to next file
+2024216.1848_08.03.2024 already exists, continuing to next file
+2024216.1854_08.03.2024 already exists, continuing to next file
+2024216.2024_08.03.2024 already exists, continuing to next file
+2024216.2030_08.03.2024 already exists, continuing to next file
+2024216.2036_08.03.2024 already exists, continuing to next file
+2024216.2206_08.03.2024 already exists, continuing to next file
+2024216.2212_08.03.2024 already exists, continuing to next file
+2024216.2218_08.03.2024 already exists, continuing to next file
+2024217.1654_08.04.2024 already exists, continuing to next file
+2024217.1830_08.04.2024 already exists, continuing to next file
+2024217.1836_08.04.2024 already exists, continuing to next file
+2024217.2006_08.04.2024 already exists, continuing to next file
+2024217.2012_08.04.2024 already exists, continuing to next file
+2024217.2018_08.04.2024 already exists, continuing to next file
+2024217.2148_08.04.2024 already exists, continuing to next file
+2024217.2154_08.04.2024 already exists, continuing to next file
+2024217.2200_08.04.2024 already exists, continuing to next file
+2024218.1636_08.05.2024 already exists, continuing to next file
+2024218.1812_08.05.2024 already exists, continuing to next file
+2024218.1818_08.05.2024 already exists, continuing to next file
+2024218.1948_08.05.2024 already exists, continuing to next file
+2024218.1954_08.05.2024 already exists, continuing to next file
+2024218.2130_08.05.2024 already exists, continuing to next file
+2024218.2136_08.05.2024 already exists, continuing to next file
+2024219.1754_08.06.2024 already exists, continuing to next file
+2024219.1930_08.06.2024 already exists, continuing to next file
+2024219.1936_08.06.2024 already exists, continuing to next file
+2024219.2112_08.06.2024 already exists, continuing to next file
+2024219.2118_08.06.2024 already exists, continuing to next file
+2024220.1736_08.07.2024 already exists, continuing to next file
+2024220.1912_08.07.2024 already exists, continuing to next file
+2024220.1918_08.07.2024 already exists, continuing to next file
+2024220.2054_08.07.2024 already exists, continuing to next file
+2024220.2100_08.07.2024 already exists, continuing to next file
+2024221.1718_08.08.2024 already exists, continuing to next file
+2024221.1854_08.08.2024 already exists, continuing to next file
+2024221.1900_08.08.2024 already exists, continuing to next file
+2024221.2036_08.08.2024 already exists, continuing to next file
+2024221.2042_08.08.2024 already exists, continuing to next file
+2024221.2212_08.08.2024 already exists, continuing to next file
+2024221.2218_08.08.2024 already exists, continuing to next file
+2024221.2224_08.08.2024 already exists, continuing to next file
+2024222.1700_08.09.2024 already exists, continuing to next file
+2024222.1836_08.09.2024 already exists, continuing to next file
+2024222.1842_08.09.2024 already exists, continuing to next file
+2024222.2012_08.09.2024 already exists, continuing to next file
+2024222.2018_08.09.2024 already exists, continuing to next file
+2024222.2024_08.09.2024 already exists, continuing to next file
+2024222.2154_08.09.2024 already exists, continuing to next file
+2024222.2200_08.09.2024 already exists, continuing to next file
+2024222.2206_08.09.2024 already exists, continuing to next file
+2024223.1642_08.10.2024 already exists, continuing to next file
+2024223.1818_08.10.2024 already exists, continuing to next file
+2024223.1824_08.10.2024 already exists, continuing to next file
+2024223.1954_08.10.2024 already exists, continuing to next file
+2024223.2000_08.10.2024 already exists, continuing to next file
+2024223.2136_08.10.2024 already exists, continuing to next file
+2024223.2142_08.10.2024 already exists, continuing to next file
+2024224.1800_08.11.2024 already exists, continuing to next file
+2024224.1936_08.11.2024 already exists, continuing to next file
+2024224.1942_08.11.2024 already exists, continuing to next file
+2024224.2118_08.11.2024 already exists, continuing to next file
+2024224.2124_08.11.2024 already exists, continuing to next file
+2024225.1742_08.12.2024 already exists, continuing to next file
+2024225.1918_08.12.2024 already exists, continuing to next file
+2024225.1924_08.12.2024 already exists, continuing to next file
+2024225.2100_08.12.2024 already exists, continuing to next file
+2024225.2106_08.12.2024 already exists, continuing to next file
+2024226.1724_08.13.2024 already exists, continuing to next file
+2024226.1900_08.13.2024 already exists, continuing to next file
+2024226.1906_08.13.2024 already exists, continuing to next file
+2024226.2042_08.13.2024 already exists, continuing to next file
+2024226.2048_08.13.2024 already exists, continuing to next file
+2024226.2218_08.13.2024 already exists, continuing to next file
+2024226.2224_08.13.2024 already exists, continuing to next file
+2024226.2230_08.13.2024 already exists, continuing to next file
+2024227.1706_08.14.2024 already exists, continuing to next file
+2024227.1842_08.14.2024 already exists, continuing to next file
+2024227.1848_08.14.2024 already exists, continuing to next file
+2024227.2018_08.14.2024 already exists, continuing to next file
+2024227.2024_08.14.2024 already exists, continuing to next file
+2024227.2030_08.14.2024 already exists, continuing to next file
+2024227.2200_08.14.2024 already exists, continuing to next file
+2024227.2206_08.14.2024 already exists, continuing to next file
+2024227.2212_08.14.2024 already exists, continuing to next file
+2024228.1648_08.15.2024 already exists, continuing to next file
+2024228.1824_08.15.2024 already exists, continuing to next file
+2024228.1830_08.15.2024 already exists, continuing to next file
+2024228.2000_08.15.2024 already exists, continuing to next file
+2024228.2006_08.15.2024 already exists, continuing to next file
+2024228.2012_08.15.2024 already exists, continuing to next file
+2024228.2142_08.15.2024 already exists, continuing to next file
+2024228.2148_08.15.2024 already exists, continuing to next file
+2024229.1630_08.16.2024 already exists, continuing to next file
+2024229.1806_08.16.2024 already exists, continuing to next file
+2024229.1942_08.16.2024 already exists, continuing to next file
+2024229.1948_08.16.2024 already exists, continuing to next file
+2024229.2124_08.16.2024 already exists, continuing to next file
+2024229.2130_08.16.2024 already exists, continuing to next file
+2024230.1748_08.17.2024 already exists, continuing to next file
+2024230.1924_08.17.2024 already exists, continuing to next file
+2024230.1930_08.17.2024 already exists, continuing to next file
+2024230.2106_08.17.2024 already exists, continuing to next file
+2024230.2112_08.17.2024 already exists, continuing to next file
+2024231.1730_08.18.2024 already exists, continuing to next file
+2024231.1906_08.18.2024 already exists, continuing to next file
+2024231.1912_08.18.2024 already exists, continuing to next file
+2024231.2048_08.18.2024 already exists, continuing to next file
+2024231.2054_08.18.2024 already exists, continuing to next file
+2024231.2236_08.18.2024 already exists, continuing to next file
+2024232.1712_08.19.2024 already exists, continuing to next file
+2024232.1848_08.19.2024 already exists, continuing to next file
+2024232.1854_08.19.2024 already exists, continuing to next file
+2024232.2024_08.19.2024 already exists, continuing to next file
+2024232.2030_08.19.2024 already exists, continuing to next file
+2024232.2036_08.19.2024 already exists, continuing to next file
+2024232.2206_08.19.2024 already exists, continuing to next file
+2024232.2212_08.19.2024 already exists, continuing to next file
+2024232.2218_08.19.2024 already exists, continuing to next file
+2024233.1654_08.20.2024 already exists, continuing to next file
+2024233.1830_08.20.2024 already exists, continuing to next file
+2024233.1836_08.20.2024 already exists, continuing to next file
+2024233.2006_08.20.2024 already exists, continuing to next file
+2024233.2012_08.20.2024 already exists, continuing to next file
+2024233.2018_08.20.2024 already exists, continuing to next file
+2024233.2148_08.20.2024 already exists, continuing to next file
+2024233.2154_08.20.2024 already exists, continuing to next file
+2024234.1636_08.21.2024 already exists, continuing to next file
+2024234.1812_08.21.2024 already exists, continuing to next file
+2024234.1948_08.21.2024 already exists, continuing to next file
+2024234.1954_08.21.2024 already exists, continuing to next file
+2024234.2130_08.21.2024 already exists, continuing to next file
+2024234.2136_08.21.2024 already exists, continuing to next file
+2024235.1754_08.22.2024 already exists, continuing to next file
+2024235.1930_08.22.2024 already exists, continuing to next file
+2024235.1936_08.22.2024 already exists, continuing to next file
+2024235.2112_08.22.2024 already exists, continuing to next file
+2024235.2118_08.22.2024 already exists, continuing to next file
+2024236.1736_08.23.2024 already exists, continuing to next file
+2024236.1912_08.23.2024 already exists, continuing to next file
+2024236.1918_08.23.2024 already exists, continuing to next file
+2024236.2054_08.23.2024 already exists, continuing to next file
+2024236.2100_08.23.2024 already exists, continuing to next file
+2024236.2242_08.23.2024 already exists, continuing to next file
+2024237.1718_08.24.2024 already exists, continuing to next file
+2024237.1854_08.24.2024 already exists, continuing to next file
+2024237.1900_08.24.2024 already exists, continuing to next file
+2024237.2030_08.24.2024 already exists, continuing to next file
+2024237.2036_08.24.2024 already exists, continuing to next file
+2024237.2042_08.24.2024 already exists, continuing to next file
+2024237.2212_08.24.2024 already exists, continuing to next file
+2024237.2218_08.24.2024 already exists, continuing to next file
+2024237.2224_08.24.2024 already exists, continuing to next file
+2024238.1700_08.25.2024 already exists, continuing to next file
+2024238.1836_08.25.2024 already exists, continuing to next file
+2024238.1842_08.25.2024 already exists, continuing to next file
+2024238.2012_08.25.2024 already exists, continuing to next file
+2024238.2018_08.25.2024 already exists, continuing to next file
+2024238.2024_08.25.2024 already exists, continuing to next file
+2024238.2154_08.25.2024 already exists, continuing to next file
+2024238.2200_08.25.2024 already exists, continuing to next file
+regridding rows
+1.7028560638427734
+regridding cols
+1.7012794017791748
+388 VIIRS NOAA-20, 08.25.2024 (2024238.2206), run time: 15.12
+regridding rows
+1.6943750381469727
+regridding cols
+1.70399808883667
+389 VIIRS NOAA-20, 10.27.2024 (2024301.1718), run time: 14.97
+regridding rows
+3.7058749198913574
+regridding cols
+3.723675489425659
+390 VIIRS NOAA-20, 10.27.2024 (2024301.1854), run time: 18.39
+regridding rows
+3.318279981613159
+regridding cols
+3.331587076187134
+391 VIIRS NOAA-20, 10.27.2024 (2024301.1900), run time: 18.14
+regridding rows
+3.4583420753479004
+regridding cols
+3.4700136184692383
+392 VIIRS NOAA-20, 10.27.2024 (2024301.2030), run time: 17.66
+regridding rows
+13.926494598388672
+regridding cols
+13.966383457183838
+393 VIIRS NOAA-20, 10.27.2024 (2024301.2036), run time: 38.43
+regridding rows
+1.7165613174438477
+regridding cols
+1.73337984085083
+394 VIIRS NOAA-20, 10.27.2024 (2024301.2042), run time: 14.92
+regridding rows
+1.8220124244689941
+regridding cols
+1.8092665672302246
+395 VIIRS NOAA-20, 10.27.2024 (2024301.2212), run time: 23.27
+regridding rows
+2.1947553157806396
+regridding cols
+2.2426767349243164
+396 VIIRS NOAA-20, 10.27.2024 (2024301.2218), run time: 21.23
+regridding rows
+1.7632100582122803
+regridding cols
+1.7357938289642334
+397 VIIRS NOAA-20, 10.27.2024 (2024301.2224), run time: 15.45
+regridding rows
+1.8281762599945068
+regridding cols
+1.719465970993042
+398 VIIRS NOAA-20, 10.28.2024 (2024302.1700), run time: 17.90
+regridding rows
+2.9967455863952637
+regridding cols
+3.002216339111328
+399 VIIRS NOAA-20, 10.28.2024 (2024302.1836), run time: 19.78
+regridding rows
+2.1919963359832764
+regridding cols
+2.2794270515441895
+400 VIIRS NOAA-20, 10.28.2024 (2024302.1842), run time: 16.36
+regridding rows
+5.228619337081909
+regridding cols
+5.300568103790283
+401 VIIRS NOAA-20, 10.28.2024 (2024302.2012), run time: 21.81
+regridding rows
+12.418405771255493
+regridding cols
+12.423469543457031
+402 VIIRS NOAA-20, 10.28.2024 (2024302.2018), run time: 36.31
+regridding rows
+1.8479864597320557
+regridding cols
+1.854344367980957
+403 VIIRS NOAA-20, 10.28.2024 (2024302.2024), run time: 14.90
+regridding rows
+3.228235960006714
+regridding cols
+3.2385551929473877
+404 VIIRS NOAA-20, 10.28.2024 (2024302.2154), run time: 18.28
+regridding rows
+3.8225107192993164
+regridding cols
+3.8471806049346924
+405 VIIRS NOAA-20, 10.28.2024 (2024302.2200), run time: 18.84
+regridding rows
+1.877415418624878
+regridding cols
+1.904259204864502
+406 VIIRS NOAA-20, 10.29.2024 (2024303.1642), run time: 14.59
+regridding rows
+2.423658609390259
+regridding cols
+2.4308013916015625
+407 VIIRS NOAA-20, 10.29.2024 (2024303.1818), run time: 16.91
+regridding rows
+6.226434230804443
+regridding cols
+6.206279039382935
+408 VIIRS NOAA-20, 10.29.2024 (2024303.1954), run time: 23.97
+regridding rows
+10.591691970825195
+regridding cols
+10.655045986175537
+409 VIIRS NOAA-20, 10.29.2024 (2024303.2000), run time: 33.18
+regridding rows
+5.521979808807373
+regridding cols
+5.518739223480225
+410 VIIRS NOAA-20, 10.29.2024 (2024303.2136), run time: 22.09
+regridding rows
+4.525054216384888
+regridding cols
+4.531082391738892
+411 VIIRS NOAA-20, 10.29.2024 (2024303.2142), run time: 20.28
+regridding rows
+1.777693271636963
+regridding cols
+1.7899055480957031
+412 VIIRS NOAA-20, 10.30.2024 (2024304.1800), run time: 15.58
+regridding rows
+6.0026421546936035
+regridding cols
+6.019619464874268
+413 VIIRS NOAA-20, 10.30.2024 (2024304.1936), run time: 23.68
+regridding rows
+8.070927858352661
+regridding cols
+8.098424673080444
+414 VIIRS NOAA-20, 10.30.2024 (2024304.1942), run time: 27.83
+regridding rows
+8.730033159255981
+regridding cols
+8.7499418258667
+415 VIIRS NOAA-20, 10.30.2024 (2024304.2118), run time: 28.31
+regridding rows
+4.4418041706085205
+regridding cols
+4.448815107345581
+416 VIIRS NOAA-20, 10.30.2024 (2024304.2124), run time: 20.55
+regridding rows
+1.670867919921875
+regridding cols
+1.6866514682769775
+417 VIIRS NOAA-20, 10.31.2024 (2024305.1742), run time: 15.01
+regridding rows
+5.339375019073486
+regridding cols
+5.362088441848755
+418 VIIRS NOAA-20, 10.31.2024 (2024305.1918), run time: 22.55
+regridding rows
+5.681635141372681
+regridding cols
+5.685037851333618
+419 VIIRS NOAA-20, 10.31.2024 (2024305.1924), run time: 23.20
+regridding rows
+12.889382362365723
+regridding cols
+12.877265214920044
+420 VIIRS NOAA-20, 10.31.2024 (2024305.2100), run time: 36.89
+regridding rows
+3.624257802963257
+regridding cols
+3.656327486038208
+421 VIIRS NOAA-20, 10.31.2024 (2024305.2106), run time: 19.11
+regridding rows
+1.6883494853973389
+regridding cols
+1.7005259990692139
+422 VIIRS NOAA-20, 11.01.2024 (2024306.1724), run time: 15.29
+regridding rows
+4.088486194610596
+regridding cols
+4.120535135269165
+423 VIIRS NOAA-20, 11.01.2024 (2024306.1900), run time: 19.05
+regridding rows
+3.8057615756988525
+regridding cols
+3.8235793113708496
+424 VIIRS NOAA-20, 11.01.2024 (2024306.1906), run time: 18.80
+regridding rows
+2.8578577041625977
+regridding cols
+2.867128849029541
+425 VIIRS NOAA-20, 11.01.2024 (2024306.2036), run time: 16.71
+regridding rows
+14.291397333145142
+regridding cols
+14.318605184555054
+426 VIIRS NOAA-20, 11.01.2024 (2024306.2042), run time: 39.36
+regridding rows
+1.9752559661865234
+regridding cols
+1.989013671875
+427 VIIRS NOAA-20, 11.01.2024 (2024306.2048), run time: 14.74
+regridding rows
+1.6738016605377197
+regridding cols
+1.6897544860839844
+428 VIIRS NOAA-20, 11.01.2024 (2024306.2218), run time: 14.42
+regridding rows
+1.7258765697479248
+regridding cols
+1.7403481006622314
+429 VIIRS NOAA-20, 11.01.2024 (2024306.2224), run time: 14.46
+regridding rows
+1.6954600811004639
+regridding cols
+1.7155475616455078
+430 VIIRS NOAA-20, 11.01.2024 (2024306.2230), run time: 14.19
+regridding rows
+1.6791303157806396
+regridding cols
+1.6917874813079834
+431 VIIRS NOAA-20, 11.02.2024 (2024307.1706), run time: 14.50
+regridding rows
+3.1547648906707764
+regridding cols
+3.175379991531372
+432 VIIRS NOAA-20, 11.02.2024 (2024307.1842), run time: 17.68
+regridding rows
+2.4748663902282715
+regridding cols
+2.488016366958618
+433 VIIRS NOAA-20, 11.02.2024 (2024307.1848), run time: 15.72
+regridding rows
+4.647853374481201
+regridding cols
+4.657962083816528
+434 VIIRS NOAA-20, 11.02.2024 (2024307.2018), run time: 20.05
+regridding rows
+12.793892860412598
+regridding cols
+12.836013078689575
+435 VIIRS NOAA-20, 11.02.2024 (2024307.2024), run time: 36.67
+regridding rows
+1.6832122802734375
+regridding cols
+1.6943273544311523
+436 VIIRS NOAA-20, 11.02.2024 (2024307.2030), run time: 14.86
+regridding rows
+2.5214197635650635
+regridding cols
+2.5486907958984375
+437 VIIRS NOAA-20, 11.02.2024 (2024307.2200), run time: 16.06
+regridding rows
+3.1535861492156982
+regridding cols
+3.1690990924835205
+438 VIIRS NOAA-20, 11.02.2024 (2024307.2206), run time: 17.03
+regridding rows
+1.7158207893371582
+regridding cols
+1.7090158462524414
+439 VIIRS NOAA-20, 11.02.2024 (2024307.2212), run time: 13.53
+regridding rows
+1.6959247589111328
+regridding cols
+1.7079427242279053
+440 VIIRS NOAA-20, 11.03.2024 (2024308.1648), run time: 13.46
+regridding rows
+2.4952828884124756
+regridding cols
+2.5048983097076416
+441 VIIRS NOAA-20, 11.03.2024 (2024308.1824), run time: 16.17
+regridding rows
+5.920722484588623
+regridding cols
+5.932004451751709
+442 VIIRS NOAA-20, 11.03.2024 (2024308.2000), run time: 22.36
+regridding rows
+11.092716455459595
+regridding cols
+11.094974517822266
+443 VIIRS NOAA-20, 11.03.2024 (2024308.2006), run time: 33.43
+regridding rows
+4.645787000656128
+regridding cols
+4.650735855102539
+444 VIIRS NOAA-20, 11.03.2024 (2024308.2142), run time: 20.11
+regridding rows
+4.342716693878174
+regridding cols
+4.369539737701416
+445 VIIRS NOAA-20, 11.03.2024 (2024308.2148), run time: 19.68
+regridding rows
+1.8742434978485107
+regridding cols
+1.876190185546875
+446 VIIRS NOAA-20, 11.04.2024 (2024309.1806), run time: 15.77
+regridding rows
+6.119253635406494
+regridding cols
+6.139496326446533
+447 VIIRS NOAA-20, 11.04.2024 (2024309.1942), run time: 22.78
+regridding rows
+8.87453007698059
+regridding cols
+8.863901615142822
+448 VIIRS NOAA-20, 11.04.2024 (2024309.1948), run time: 28.89
+regridding rows
+7.535183668136597
+regridding cols
+7.5425097942352295
+449 VIIRS NOAA-20, 11.04.2024 (2024309.2124), run time: 25.38
+regridding rows
+4.525697231292725
+regridding cols
+4.539465665817261
+450 VIIRS NOAA-20, 11.04.2024 (2024309.2130), run time: 19.98
+regridding rows
+1.6908128261566162
+regridding cols
+1.6968212127685547
+451 VIIRS NOAA-20, 11.05.2024 (2024310.1748), run time: 14.86
+regridding rows
+5.710511922836304
+regridding cols
+5.726261615753174
+452 VIIRS NOAA-20, 11.05.2024 (2024310.1924), run time: 23.66
+regridding rows
+6.35805344581604
+regridding cols
+6.375895738601685
+453 VIIRS NOAA-20, 11.05.2024 (2024310.1930), run time: 23.58
+regridding rows
+11.598083019256592
+regridding cols
+11.608514070510864
+454 VIIRS NOAA-20, 11.05.2024 (2024310.2106), run time: 33.59
+regridding rows
+3.9198155403137207
+regridding cols
+3.9389700889587402
+455 VIIRS NOAA-20, 11.05.2024 (2024310.2112), run time: 19.15
+regridding rows
+1.6763741970062256
+regridding cols
+1.692901372909546
+456 VIIRS NOAA-20, 11.06.2024 (2024311.1730), run time: 14.49
+regridding rows
+4.609095335006714
+regridding cols
+4.623666286468506
+457 VIIRS NOAA-20, 11.06.2024 (2024311.1906), run time: 20.09
+regridding rows
+4.2770676612854
+regridding cols
+4.28959059715271
+458 VIIRS NOAA-20, 11.06.2024 (2024311.1912), run time: 19.45
+regridding rows
+14.174874782562256
+regridding cols
+14.192227602005005
+459 VIIRS NOAA-20, 11.06.2024 (2024311.2048), run time: 38.40
+regridding rows
+2.4977290630340576
+regridding cols
+2.524489164352417
+460 VIIRS NOAA-20, 11.06.2024 (2024311.2054), run time: 16.47
+regridding rows
+1.6819849014282227
+regridding cols
+1.6906065940856934
+461 VIIRS NOAA-20, 11.06.2024 (2024311.2224), run time: 14.59
+regridding rows
+1.6872985363006592
+regridding cols
+1.6974360942840576
+462 VIIRS NOAA-20, 11.06.2024 (2024311.2236), run time: 14.67
+regridding rows
+1.6767146587371826
+regridding cols
+1.6980030536651611
+463 VIIRS NOAA-20, 11.07.2024 (2024312.1712), run time: 14.92
+regridding rows
+1.682173490524292
+regridding cols
+1.6947205066680908
+464 VIIRS NOAA-20, 11.07.2024 (2024312.1842), run time: 15.26
+regridding rows
+3.448274850845337
+regridding cols
+3.4559364318847656
+465 VIIRS NOAA-20, 11.07.2024 (2024312.1848), run time: 17.98
+regridding rows
+2.8289122581481934
+regridding cols
+2.840407133102417
+466 VIIRS NOAA-20, 11.07.2024 (2024312.1854), run time: 16.01
+regridding rows
+4.182352304458618
+regridding cols
+4.193131446838379
+467 VIIRS NOAA-20, 11.07.2024 (2024312.2024), run time: 19.45
+regridding rows
+13.298593282699585
+regridding cols
+13.316983699798584
+468 VIIRS NOAA-20, 11.07.2024 (2024312.2030), run time: 37.14
+regridding rows
+1.6967182159423828
+regridding cols
+1.7189619541168213
+469 VIIRS NOAA-20, 11.07.2024 (2024312.2036), run time: 13.72
+regridding rows
+2.0900747776031494
+regridding cols
+2.0994133949279785
+470 VIIRS NOAA-20, 11.07.2024 (2024312.2206), run time: 14.82
+regridding rows
+2.6457266807556152
+regridding cols
+2.655452251434326
+471 VIIRS NOAA-20, 11.07.2024 (2024312.2212), run time: 16.37
+regridding rows
+1.7032582759857178
+regridding cols
+1.731522798538208
+472 VIIRS NOAA-20, 11.07.2024 (2024312.2218), run time: 13.24
+regridding rows
+1.6959760189056396
+regridding cols
+1.7088065147399902
+473 VIIRS NOAA-20, 11.08.2024 (2024313.1654), run time: 14.25
+regridding rows
+2.774341106414795
+regridding cols
+2.785841226577759
+474 VIIRS NOAA-20, 11.08.2024 (2024313.1830), run time: 16.78
+regridding rows
+1.8795678615570068
+regridding cols
+1.8884961605072021
+475 VIIRS NOAA-20, 11.08.2024 (2024313.1836), run time: 13.97
+regridding rows
+5.79358434677124
+regridding cols
+5.805720090866089
+476 VIIRS NOAA-20, 11.08.2024 (2024313.2006), run time: 23.09
+regridding rows
+11.573897123336792
+regridding cols
+11.595105171203613
+477 VIIRS NOAA-20, 11.08.2024 (2024313.2012), run time: 33.99
+regridding rows
+3.9955685138702393
+regridding cols
+4.008893966674805
+478 VIIRS NOAA-20, 11.08.2024 (2024313.2148), run time: 18.91
+regridding rows
+4.18397068977356
+regridding cols
+4.169331312179565
+479 VIIRS NOAA-20, 11.08.2024 (2024313.2154), run time: 20.49
+regridding rows
+2.04470157623291
+regridding cols
+2.061129093170166
+480 VIIRS NOAA-20, 11.09.2024 (2024314.1812), run time: 15.07
+regridding rows
+6.274428844451904
+regridding cols
+6.278285503387451
+481 VIIRS NOAA-20, 11.09.2024 (2024314.1948), run time: 26.78
+regridding rows
+9.553237915039062
+regridding cols
+9.58894658088684
+482 VIIRS NOAA-20, 11.09.2024 (2024314.1954), run time: 29.83
+regridding rows
+6.611966371536255
+regridding cols
+6.6196160316467285
+483 VIIRS NOAA-20, 11.09.2024 (2024314.2130), run time: 23.55
+regridding rows
+4.5319836139678955
+regridding cols
+4.531761646270752
+484 VIIRS NOAA-20, 11.09.2024 (2024314.2136), run time: 19.88
+regridding rows
+1.741745948791504
+regridding cols
+1.7558207511901855
+485 VIIRS NOAA-20, 11.10.2024 (2024315.1754), run time: 14.56
+regridding rows
+6.051908016204834
+regridding cols
+6.055336236953735
+486 VIIRS NOAA-20, 11.10.2024 (2024315.1930), run time: 22.83
+regridding rows
+7.119137525558472
+regridding cols
+7.130828619003296
+487 VIIRS NOAA-20, 11.10.2024 (2024315.1936), run time: 25.50
+regridding rows
+10.23779582977295
+regridding cols
+10.289303064346313
+488 VIIRS NOAA-20, 11.10.2024 (2024315.2112), run time: 30.79
+regridding rows
+4.133145570755005
+regridding cols
+4.150942325592041
+489 VIIRS NOAA-20, 11.10.2024 (2024315.2118), run time: 18.97
+regridding rows
+1.7174251079559326
+regridding cols
+1.7215502262115479
+490 VIIRS NOAA-20, 11.11.2024 (2024316.1736), run time: 14.53
+regridding rows
+5.125831365585327
+regridding cols
+5.14482855796814
+491 VIIRS NOAA-20, 11.11.2024 (2024316.1912), run time: 21.54
+regridding rows
+4.824245452880859
+regridding cols
+4.841383934020996
+492 VIIRS NOAA-20, 11.11.2024 (2024316.1918), run time: 20.41
+regridding rows
+13.868353605270386
+regridding cols
+13.894442796707153
+493 VIIRS NOAA-20, 11.11.2024 (2024316.2054), run time: 38.35
+regridding rows
+2.9745051860809326
+regridding cols
+2.9876809120178223
+494 VIIRS NOAA-20, 11.11.2024 (2024316.2100), run time: 16.97
+regridding rows
+1.710582971572876
+regridding cols
+1.724531888961792
+495 VIIRS NOAA-20, 11.11.2024 (2024316.2242), run time: 13.81
+regridding rows
+1.707836627960205
+regridding cols
+1.720141887664795
+496 VIIRS NOAA-20, 11.12.2024 (2024317.1718), run time: 14.24
+regridding rows
+1.6960265636444092
+regridding cols
+1.705352783203125
+497 VIIRS NOAA-20, 11.12.2024 (2024317.1848), run time: 14.48
+regridding rows
+3.8939502239227295
+regridding cols
+3.9020144939422607
+498 VIIRS NOAA-20, 11.12.2024 (2024317.1854), run time: 18.76
+regridding rows
+3.176265239715576
+regridding cols
+3.1944327354431152
+499 VIIRS NOAA-20, 11.12.2024 (2024317.1900), run time: 17.07
+regridding rows
+3.8049557209014893
+regridding cols
+3.833854913711548
+500 VIIRS NOAA-20, 11.12.2024 (2024317.2030), run time: 18.85
+regridding rows
+13.649442911148071
+regridding cols
+13.701459407806396
+501 VIIRS NOAA-20, 11.12.2024 (2024317.2036), run time: 37.75
+regridding rows
+1.717958688735962
+regridding cols
+1.7330660820007324
+502 VIIRS NOAA-20, 11.12.2024 (2024317.2042), run time: 13.52
+regridding rows
+1.8052785396575928
+regridding cols
+1.8220407962799072
+503 VIIRS NOAA-20, 11.12.2024 (2024317.2212), run time: 14.18
+regridding rows
+2.1498491764068604
+regridding cols
+2.161846399307251
+504 VIIRS NOAA-20, 11.12.2024 (2024317.2218), run time: 15.56
+regridding rows
+1.70768404006958
+regridding cols
+1.7185051441192627
+505 VIIRS NOAA-20, 11.12.2024 (2024317.2224), run time: 13.18
+regridding rows
+1.7058203220367432
+regridding cols
+1.7180018424987793
+506 VIIRS NOAA-20, 11.13.2024 (2024318.1700), run time: 13.88
+regridding rows
+3.0702950954437256
+regridding cols
+3.081514835357666
+507 VIIRS NOAA-20, 11.13.2024 (2024318.1836), run time: 17.45
+regridding rows
+2.0512521266937256
+regridding cols
+2.062534809112549
+508 VIIRS NOAA-20, 11.13.2024 (2024318.1842), run time: 13.89
+regridding rows
+5.497278451919556
+regridding cols
+5.5376787185668945
+509 VIIRS NOAA-20, 11.13.2024 (2024318.2012), run time: 21.64
+regridding rows
+11.953130722045898
+regridding cols
+11.974834680557251
+510 VIIRS NOAA-20, 11.13.2024 (2024318.2018), run time: 34.52
+regridding rows
+1.7095696926116943
+regridding cols
+1.716223955154419
+511 VIIRS NOAA-20, 11.13.2024 (2024318.2024), run time: 12.95
+regridding rows
+3.2084240913391113
+regridding cols
+3.219745635986328
+512 VIIRS NOAA-20, 11.13.2024 (2024318.2154), run time: 16.96
+regridding rows
+3.6458566188812256
+regridding cols
+3.6547799110412598
+513 VIIRS NOAA-20, 11.13.2024 (2024318.2200), run time: 18.31
+regridding rows
+2.275721549987793
+regridding cols
+2.2886884212493896
+514 VIIRS NOAA-20, 11.14.2024 (2024319.1818), run time: 15.44
+regridding rows
+6.357576131820679
+regridding cols
+6.369235992431641
+515 VIIRS NOAA-20, 11.14.2024 (2024319.1954), run time: 23.77
+regridding rows
+10.158886432647705
+regridding cols
+10.155734777450562
+516 VIIRS NOAA-20, 11.14.2024 (2024319.2000), run time: 32.09
+regridding rows
+5.703193426132202
+regridding cols
+5.720432996749878
+517 VIIRS NOAA-20, 11.14.2024 (2024319.2136), run time: 21.76
+regridding rows
+4.369584560394287
+regridding cols
+4.387516498565674
+518 VIIRS NOAA-20, 11.14.2024 (2024319.2142), run time: 19.38
+regridding rows
+1.780043363571167
+regridding cols
+1.7905590534210205
+519 VIIRS NOAA-20, 11.15.2024 (2024320.1800), run time: 14.92
+regridding rows
+6.301846504211426
+regridding cols
+6.328866481781006
+520 VIIRS NOAA-20, 11.15.2024 (2024320.1936), run time: 23.23
+regridding rows
+7.785862922668457
+regridding cols
+7.803330183029175
+521 VIIRS NOAA-20, 11.15.2024 (2024320.1942), run time: 26.55
+regridding rows
+9.051953315734863
+regridding cols
+9.056877613067627
+522 VIIRS NOAA-20, 11.15.2024 (2024320.2118), run time: 28.82
+regridding rows
+4.178190231323242
+regridding cols
+4.188709735870361
+523 VIIRS NOAA-20, 11.15.2024 (2024320.2124), run time: 19.64
+regridding rows
+1.7096734046936035
+regridding cols
+1.7347526550292969
+524 VIIRS NOAA-20, 11.16.2024 (2024321.1742), run time: 14.70
+regridding rows
+5.633041858673096
+regridding cols
+5.640526056289673
+525 VIIRS NOAA-20, 11.16.2024 (2024321.1918), run time: 22.25
+regridding rows
+5.420077085494995
+regridding cols
+5.418801784515381
+526 VIIRS NOAA-20, 11.16.2024 (2024321.1924), run time: 21.43
+regridding rows
+13.166579008102417
+regridding cols
+13.166152000427246
+527 VIIRS NOAA-20, 11.16.2024 (2024321.2100), run time: 37.36
+regridding rows
+3.2911341190338135
+regridding cols
+3.3046672344207764
+528 VIIRS NOAA-20, 11.16.2024 (2024321.2106), run time: 17.40
+regridding rows
+1.7171955108642578
+regridding cols
+1.7119617462158203
+529 VIIRS NOAA-20, 11.17.2024 (2024322.1724), run time: 14.35
+regridding rows
+4.360682249069214
+regridding cols
+4.373477458953857
+530 VIIRS NOAA-20, 11.17.2024 (2024322.1900), run time: 19.78
+regridding rows
+3.5753302574157715
+regridding cols
+3.5585851669311523
+531 VIIRS NOAA-20, 11.17.2024 (2024322.1906), run time: 18.19
+regridding rows
+3.382581949234009
+regridding cols
+3.398772716522217
+532 VIIRS NOAA-20, 11.17.2024 (2024322.2036), run time: 17.59
+regridding rows
+14.060301780700684
+regridding cols
+14.077723741531372
+533 VIIRS NOAA-20, 11.17.2024 (2024322.2042), run time: 38.84
+regridding rows
+1.766904354095459
+regridding cols
+1.7865307331085205
+534 VIIRS NOAA-20, 11.17.2024 (2024322.2048), run time: 14.21
+regridding rows
+1.6980268955230713
+regridding cols
+1.717527151107788
+535 VIIRS NOAA-20, 11.17.2024 (2024322.2218), run time: 15.57
+regridding rows
+1.7531592845916748
+regridding cols
+1.7683541774749756
+536 VIIRS NOAA-20, 11.17.2024 (2024322.2224), run time: 15.51
+regridding rows
+1.7187743186950684
+regridding cols
+1.7262754440307617
+537 VIIRS NOAA-20, 11.17.2024 (2024322.2230), run time: 13.18
+regridding rows
+1.7171597480773926
+regridding cols
+1.7286903858184814
+538 VIIRS NOAA-20, 11.18.2024 (2024323.1706), run time: 13.66
+regridding rows
+1.6980469226837158
+regridding cols
+1.7099618911743164
+539 VIIRS NOAA-20, 11.18.2024 (2024323.1836), run time: 14.55
+regridding rows
+3.4075188636779785
+regridding cols
+3.415593385696411
+540 VIIRS NOAA-20, 11.18.2024 (2024323.1842), run time: 17.70
+regridding rows
+2.2459876537323
+regridding cols
+2.265678882598877
+541 VIIRS NOAA-20, 11.18.2024 (2024323.1848), run time: 15.88
+regridding rows
+5.212324380874634
+regridding cols
+5.221902132034302
+542 VIIRS NOAA-20, 11.18.2024 (2024323.2018), run time: 21.45
+regridding rows
+12.297603607177734
+regridding cols
+12.28884220123291
+543 VIIRS NOAA-20, 11.18.2024 (2024323.2024), run time: 38.04
+regridding rows
+1.7148282527923584
+regridding cols
+1.7112362384796143
+544 VIIRS NOAA-20, 11.18.2024 (2024323.2030), run time: 13.38
+regridding rows
+2.6229658126831055
+regridding cols
+2.633134126663208
+545 VIIRS NOAA-20, 11.18.2024 (2024323.2200), run time: 16.37

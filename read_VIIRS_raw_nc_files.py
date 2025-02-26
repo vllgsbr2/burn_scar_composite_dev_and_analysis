@@ -1,6 +1,31 @@
 import numpy as np
 from netCDF4 import Dataset
+import h5py
 
+def get_VJ114_thermal_anomalies(VJ114_file):
+    # netcdf4 - VJ114.A2024231.2236.002.2024232050547.nc
+    '''
+    "fire_mask" - Pixel Class Definition
+    0 Not processed
+    1 Bow-tie deletion
+    2 Sun glint
+    3 Water
+    4 Cloud
+    5 Land
+    6 Unclassified
+    7 Low confidence fire pixel
+    8 Nominal confidence fire pixel
+    9 High confidence fire pixel
+    '''
+    
+    with Dataset(VJ114_file, 'r') as nc_VJ114:
+        return nc_VJ114['fire_mask'][:]
+
+def get_VJ115_leaf_area_index(VJ115_file):
+    # h5 files - VJ115A2H.A2024177.h07v05.002.2024185091418.h5
+    #scale factor of 0.1
+    with h5py.File(VJ115_file, 'r') as hf_VJ115:
+        return np.array(hf_VJ115['HDFEOS/GRIDS/Data_Fields/Lai'][:], dtype=np.int8)*0.1
 
 def get_VJ103_geo(geo_file, include_latlon=False, include_SZA=False,
                   include_VZA=False, include_SAAVAA=False, include_lwm=False):
@@ -310,7 +335,11 @@ def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
                 # print(band_num)
                 M_bands_temp = nc_ref_file_obj.variables['750m Surface Reflectance Band M{}'\
                                                       .format(band_num)][:]
-                
+               
+                # this shit removes bad NDVI vals... what?!? Just return QC
+                # and save into dataset. Can investigate another time. 
+                # Didn't know I had enemies until today. ATBD/User Guide useless
+                '''
                 # now use masks from QF<X> to quality control bands
                 if band_num==5:
                     M_bands_temp[m5_qual_mask==1]=-999
@@ -322,8 +351,9 @@ def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
                     print('band not yet supported')
 
                 # add filtered band to band list for return
+                '''
                 M_bands.append(M_bands_temp)
-
+               
         if cld_shadow_snowice:
             # if cloud mask is poor quality, set to -999
             # becuase burn scars dont exhibit spectral
@@ -331,7 +361,8 @@ def get_VJ109_ref(ref_file, which_bands=[5,7,11], cld_shadow_snowice=True):
             new_cldmsk[new_cldmsk_qual==0]=-999
 
     if cld_shadow_snowice:
-        return new_cldmsk, snow_ice_mask, shadow_mask
+        return new_cldmsk,new_cldmsk_qual,\
+               snow_ice_mask, shadow_mask
     else:
         return np.array(M_bands)
 

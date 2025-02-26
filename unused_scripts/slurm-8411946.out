@@ -1,0 +1,498 @@
+Setting up environment
+Calculating daily burn scar composites
+01/387 2024183.1730_07.01.2024 composite updated
+02/387 2024183.1906_07.01.2024 composite updated
+03/387 2024183.1912_07.01.2024 composite updated
+04/387 2024183.2048_07.01.2024 composite updated
+05/387 2024183.2054_07.01.2024 composite updated
+06/387 2024183.2236_07.01.2024 composite updated
+avg age of pixels in days:  1.0
+saved daily composite 07.01.2024 ***** run time: 6.15
+07/387 2024184.1712_07.02.2024 composite updated
+08/387 2024184.1848_07.02.2024 composite updated
+09/387 2024184.1854_07.02.2024 composite updated
+10/387 2024184.2024_07.02.2024 composite updated
+11/387 2024184.2030_07.02.2024 composite updated
+12/387 2024184.2036_07.02.2024 composite updated
+13/387 2024184.2206_07.02.2024 composite updated
+14/387 2024184.2212_07.02.2024 composite updated
+15/387 2024184.2218_07.02.2024 composite updated
+avg age of pixels in days:  1.3735263706803635
+saved daily composite 07.02.2024 ***** run time: 6.77
+16/387 2024185.1654_07.03.2024 composite updated
+17/387 2024185.1830_07.03.2024 composite updated
+18/387 2024185.1836_07.03.2024 composite updated
+19/387 2024185.2006_07.03.2024 composite updated
+20/387 2024185.2012_07.03.2024 composite updated
+21/387 2024185.2018_07.03.2024 composite updated
+22/387 2024185.2148_07.03.2024 composite updated
+23/387 2024185.2154_07.03.2024 composite updated
+avg age of pixels in days:  1.6773838565098536
+saved daily composite 07.03.2024 ***** run time: 6.82
+24/387 2024186.1636_07.04.2024 composite updated
+25/387 2024186.1812_07.04.2024 composite updated
+26/387 2024186.1948_07.04.2024 composite updated
+27/387 2024186.1954_07.04.2024 composite updated
+28/387 2024186.2130_07.04.2024 composite updated
+29/387 2024186.2136_07.04.2024 composite updated
+avg age of pixels in days:  1.8163231027169848
+saved daily composite 07.04.2024 ***** run time: 6.69
+30/387 2024187.1754_07.05.2024 composite updated
+31/387 2024187.1930_07.05.2024 composite updated
+32/387 2024187.1936_07.05.2024 composite updated
+33/387 2024187.2112_07.05.2024 composite updated
+34/387 2024187.2118_07.05.2024 composite updated
+avg age of pixels in days:  1.91223666331283
+saved daily composite 07.05.2024 ***** run time: 6.64
+35/387 2024188.1736_07.06.2024 composite updated
+36/387 2024188.1912_07.06.2024 composite updated
+37/387 2024188.1918_07.06.2024 composite updated
+38/387 2024188.2054_07.06.2024 composite updated
+39/387 2024188.2100_07.06.2024 composite updated
+40/387 2024188.2242_07.06.2024 composite updated
+avg age of pixels in days:  2.066786455528974
+saved daily composite 07.06.2024 ***** run time: 7.01
+41/387 2024189.1718_07.07.2024 composite updated
+42/387 2024189.1854_07.07.2024 composite updated
+43/387 2024189.1900_07.07.2024 composite updated
+44/387 2024189.2036_07.07.2024 composite updated
+45/387 2024189.2042_07.07.2024 composite updated
+46/387 2024189.2212_07.07.2024 composite updated
+47/387 2024189.2218_07.07.2024 composite updated
+48/387 2024189.2224_07.07.2024 composite updated
+avg age of pixels in days:  2.2227147547754456
+saved daily composite 07.07.2024 ***** run time: 6.98
+49/387 2024190.1700_07.08.2024 composite updated
+50/387 2024190.1836_07.08.2024 composite updated
+51/387 2024190.1842_07.08.2024 composite updated
+52/387 2024190.2012_07.08.2024 composite updated
+53/387 2024190.2018_07.08.2024 composite updated
+54/387 2024190.2024_07.08.2024 composite updated
+55/387 2024190.2154_07.08.2024 composite updated
+56/387 2024190.2200_07.08.2024 composite updated
+57/387 2024190.2206_07.08.2024 composite updated
+avg age of pixels in days:  2.313026001506869
+saved daily composite 07.08.2024 ***** run time: 6.95
+58/387 2024191.1642_07.09.2024 composite updated
+59/387 2024191.1818_07.09.2024 composite updated
+60/387 2024191.1824_07.09.2024 composite updated
+61/387 2024191.1954_07.09.2024 composite updated
+62/387 2024191.2000_07.09.2024 composite updated
+63/387 2024191.2136_07.09.2024 composite updated
+64/387 2024191.2142_07.09.2024 composite updated
+avg age of pixels in days:  2.507442759248904
+saved daily composite 07.09.2024 ***** run time: 7.05
+65/387 2024192.1800_07.10.2024 composite updated
+66/387 2024192.1936_07.10.2024 composite updated
+67/387 2024192.1942_07.10.2024 composite updated
+68/387 2024192.2118_07.10.2024 composite updated
+69/387 2024192.2124_07.10.2024 composite updated
+avg age of pixels in days:  2.6818115810149585
+saved daily composite 07.10.2024 ***** run time: 7.17
+70/387 2024193.1742_07.11.2024 composite updated
+71/387 2024193.1918_07.11.2024 composite updated
+72/387 2024193.1924_07.11.2024 composite updated
+73/387 2024193.2100_07.11.2024 composite updated
+74/387 2024193.2106_07.11.2024 composite updated
+avg age of pixels in days:  2.894612872320663
+saved daily composite 07.11.2024 ***** run time: 7.04
+75/387 2024194.1724_07.12.2024 composite updated
+76/387 2024194.1900_07.12.2024 composite updated
+77/387 2024194.1906_07.12.2024 composite updated
+78/387 2024194.2042_07.12.2024 composite updated
+79/387 2024194.2048_07.12.2024 composite updated
+80/387 2024194.2218_07.12.2024 composite updated
+81/387 2024194.2224_07.12.2024 composite updated
+82/387 2024194.2230_07.12.2024 composite updated
+avg age of pixels in days:  3.086823075842286
+saved daily composite 07.12.2024 ***** run time: 7.53
+83/387 2024195.1706_07.13.2024 composite updated
+84/387 2024195.1842_07.13.2024 composite updated
+85/387 2024195.1848_07.13.2024 composite updated
+86/387 2024195.2018_07.13.2024 composite updated
+87/387 2024195.2024_07.13.2024 composite updated
+88/387 2024195.2030_07.13.2024 composite updated
+89/387 2024195.2200_07.13.2024 composite updated
+90/387 2024195.2206_07.13.2024 composite updated
+91/387 2024195.2212_07.13.2024 composite updated
+avg age of pixels in days:  3.4050093731405773
+saved daily composite 07.13.2024 ***** run time: 7.42
+92/387 2024196.1648_07.14.2024 composite updated
+93/387 2024196.1824_07.14.2024 composite updated
+94/387 2024196.1830_07.14.2024 composite updated
+95/387 2024196.2000_07.14.2024 composite updated
+96/387 2024196.2006_07.14.2024 composite updated
+97/387 2024196.2012_07.14.2024 composite updated
+98/387 2024196.2142_07.14.2024 composite updated
+99/387 2024196.2148_07.14.2024 composite updated
+avg age of pixels in days:  3.762729413273461
+saved daily composite 07.14.2024 ***** run time: 6.96
+100/387 2024197.1630_07.15.2024 composite updated
+101/387 2024197.1806_07.15.2024 composite updated
+102/387 2024197.1942_07.15.2024 composite updated
+103/387 2024197.1948_07.15.2024 composite updated
+104/387 2024197.2124_07.15.2024 composite updated
+105/387 2024197.2130_07.15.2024 composite updated
+avg age of pixels in days:  3.8750001178714863
+saved daily composite 07.15.2024 ***** run time: 6.96
+106/387 2024198.1748_07.16.2024 composite updated
+107/387 2024198.1924_07.16.2024 composite updated
+108/387 2024198.1930_07.16.2024 composite updated
+109/387 2024198.2106_07.16.2024 composite updated
+110/387 2024198.2112_07.16.2024 composite updated
+avg age of pixels in days:  3.940328856731452
+saved daily composite 07.16.2024 ***** run time: 6.96
+111/387 2024199.1730_07.17.2024 composite updated
+112/387 2024199.1906_07.17.2024 composite updated
+113/387 2024199.1912_07.17.2024 composite updated
+114/387 2024199.2048_07.17.2024 composite updated
+115/387 2024199.2054_07.17.2024 composite updated
+116/387 2024199.2236_07.17.2024 composite updated
+avg age of pixels in days:  4.057316896076011
+saved daily composite 07.17.2024 ***** run time: 7.08
+117/387 2024200.1712_07.18.2024 composite updated
+118/387 2024200.1848_07.18.2024 composite updated
+119/387 2024200.1854_07.18.2024 composite updated
+120/387 2024200.2024_07.18.2024 composite updated
+121/387 2024200.2030_07.18.2024 composite updated
+122/387 2024200.2036_07.18.2024 composite updated
+123/387 2024200.2206_07.18.2024 composite updated
+124/387 2024200.2212_07.18.2024 composite updated
+125/387 2024200.2218_07.18.2024 composite updated
+avg age of pixels in days:  4.33511959712469
+saved daily composite 07.18.2024 ***** run time: 7.26
+126/387 2024201.1654_07.19.2024 composite updated
+127/387 2024201.1830_07.19.2024 composite updated
+128/387 2024201.1836_07.19.2024 composite updated
+129/387 2024201.2006_07.19.2024 composite updated
+130/387 2024201.2012_07.19.2024 composite updated
+131/387 2024201.2018_07.19.2024 composite updated
+132/387 2024201.2148_07.19.2024 composite updated
+133/387 2024201.2154_07.19.2024 composite updated
+134/387 2024201.2200_07.19.2024 composite updated
+avg age of pixels in days:  4.459804880256715
+saved daily composite 07.19.2024 ***** run time: 7.25
+135/387 2024202.1636_07.20.2024 composite updated
+136/387 2024202.1812_07.20.2024 composite updated
+137/387 2024202.1818_07.20.2024 composite updated
+138/387 2024202.1948_07.20.2024 composite updated
+139/387 2024202.1954_07.20.2024 composite updated
+140/387 2024202.2130_07.20.2024 composite updated
+141/387 2024202.2136_07.20.2024 composite updated
+avg age of pixels in days:  4.642175643601888
+saved daily composite 07.20.2024 ***** run time: 7.20
+142/387 2024203.1754_07.21.2024 composite updated
+143/387 2024203.1930_07.21.2024 composite updated
+144/387 2024203.1936_07.21.2024 composite updated
+145/387 2024203.2112_07.21.2024 composite updated
+146/387 2024203.2118_07.21.2024 composite updated
+avg age of pixels in days:  4.814353234440728
+saved daily composite 07.21.2024 ***** run time: 6.92
+147/387 2024204.1736_07.22.2024 composite updated
+148/387 2024204.1912_07.22.2024 composite updated
+149/387 2024204.1918_07.22.2024 composite updated
+150/387 2024204.2054_07.22.2024 composite updated
+151/387 2024204.2100_07.22.2024 composite updated
+avg age of pixels in days:  4.955011754144597
+saved daily composite 07.22.2024 ***** run time: 7.20
+152/387 2024205.1718_07.23.2024 composite updated
+153/387 2024205.1854_07.23.2024 composite updated
+154/387 2024205.1900_07.23.2024 composite updated
+155/387 2024205.2036_07.23.2024 composite updated
+156/387 2024205.2042_07.23.2024 composite updated
+157/387 2024205.2212_07.23.2024 composite updated
+158/387 2024205.2218_07.23.2024 composite updated
+159/387 2024205.2224_07.23.2024 composite updated
+avg age of pixels in days:  5.068695030632441
+saved daily composite 07.23.2024 ***** run time: 7.91
+160/387 2024206.1700_07.24.2024 composite updated
+161/387 2024206.1836_07.24.2024 composite updated
+162/387 2024206.1842_07.24.2024 composite updated
+163/387 2024206.2012_07.24.2024 composite updated
+164/387 2024206.2018_07.24.2024 composite updated
+165/387 2024206.2024_07.24.2024 composite updated
+166/387 2024206.2154_07.24.2024 composite updated
+167/387 2024206.2200_07.24.2024 composite updated
+168/387 2024206.2206_07.24.2024 composite updated
+avg age of pixels in days:  5.264839312875244
+saved daily composite 07.24.2024 ***** run time: 7.47
+169/387 2024207.1642_07.25.2024 composite updated
+170/387 2024207.1818_07.25.2024 composite updated
+171/387 2024207.1824_07.25.2024 composite updated
+172/387 2024207.1954_07.25.2024 composite updated
+173/387 2024207.2000_07.25.2024 composite updated
+174/387 2024207.2136_07.25.2024 composite updated
+175/387 2024207.2142_07.25.2024 composite updated
+avg age of pixels in days:  5.48986977086726
+saved daily composite 07.25.2024 ***** run time: 18.87
+176/387 2024208.1800_07.26.2024 composite updated
+177/387 2024208.1936_07.26.2024 composite updated
+178/387 2024208.1942_07.26.2024 composite updated
+179/387 2024208.2118_07.26.2024 composite updated
+avg age of pixels in days:  5.65622097414654
+saved daily composite 07.26.2024 ***** run time: 7.24
+180/387 2024209.1742_07.27.2024 composite updated
+181/387 2024209.1918_07.27.2024 composite updated
+182/387 2024209.1924_07.27.2024 composite updated
+183/387 2024209.2100_07.27.2024 composite updated
+184/387 2024209.2106_07.27.2024 composite updated
+avg age of pixels in days:  5.77563598739058
+saved daily composite 07.27.2024 ***** run time: 7.78
+185/387 2024210.1724_07.28.2024 composite updated
+186/387 2024210.1900_07.28.2024 composite updated
+187/387 2024210.1906_07.28.2024 composite updated
+188/387 2024210.2042_07.28.2024 composite updated
+189/387 2024210.2048_07.28.2024 composite updated
+190/387 2024210.2224_07.28.2024 composite updated
+191/387 2024210.2230_07.28.2024 composite updated
+avg age of pixels in days:  5.901418654058504
+saved daily composite 07.28.2024 ***** run time: 7.80
+192/387 2024211.1706_07.29.2024 composite updated
+193/387 2024211.1842_07.29.2024 composite updated
+194/387 2024211.1848_07.29.2024 composite updated
+195/387 2024211.2018_07.29.2024 composite updated
+196/387 2024211.2024_07.29.2024 composite updated
+197/387 2024211.2030_07.29.2024 composite updated
+198/387 2024211.2200_07.29.2024 composite updated
+199/387 2024211.2206_07.29.2024 composite updated
+200/387 2024211.2212_07.29.2024 composite updated
+avg age of pixels in days:  6.202685913980218
+saved daily composite 07.29.2024 ***** run time: 7.54
+201/387 2024212.1648_07.30.2024 composite updated
+202/387 2024212.1824_07.30.2024 composite updated
+203/387 2024212.1830_07.30.2024 composite updated
+204/387 2024212.2000_07.30.2024 composite updated
+205/387 2024212.2006_07.30.2024 composite updated
+206/387 2024212.2012_07.30.2024 composite updated
+207/387 2024212.2142_07.30.2024 composite updated
+208/387 2024212.2148_07.30.2024 composite updated
+avg age of pixels in days:  6.496944181721998
+saved daily composite 07.30.2024 ***** run time: 8.35
+209/387 2024213.1630_07.31.2024 composite updated
+210/387 2024213.1806_07.31.2024 composite updated
+211/387 2024213.1942_07.31.2024 composite updated
+212/387 2024213.1948_07.31.2024 composite updated
+213/387 2024213.2124_07.31.2024 composite updated
+214/387 2024213.2130_07.31.2024 composite updated
+avg age of pixels in days:  6.453234959362627
+saved daily composite 07.31.2024 ***** run time: 7.71
+215/387 2024214.1748_08.01.2024 composite updated
+216/387 2024214.1924_08.01.2024 composite updated
+217/387 2024214.1930_08.01.2024 composite updated
+218/387 2024214.2106_08.01.2024 composite updated
+219/387 2024214.2112_08.01.2024 composite updated
+avg age of pixels in days:  6.4978397692736385
+saved daily composite 08.01.2024 ***** run time: 7.96
+220/387 2024215.1730_08.02.2024 composite updated
+221/387 2024215.1906_08.02.2024 composite updated
+222/387 2024215.1912_08.02.2024 composite updated
+223/387 2024215.2048_08.02.2024 composite updated
+224/387 2024215.2054_08.02.2024 composite updated
+225/387 2024215.2236_08.02.2024 composite updated
+avg age of pixels in days:  6.7273719750640515
+saved daily composite 08.02.2024 ***** run time: 7.83
+226/387 2024216.1712_08.03.2024 composite updated
+227/387 2024216.1848_08.03.2024 composite updated
+228/387 2024216.1854_08.03.2024 composite updated
+229/387 2024216.2024_08.03.2024 composite updated
+230/387 2024216.2030_08.03.2024 composite updated
+231/387 2024216.2036_08.03.2024 composite updated
+232/387 2024216.2206_08.03.2024 composite updated
+233/387 2024216.2212_08.03.2024 composite updated
+234/387 2024216.2218_08.03.2024 composite updated
+avg age of pixels in days:  7.083022074028952
+saved daily composite 08.03.2024 ***** run time: 8.07
+235/387 2024217.1654_08.04.2024 composite updated
+236/387 2024217.1830_08.04.2024 composite updated
+237/387 2024217.1836_08.04.2024 composite updated
+238/387 2024217.2006_08.04.2024 composite updated
+239/387 2024217.2012_08.04.2024 composite updated
+240/387 2024217.2018_08.04.2024 composite updated
+241/387 2024217.2148_08.04.2024 composite updated
+242/387 2024217.2154_08.04.2024 composite updated
+243/387 2024217.2200_08.04.2024 composite updated
+avg age of pixels in days:  7.303658165146439
+saved daily composite 08.04.2024 ***** run time: 8.40
+244/387 2024218.1636_08.05.2024 composite updated
+245/387 2024218.1812_08.05.2024 composite updated
+246/387 2024218.1818_08.05.2024 composite updated
+247/387 2024218.1948_08.05.2024 composite updated
+248/387 2024218.1954_08.05.2024 composite updated
+249/387 2024218.2130_08.05.2024 composite updated
+250/387 2024218.2136_08.05.2024 composite updated
+avg age of pixels in days:  7.464159052954472
+saved daily composite 08.05.2024 ***** run time: 7.32
+251/387 2024219.1754_08.06.2024 composite updated
+252/387 2024219.1930_08.06.2024 composite updated
+253/387 2024219.1936_08.06.2024 composite updated
+254/387 2024219.2112_08.06.2024 composite updated
+255/387 2024219.2118_08.06.2024 composite updated
+avg age of pixels in days:  7.574189374215565
+saved daily composite 08.06.2024 ***** run time: 7.10
+256/387 2024220.1736_08.07.2024 composite updated
+257/387 2024220.1912_08.07.2024 composite updated
+258/387 2024220.1918_08.07.2024 composite updated
+259/387 2024220.2054_08.07.2024 composite updated
+260/387 2024220.2100_08.07.2024 composite updated
+avg age of pixels in days:  7.863720170263004
+saved daily composite 08.07.2024 ***** run time: 7.03
+261/387 2024221.1718_08.08.2024 composite updated
+262/387 2024221.1854_08.08.2024 composite updated
+263/387 2024221.1900_08.08.2024 composite updated
+264/387 2024221.2036_08.08.2024 composite updated
+265/387 2024221.2042_08.08.2024 composite updated
+266/387 2024221.2212_08.08.2024 composite updated
+267/387 2024221.2218_08.08.2024 composite updated
+268/387 2024221.2224_08.08.2024 composite updated
+avg age of pixels in days:  8.119205673484668
+saved daily composite 08.08.2024 ***** run time: 7.90
+269/387 2024222.1700_08.09.2024 composite updated
+270/387 2024222.1836_08.09.2024 composite updated
+271/387 2024222.1842_08.09.2024 composite updated
+272/387 2024222.2012_08.09.2024 composite updated
+273/387 2024222.2018_08.09.2024 composite updated
+274/387 2024222.2024_08.09.2024 composite updated
+275/387 2024222.2154_08.09.2024 composite updated
+276/387 2024222.2200_08.09.2024 composite updated
+277/387 2024222.2206_08.09.2024 composite updated
+avg age of pixels in days:  8.250528417872335
+saved daily composite 08.09.2024 ***** run time: 7.36
+278/387 2024223.1642_08.10.2024 composite updated
+279/387 2024223.1818_08.10.2024 composite updated
+280/387 2024223.1824_08.10.2024 composite updated
+281/387 2024223.1954_08.10.2024 composite updated
+282/387 2024223.2000_08.10.2024 composite updated
+283/387 2024223.2136_08.10.2024 composite updated
+284/387 2024223.2142_08.10.2024 composite updated
+avg age of pixels in days:  8.337646761787385
+saved daily composite 08.10.2024 ***** run time: 7.47
+285/387 2024224.1800_08.11.2024 composite updated
+286/387 2024224.1936_08.11.2024 composite updated
+287/387 2024224.1942_08.11.2024 composite updated
+288/387 2024224.2118_08.11.2024 composite updated
+289/387 2024224.2124_08.11.2024 composite updated
+avg age of pixels in days:  8.43152715711892
+saved daily composite 08.11.2024 ***** run time: 7.48
+290/387 2024225.1742_08.12.2024 composite updated
+291/387 2024225.1918_08.12.2024 composite updated
+292/387 2024225.1924_08.12.2024 composite updated
+293/387 2024225.2100_08.12.2024 composite updated
+294/387 2024225.2106_08.12.2024 composite updated
+avg age of pixels in days:  8.602505405586355
+saved daily composite 08.12.2024 ***** run time: 7.43
+295/387 2024226.1724_08.13.2024 composite updated
+296/387 2024226.1900_08.13.2024 composite updated
+297/387 2024226.1906_08.13.2024 composite updated
+298/387 2024226.2042_08.13.2024 composite updated
+299/387 2024226.2048_08.13.2024 composite updated
+300/387 2024226.2218_08.13.2024 composite updated
+301/387 2024226.2224_08.13.2024 composite updated
+302/387 2024226.2230_08.13.2024 composite updated
+avg age of pixels in days:  8.871418121279387
+saved daily composite 08.13.2024 ***** run time: 7.65
+303/387 2024227.1706_08.14.2024 composite updated
+304/387 2024227.1842_08.14.2024 composite updated
+305/387 2024227.1848_08.14.2024 composite updated
+306/387 2024227.2018_08.14.2024 composite updated
+307/387 2024227.2024_08.14.2024 composite updated
+308/387 2024227.2030_08.14.2024 composite updated
+309/387 2024227.2200_08.14.2024 composite updated
+310/387 2024227.2206_08.14.2024 composite updated
+311/387 2024227.2212_08.14.2024 composite updated
+avg age of pixels in days:  8.97451370939681
+saved daily composite 08.14.2024 ***** run time: 7.31
+312/387 2024228.1648_08.15.2024 composite updated
+313/387 2024228.1824_08.15.2024 composite updated
+314/387 2024228.1830_08.15.2024 composite updated
+315/387 2024228.2000_08.15.2024 composite updated
+316/387 2024228.2006_08.15.2024 composite updated
+317/387 2024228.2012_08.15.2024 composite updated
+318/387 2024228.2142_08.15.2024 composite updated
+319/387 2024228.2148_08.15.2024 composite updated
+avg age of pixels in days:  9.066528906331774
+saved daily composite 08.15.2024 ***** run time: 7.99
+320/387 2024229.1630_08.16.2024 composite updated
+321/387 2024229.1806_08.16.2024 composite updated
+322/387 2024229.1942_08.16.2024 composite updated
+323/387 2024229.1948_08.16.2024 composite updated
+324/387 2024229.2124_08.16.2024 composite updated
+325/387 2024229.2130_08.16.2024 composite updated
+avg age of pixels in days:  9.188989247291548
+saved daily composite 08.16.2024 ***** run time: 7.67
+326/387 2024230.1748_08.17.2024 composite updated
+327/387 2024230.1924_08.17.2024 composite updated
+328/387 2024230.1930_08.17.2024 composite updated
+329/387 2024230.2106_08.17.2024 composite updated
+330/387 2024230.2112_08.17.2024 composite updated
+avg age of pixels in days:  9.328756776431737
+saved daily composite 08.17.2024 ***** run time: 7.52
+331/387 2024231.1730_08.18.2024 composite updated
+332/387 2024231.1906_08.18.2024 composite updated
+333/387 2024231.1912_08.18.2024 composite updated
+334/387 2024231.2048_08.18.2024 composite updated
+335/387 2024231.2054_08.18.2024 composite updated
+336/387 2024231.2236_08.18.2024 composite updated
+avg age of pixels in days:  9.471197395134453
+saved daily composite 08.18.2024 ***** run time: 7.87
+337/387 2024232.1712_08.19.2024 composite updated
+338/387 2024232.1848_08.19.2024 composite updated
+339/387 2024232.1854_08.19.2024 composite updated
+340/387 2024232.2024_08.19.2024 composite updated
+341/387 2024232.2030_08.19.2024 composite updated
+342/387 2024232.2036_08.19.2024 composite updated
+343/387 2024232.2206_08.19.2024 composite updated
+344/387 2024232.2212_08.19.2024 composite updated
+345/387 2024232.2218_08.19.2024 composite updated
+avg age of pixels in days:  9.72618441984126
+saved daily composite 08.19.2024 ***** run time: 18.44
+346/387 2024233.1654_08.20.2024 composite updated
+347/387 2024233.1830_08.20.2024 composite updated
+348/387 2024233.1836_08.20.2024 composite updated
+349/387 2024233.2006_08.20.2024 composite updated
+350/387 2024233.2012_08.20.2024 composite updated
+351/387 2024233.2018_08.20.2024 composite updated
+352/387 2024233.2148_08.20.2024 composite updated
+353/387 2024233.2154_08.20.2024 composite updated
+avg age of pixels in days:  9.94270196336177
+saved daily composite 08.20.2024 ***** run time: 7.69
+354/387 2024234.1636_08.21.2024 composite updated
+355/387 2024234.1812_08.21.2024 composite updated
+356/387 2024234.1948_08.21.2024 composite updated
+357/387 2024234.1954_08.21.2024 composite updated
+358/387 2024234.2130_08.21.2024 composite updated
+359/387 2024234.2136_08.21.2024 composite updated
+avg age of pixels in days:  10.246700069874217
+saved daily composite 08.21.2024 ***** run time: 7.09
+360/387 2024235.1754_08.22.2024 composite updated
+361/387 2024235.1930_08.22.2024 composite updated
+362/387 2024235.1936_08.22.2024 composite updated
+363/387 2024235.2112_08.22.2024 composite updated
+364/387 2024235.2118_08.22.2024 composite updated
+avg age of pixels in days:  10.410218821341717
+saved daily composite 08.22.2024 ***** run time: 6.87
+365/387 2024236.1736_08.23.2024 composite updated
+366/387 2024236.1912_08.23.2024 composite updated
+367/387 2024236.1918_08.23.2024 composite updated
+368/387 2024236.2054_08.23.2024 composite updated
+369/387 2024236.2100_08.23.2024 composite updated
+370/387 2024236.2242_08.23.2024 composite updated
+avg age of pixels in days:  10.704320791492885
+saved daily composite 08.23.2024 ***** run time: 7.46
+371/387 2024237.1718_08.24.2024 composite updated
+372/387 2024237.1854_08.24.2024 composite updated
+373/387 2024237.1900_08.24.2024 composite updated
+374/387 2024237.2030_08.24.2024 composite updated
+375/387 2024237.2036_08.24.2024 composite updated
+376/387 2024237.2042_08.24.2024 composite updated
+377/387 2024237.2212_08.24.2024 composite updated
+378/387 2024237.2218_08.24.2024 composite updated
+379/387 2024237.2224_08.24.2024 composite updated
+avg age of pixels in days:  10.987379146365267
+saved daily composite 08.24.2024 ***** run time: 7.57
+380/387 2024238.1700_08.25.2024 composite updated
+381/387 2024238.1836_08.25.2024 composite updated
+382/387 2024238.1842_08.25.2024 composite updated
+383/387 2024238.2012_08.25.2024 composite updated
+384/387 2024238.2018_08.25.2024 composite updated
+385/387 2024238.2024_08.25.2024 composite updated
+386/387 2024238.2154_08.25.2024 composite updated

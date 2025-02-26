@@ -146,17 +146,25 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         sys.exit(-1)
 
-    token                 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbF9hZGRyZXNzIjoiamF2aWVyLmEudmlsbGVnYXNicmF2b0Bub2FhLmdvdiIsImlzcyI6IkFQUyBPQXV0aDIgQXV0aGVudGljYXRvciIsImlhdCI6MTcxMjAwOTA5MywibmJmIjoxNzEyMDA5MDkzLCJleHAiOjE4Njk2ODkwOTMsInVpZCI6InZsbGdzYnIyIiwidG9rZW5DcmVhdG9yIjoidmxsZ3NicjIifQ.d33j4uglmnzAo7g2ICCSIIVqZWiIeUOhO-Kb3e7bR_s' 
-    destination_directory = '/scratch/zt1/project/vllgsbr2-prj/burnscar_project/data/noaa_20_vj109_files'
+    token                 = 'eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiVXNlciIsInVpZCI6InZsbGdzYnIyIiwiZXhwIjoxNzM0ODg2Mzc3LCJpYXQiOjE3Mjk3MDIzNzcsImlzcyI6Imh0dHBzOi8vdXJzLmVhcnRoZGF0YS5uYXNhLmdvdiJ9.I6RpfWYvXY6TTudGCscpbEGWTxFBynjqrR_wnUWtFohMtNlB7HugxmzsrQ0jv3UtXxi1jmPtlX140puHAPcQhfL6XKqSWfySHKzuxlO6dfZvz0ZoGuepsCSEns5nM9O_J0yp3SOR431soxDw1JSJ77AfjVQ-K786I9DjhgNL4LHsE1UwH8F19uzNxQa2LiavoMnI7344ONs4NfpsoP8bnGg3VjML5z54gTW5TMW4DwJ9AdbpaTJjfhCXEG4CxffKK8-2JPaBReuLmZ89oDv8PU_ieh8bKB_I4wL5Lc_SdQd9_QkR6til0xaHMR99GbYcXSlCw4xhZanJcpMkJDHuDg' 
+    destination_directory = '/scratch/zt1/project/vllgsbr2-prj/raw_data_burnscar/data/noaa_20_viirs/2024_fire_season'
     source_url            = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/502165538/'
 
 
-    order_2020_vj103 = '502165538/' # done
-    order_2020_vj109 = '502165537/' # done
-    order_2021_vj103 = '502165516/' # done
-    order_2021_vj109 = '502165515/' # in pregresso
+    #order_2020_vj103 = '502165538/' # donzo
+    #order_2020_vj109 = '502165537/' # donzo
+    #order_2021_vj103 = '502165516/' # donzo
+    #order_2021_vj109 = '502165515/' # donzo
 
+    #order_park_fire_VJ109 = '502265239/' donzo
+    #order_park_fire_VJ103 = '502265240/' donzo
     #_main()
+
+    #order_07012024_08252024_VJ103_VJ109 = '502293922/' not donzo
+    #order_07012024_08252024_VJ114_VJ115 = '502293921/' not donzo
+
+    #LA_fires_12_20_24_01_10_25_VJ109_VJ103 = 502321825
+    #LA_fires_12_20_24_01_10_25_VJ114_VJ115 = 502321824
 
     '''
     how to run
