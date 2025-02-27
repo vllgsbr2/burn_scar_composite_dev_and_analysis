@@ -133,11 +133,18 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
         for i in range(7):
             lai_filepaths_resized.append(f)
     #cldmsk_filepaths = np.sort([cldmsk_filepath_home + x for x in os.listdir(cldmsk_filepath_home)])
+    if database_type != "OPERATIONAL":
+        ref_file_timestamps    = [x[-34:-22] for x in ref_filepaths] # for TOA ref -33:-21
+        geo_file_timestamps    = [x[-33:-21] for x in geo_filepaths]
+        fire_file_timestamps   = [x[-33:-21] for x in fire_filepaths]
+        lai_file_timestamps    = [x[-35:-28] for x in lai_filepaths]
+    else:
+        ref_file_timestamps    = [x[-20:-8] for x in ref_filepaths] # for TOA ref -33:-21
+        geo_file_timestamps    = [x[-19:-7] for x in geo_filepaths]
+        fire_file_timestamps   = [x[-33:-21] for x in fire_filepaths]
+        lai_file_timestamps    = [x[-35:-28] for x in lai_filepaths]
 
-    ref_file_timestamps    = [x[-34:-22] for x in ref_filepaths] # for TOA ref -33:-21
-    geo_file_timestamps    = [x[-33:-21] for x in geo_filepaths]
-    fire_file_timestamps   = [x[-33:-21] for x in fire_filepaths]
-    lai_file_timestamps    = [x[-35:-28] for x in lai_filepaths]
+
     #cldmsk_file_timestamps = [x[-33:-21] for x in cldmsk_filepaths]
 
     #checks that files are exact sets of each other but I'm depricating this now
@@ -164,7 +171,10 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
             #, cldmsk_file cldmsk_filepaths[start:end])):
 
             # define time stamp to write to file
-            time_stamp_current = geo_file[-33:-21]
+            if database_type != "OPERATIONAL":
+                time_stamp_current = geo_file[-33:-21]
+            else:
+                time_stamp_current = geo_file[-19:-7]
             year               = time_stamp_current[:4]
             DOY                = '{}'.format(time_stamp_current[4:7])
             UTC_hr             = time_stamp_current[8:][:2]
@@ -433,9 +443,10 @@ if __name__=='__main__':
     savefig_path         = home_data + 'database_inspect_figures_no_ref_QC'
 
     '''
-    if sys.argv != ['']:
+    print(sys.argv[1])
+    if sys.argv[1] != 'OPERATIONAL':
         build_burn_scar_database()
-    elif sys.argv == ['OPERATIONAL']:
+    elif sys.argv[1] == 'OPERATIONAL':
         # write database if not yet created
         # if day already exist, skip
         build_burn_scar_database(database_file = None, current_date = None, latest_date = None,\
