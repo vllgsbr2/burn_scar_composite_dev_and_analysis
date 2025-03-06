@@ -139,8 +139,8 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
         fire_file_timestamps   = [x[-33:-21] for x in fire_filepaths]
         lai_file_timestamps    = [x[-35:-28] for x in lai_filepaths]
     else:
-        ref_file_timestamps    = [x[-20:-8] for x in ref_filepaths] # for TOA ref -33:-21
-        geo_file_timestamps    = [x[-19:-7] for x in geo_filepaths]
+        ref_file_timestamps    = np.array([x[-20:-8] for x in ref_filepaths]) # for TOA ref -33:-21
+        geo_file_timestamps    = np.array([x[-19:-7] for x in geo_filepaths])
         fire_file_timestamps   = [x[-33:-21] for x in fire_filepaths]
         lai_file_timestamps    = [x[-35:-28] for x in lai_filepaths]
 
@@ -148,13 +148,12 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
     #cldmsk_file_timestamps = [x[-33:-21] for x in cldmsk_filepaths]
 
     #checks that files are exact sets of each other but I'm depricating this now
-    #boolean_intersection_ref_geo    = np.in1d(ref_file_timestamps, geo_file_timestamps)
-    #idx_last_not_match              = np.where(boolean_intersection_ref_geo==False)[0][-1]
-    #ref_filepaths       = ref_filepaths[idx_last_not_match+1:]
-    #geo_filepaths       = geo_filepaths[idx_last_not_match+1:]
-    #ref_file_timestamps = ref_file_timestamps[idx_last_not_match+1:]
-    #geo_file_timestamps = geo_file_timestamps[idx_last_not_match+1:]
-
+    
+    boolean_intersection_ref_geo = np.in1d(geo_file_timestamps, ref_file_timestamps)
+    idx_matched_timestamps       = np.where(boolean_intersection_ref_geo==True)[0]
+    geo_filepaths                = geo_filepaths[idx_matched_timestamps]
+    geo_file_timestamps          = geo_file_timestamps[idx_matched_timestamps]
+    
     with h5py.File(commongrid_file, 'r') as hf_west_conus_grid:
         common_grid_lat = hf_west_conus_grid['Geolocation/Latitude'][:]
         common_grid_lon = hf_west_conus_grid['Geolocation/Longitude'][:]
@@ -165,7 +164,7 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
     start, end = 0,-1
 
     print('Building Database')
-    with h5py.File(database_file,'a') as hf_database:
+    with h5py.File(database_file,'w') as hf_database:
         for i, (geo_file, ref_file) in enumerate(zip(geo_filepaths[start:end],\
                 ref_filepaths[start:end])):
             #, cldmsk_file cldmsk_filepaths[start:end])):
@@ -181,7 +180,7 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
             UTC_min            = time_stamp_current[8:][2:]
             date               = datetime.strptime(year + "-" + DOY, "%Y-%j")\
                                  .strftime("_%m.%d.%Y")
-
+            #print(list(hf_database.keys()))
             # fill_val_idx is last to get populated. If it exists assume dataset is complete
             # and continue to next time stamp, otherwise work on current time step
             if (f"{time_stamp_current+date}/fill_val_idx" in hf_database) == True:
@@ -326,7 +325,7 @@ def build_burn_scar_database(database_file = None, current_date = None, latest_d
                 # print some diagnostics
                 run_time = time.time() - start_time
                 print('{:02d} VIIRS NOAA-20, {} ({}), run time: {:02.2f}'\
-                        .format(i, date[1:], time_stamp_current, run_time))
+                            .format(i, date[1:], time_stamp_current, run_time))
             except Exception as e:
                 run_time = time.time() - start_time
                 print(f'Failed **** {i} {ref_file} {e}')
